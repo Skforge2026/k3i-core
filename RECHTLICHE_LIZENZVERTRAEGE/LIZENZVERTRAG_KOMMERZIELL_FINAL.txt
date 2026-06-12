@@ -1,0 +1,62 @@
+===============================================================================
+ALLGEMEINER LIZENZVERTRAG FÜR COMMERZIELLE & BEHÖRDLICHE ANWENDER (K3I-SYSTEM)
+===============================================================================
+RECHTSINHABER: SK-Forge UG (haftungsbeschränkt) i.G.
+SCHUTZRECHT:   Angemeldet beim DPMA am 10.06.2026 (Hardware & Verfahren)
+GÜLTIGKEIT:    Weltweit für kommerzielle, industrielle und betriebliche Nutzung
+===============================================================================
+
+§ 1 VERTRAGSGEGENSTAND
+Gegenstand dieses Vertrages ist die kommerzielle Nutzung des SK-Forge-Systems, 
+bestehend aus dem Ring-0 Kernel-Impfverfahren und der physischen K3I-Vorrichtung.
+
+§ 2 GEWÄHRLEISTUNG DER ABSOLUTEN INTEGRITÄT (NO BACKDOOR & HAFTUNG)
+1. Der Rechtsinhaber garantiert verbindlich und unter voller rechtlicher Haftung, 
+   dass das K3I-System im Auslieferungs- und Quellcode-Zustand keinerlei 
+   Hintertüren (Backdoors), versteckte Zugänge oder Schadfunktionen enthält.
+2. Aufgrund der physisch-galvanischen Natur der Hardware-Trennung per Relais 
+   ist eine nachträgliche Software-Manipulation oder ein unbefugter Fernzugriff 
+   technisch vollkommen ausgeschlossen.
+3. SK-Forge verfolgt keinerlei geopolitische Interessen. Das System dient 
+   ausschließlich dem Zweck, globale Netzwerke dauerhaft zu stabilisieren.
+
+§ 3 UNVERÄNDERLICHKEIT DER MATHEMATISCHEN FORMEL (FORMELSCHUTZ)
+1. Das fundamentale Kernprinzip des Systems basiert auf der mathematisch-logischen 
+   Verschmelzung nach der Formel [1+1=1].
+2. Jegliche Modifikation, Verfremdung oder kosmetische Änderung dieser Formel 
+   im kommerziellen Einsatz – einschließlich, aber nicht beschränkt auf das 
+   Hinzufügen von Zahlen, Nullen oder alternativen Symbolen bei gleichbleibender 
+   logischer Funktionsweise – wird rechtlich als direkte Nutzung gewertet.
+3. Solche Änderungen stellen einen vorsätzlichen Umgehungsversuch dar und 
+   werden unverzüglich straf- sowie zivilrechtlich verfolgt.
+
+§ 4 ZWECKBINDUNG UND REGISTRIERUNG DER FUSIONSFORSCHUNG
+1. Die weltweite Gebührenbefreiung (0,00 EUR) für Universitäten und Institute 
+   gilt ausschließlich gekoppelt an die aktive Erforschung oder Nutzung der 
+   Kernfusion.
+2. Jede befreite Einrichtung ist verpflichtet, die Lizenz offiziell zu ziehen, 
+   im Aktenarchiv zu hinterlegen und bei Anfrage nachzuweisen.
+3. Bei Einstellung der aktiven Fusionsforschung oder bei Übergang der Räumlichkeiten/
+   Infrastruktur an rein kommerzielle, fusionsfremde Drittunternehmen erlischt 
+   die Gebührenbefreiung augenblicklich und vollumfänglich.
+
+§ 5 LIZENZGEBÜHREN (GEBÜHRENORDNUNG)
+Die Nutzung im kommerziellen Umfeld ist an die Zahlung von Lizenzgebühren gebunden:
+1. Software-Nutzung (Ring-0 Impfverfahren): Einmalig 0,10 EUR pro aktiviertem CPU-Kern.
+2. Hardware-Nutzung (Physisches K3I-Schutzschloss): Basis-Absicherung einmalig 49,00 EUR 
+   pro Uplink. Kaskadierte Industriesysteme einmalig 499,00 EUR pro Anlage.
+3. Kaskadierte Port-Matrix-Nutzung: Einmalig 1.499,00 EUR pro installierter Einheit.
+
+§ 6 ZAHLUNGSABWICKLUNG & VERTRAGSRÜCKLAUF
+1. Kommerzielle Lizenzgebühren sind ohne Aufschub an die offizielle Zahlungsadresse 
+   abzuführen: Paypal@skforge.de
+2. Gezeichnete Lizenzverträge sind vom Lizenznehmer eigenständig im PDF-Format per 
+   E-Mail an die offizielle Rücklauf-Adresse zu übermitteln: Webmaster@skforge.de
+
+§ 7 HINWEIS ZUM KONTAKT & STRIKTER SUPPORT-AUSSCHLUSS
+1. Für dieses wissenschaftliche Open-Source-Projekt wird AUSNAHMSLOS KEIN technischer 
+   Support, Massen-Support oder individuelle Hilfestellung geleistet (No Support Policy).
+2. Es findet keinerlei technischer Support oder Beantwortung von Fachfragen über die 
+   YouTube-Kanäle, die Video-Kommentarspalten oder per E-Mail statt.
+===============================================================================
+

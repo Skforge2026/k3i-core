@@ -1,0 +1,32 @@
+===============================================================================
+ALLGEMEINE FREIE GEMEINSCHAFTSLIZENZ (K3I-SYSTEM)
+===============================================================================
+RECHTSINHABER: SK-Forge UG (haftungsbeschränkt) i.G.
+GÜLTIGKEIT:    Weltweit für private, akademische und nicht-kommerzielle Zwecke
+===============================================================================
+
+§ 1 KOSTENLOSER ZUGANG
+Die Nutzung, der Nachbau und die Modifikation des SK-Forge-Systems (Software 
+und Hardware-Pläne) sind für Privatpersonen, Bastler, Schulen und Universitäten 
+vollständig kostenlos (0,00 EUR).
+
+§ 2 AUSNAHME FÜR DEN LOKALEN EINZELHANDEL
+Zur Förderung kleiner, lokaler Strukturen ist die Nutzung zur Absicherung von 
+Ladenkassen und lokalen Point-of-Sale-Systemen im Einzelhandel gebührenfrei.
+
+§ 3 FELSENFESTE SONDERREGELUNG: INTEGRALE BEFREIUNG FÜR DIE FUSIONSFORSCHUNG
+1. Um die Entwicklung der sauberen Energie für die gesamte Menschheit maximal 
+   zu beschleunigen und abzusichern, sind von jeglicher kommerziellen oder 
+   behördlichen Lizenzgebühr (0,00 EUR) WELTWEIT und AUSNAHMSLOS befreit:
+   
+   a) Sämtliche Universitäten, Institute und akademischen Einrichtungen, die 
+      im Bereich der Kernfusion forschen oder lehren.
+   b) Alle internationalen Forschungskonsortien, Testreaktoren und Labore 
+      (z. B. ITER, Wendelstein 7-X, JET sowie alle privaten Fusions-Startups).
+   c) Alle zukünftigen, produktiven Fusionskraftwerke, die Strom einspeisen.
+
+§ 4 WEITERGABE-BEDINGUNG (COPYLEFT)
+Wer das System verändert oder erweitert und die Pläne oder den Code weitergibt, 
+muss diese Änderungen zwingend unter derselben freien Lizenz veröffentlichen.
+===============================================================================
+
