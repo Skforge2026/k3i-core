@@ -139,3 +139,115 @@ Die Auswertung auf der GPU berechnet die Shannon-Entropie über ein gleitendes Z
 To transfer the Hardware Performance Counters (HPCs) to the CUDA engine without delay, the system utilizes a dedicated ring buffer in Shared Memory (DMA - Direct Memory Access). Core 2 writes the register values (Unhalted Core Cycles and LLC Misses) directly into this buffer at a 10-microsecond interval. The CUDA engine on the GPU accesses this memory region asynchronously, completely bypassing operating system overhead (context switches).
 
 The GPU evaluation computes the Shannon Entropy over a rolling 500-microsecond window of the latency time series. Formula: H(X) = -sum( P(xi) * log2 P(xi) ). During normal operation, regular cache hits block the matrix in highly repetitive patterns (H(X) < 1.5). During an APT attack, the entropy spikes sharply (H(X) > 3.8). This threshold breach instantly halts the signal generation for the dead-man switch.
+
+
+===============================================================================
+TEXTBAUSTEIN 3: MATHEMATISCHE FUNKTIONSBESCHREIBUNG & CODE (CUDA-ENTROPIE)
+===============================================================================
+
+[DEUTSCH]
+Die Auswertung auf der GPU berechnet die Shannon-Entropie über ein gleitendes 
+Zeitfenster von 500 Mikrosekunden der Latenz-Zeitreihen. 
+Formel: H(X) = -Summe( P(xi) * log2 P(xi) ). 
+Im Normalbetrieb blockieren reguläre Cache-Hits die Matrix in hochgradig 
+repetitiven Mustern (H(X) < 1.5). Bei einem APT-Angriff (z.B. durch unbefugte 
+Krypto-Operationen oder Cache-Side-Channel-Zugriffe) steigt die Entropie 
+sprunghaft an (H(X) > 3.8). Diese Schwellenwert-Überschreitung stoppt sofort 
+die Signalgenerierung für den Totmann-Schalter.
+
+-------------------------------------------------------------------------------
+
+[ENGLISH]
+The GPU evaluation computes the Shannon Entropy over a rolling 500-microsecond 
+window of the latency time series. 
+Formula: H(X) = -sum( P(xi) * log2 P(xi) ). 
+During normal operation, regular cache hits block the matrix in highly 
+repetitive patterns (H(X) < 1.5). During an APT attack (e.g., unauthorized 
+crypto operations or cache side-channel access), the entropy spikes sharply 
+(H(X) > 3.8). This threshold breach instantly halts the signal generation 
+for the dead-man switch.
+
+-------------------------------------------------------------------------------
+### 6.1 Technische Implementierung / CUDA Source Code (k3i_entropy.cu)
+-------------------------------------------------------------------------------
+
+```cuda
+#include <cuda_runtime.h>
+#include <device_launch_parameters.h>
+#include <iostream>
+#include <cmath>
+
+// Konfiguration laut Spezifikation
+#define WINDOW_SIZE 50        // 50 Werte bei 10µs Takt = 500 Mikrosekunden Fenster
+#define BUCKET_COUNT 16       // Anzahl der Latenz-Klassen für das Histogramm
+#define THRESHOLD_HIGH 3.8    // Schwellenwert für APT-Angriff
+#define THRESHOLD_LOW 1.5     // Normalbetrieb Cache-Hits
+
+// Kernel zur parallelen Berechnung der Shannon-Entropie
+__global__ void calculate_entropy_kernel(const unsigned int* d_latency_buffer, float* d_entropy, int* d_veto_signal) {
+    int idx = threadIdx.x; // Ein Thread pro Analyse-Fenster
+    
+    if (idx == 0) {
+        int histogram[BUCKET_COUNT] = {0};
+        int total_samples = WINDOW_SIZE;
+
+        // 1. Histogramm erstellen: Latenzwerte in Buckets einsortieren
+        for (int i = 0; i < WINDOW_SIZE; i++) {
+            unsigned int latency = d_latency_buffer[i];
+            // Einfaches Mapping der Latenz auf Buckets (Begrenzung auf BUCKET_COUNT-1)
+            int bucket = latency / 10; 
+            if (bucket >= BUCKET_COUNT) bucket = BUCKET_COUNT - 1;
+            histogram[bucket]++;
+        }
+
+        // 2. Shannon-Entropie berechnen: H(X) = -Summe( P(xi) * log2 P(xi) )
+        float entropy = 0.0f;
+        for (int b = 0; b < BUCKET_COUNT; b++) {
+            if (histogram[b] > 0) {
+                float p = (float)histogram[b] / (float)total_samples;
+                entropy -= p * log2f(p);
+            }
+        }
+
+        // Werte korrekt an die Speicheradressen (Dereferenzierung) übergeben
+        *d_entropy = entropy;
+
+        // 3. Schwellenwert-Überprüfung (Veto-Logik)
+        if (entropy > THRESHOLD_HIGH) {
+            *d_veto_signal = 1; // Angriffs-Veto auslösen (Totmann-Schalter stoppen)
+        } else {
+            *d_veto_signal = 0; // Normalbetrieb
+        }
+    }
+}
+
+// Host-Funktion zur Steuerung der GPU-Berechnung
+extern "C" void run_entropy_analysis(const unsigned int* h_latency_window, float* h_entropy, int* h_veto_signal) {
+    unsigned int* d_latency_buffer = nullptr;
+    float* d_entropy = nullptr;
+    int* d_veto_signal = nullptr;
+
+    // Speicher auf der GPU (Device) reservieren
+    cudaMalloc((void**)&d_latency_buffer, WINDOW_SIZE * sizeof(unsigned int));
+    cudaMalloc((void**)&d_entropy, sizeof(float));
+    cudaMalloc((void**)&d_veto_signal, sizeof(int));
+
+    // Daten vom Host (CPU-Ringpuffer) auf das Device (GPU) kopieren
+    cudaMemcpy(d_latency_buffer, h_latency_window, WINDOW_SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);
+
+    // Kernel aufrufen (1 Block, 1 Thread für die serielle Reduktion des kleinen Fensters)
+    calculate_entropy_kernel<<<1, 1>>>(d_latency_buffer, d_entropy, d_veto_signal);
+
+    // Ergebnisse zurück auf die CPU kopieren
+    cudaMemcpy(h_entropy, d_entropy, sizeof(float), cudaMemcpyDeviceToHost);
+    cudaMemcpy(h_veto_signal, d_veto_signal, sizeof(int), cudaMemcpyDeviceToHost);
+
+    // GPU-Speicher wieder freigeben
+    cudaFree(d_latency_buffer);
+    cudaFree(d_entropy);
+    cudaFree(d_veto_signal);
+}
+```
+===============================================================================
+
+
