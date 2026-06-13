@@ -76,5 +76,45 @@ void loop() {
   }
 }
 
+---
+
+## 7. Hardware-Stückliste & Pin-Belegung (K3I-Schutzschloss)
+
+### 7.1 Die Stückliste (Komponenten für den Nachbau)
+Für den Aufbau der physischen Veto-Schaltung auf einer Lochrasterplatine werden folgende Standard-Bauteile benötigt:
+
+* **1x Mikrocontroller:** Arduino Nano (oder ESP32) als Logik-Schnittstelle.
+* **1x Halbleiter-Sperrglied (Stufe 1):** IRLZ44N N-Kanal Logik-Level-MOSFET (schaltet voll durch bei 5V Gate-Spannung).
+* **1x Galvanisches Relais (Stufe 2):** 5V-Signalrelais (Wechsler / Monostabil, z. B. Finder 30.22.7.005.0010).
+* **1x Freilaufdiode:** 1N4007 (Unerlässlich! Schützt den Arduino vor der induktiven Abschalt-Spannungsspitze der Relaisspule).
+* **1x Pull-Down-Widerstand:** 10k Ohm (Hält das Gate des MOSFETs beim Booten sicher auf Masse).
+* **1x Basis-Schutzwiderstand:** 220 Ohm (Begrenzt den Schaltstrom vom Arduino-Pin zum Gate des MOSFETs).
+* **2x RJ45-Netzwerkbuchsen:** Zur physischen Integration (Durchschleifen) in die zu trennende Datenleitung.
+* **1x Externe Spannungsversorgung:** Stabilisiertes 5V DC Netzteil (mindestens 500mA).
+
+---
+
+### 7.2 Die Pin-Belegung (Verdrahtungsplan)
+Die physische Verkabelung der Komponenten auf der Platine erfolgt nach folgender Festlegung:
+
+#### 1. Signal-Eingang (Vom PC kommend)
+* **Arduino Pin D2 (INPUT):** Verbunden mit der Signalleitung (Keep-Alive / PC-Rauschen) des geimpften Kerns.
+* **Arduino GND:** Verbunden mit der Masse (GND) des Signalgebers/PCs.
+
+#### 2. Veto-Ausgang (Steuerstromkreis)
+* **Arduino Pin D3 (OUTPUT):** Geht über den **220-Ohm-Widerstand** direkt an das **Gate (Pin 1)** des IRLZ44N MOSFETs.
+* **Zwischen Gate und GND:** Der **10k-Ohm-Pull-Down-Widerstand** wird fest eingelötet.
+
+#### 3. Leistungskreis & Relais-Kaskade
+* **MOSFET Source (Pin 3):** Direkt an die gemeinsame Masse (**GND**).
+* **MOSFET Drain (Pin 2):** Verbunden mit dem **Minuspol der Relaisspule** (A2).
+* **Relaisspule Pluspol (A1):** Direkt an die externe **+5V Stromversorgung**.
+* **Parallel zur Relaisspule (Wichtig):** Die Diode **1N4007** wird antiparallel über die Spulenanschlüsse gelötet (Kathode mit dem Ring an +5V/A1, Anode an Drain/A2).
+
+#### 4. Datenleitungs-Trennung (RJ45-Schnittstelle)
+* **RJ45 Buchse 1 (Eingang):** Die zu schützende Datenader geht an den **Mittelkontakt (Common)** des Relais-Wechslers.
+* **Relais-Schließerkontakt (Normally Open / NO):** Wird weitergeschleift zum **Drain-Anschluss** des MOSFETs.
+* **Relais-Öffnerkontakt (Normally Closed / NC):** Bleibt frei (isoliert).
+* **RJ45 Buchse 2 (Ausgang):** Der **Source-Anschluss** des MOSFETs führt die geschützte Ader wieder nach draußen.
 
 
