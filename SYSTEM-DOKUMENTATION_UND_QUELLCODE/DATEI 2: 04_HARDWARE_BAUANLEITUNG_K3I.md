@@ -37,7 +37,6 @@ Das Prinzip basiert auf Ruhestrom. Das bedeutet: Strom fließt = Leitung ist off
 
 ## 3. Der Steuerungs-Code für die Hardware (English)
 
-
 const int INPUT_SIGNAL_PIN = 2;  // PC-Rauschen / PC-Noise Input
 const int SAFETY_VETO_PIN = 3;   // Ausgang zu MOSFET & Relais / Output to MOSFET & Relay
 
@@ -75,4 +74,5 @@ void loop() {
     digitalWrite(SAFETY_VETO_PIN, HIGH); // Normalbetrieb: Leitung bleibt offen (geschaltet)
   }
 }
+
 
