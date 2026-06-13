@@ -118,8 +118,6 @@ Die Auswertung auf der GPU berechnet die Shannon-Entropie über ein gleitendes Z
 
 ### 6.1 Technische Implementierung / CUDA Source Code (k3i_entropy.cu)
 
-### 6.1 Technische Implementierung / CUDA Source Code (k3i_entropy.cu)
-
 ```cuda
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
