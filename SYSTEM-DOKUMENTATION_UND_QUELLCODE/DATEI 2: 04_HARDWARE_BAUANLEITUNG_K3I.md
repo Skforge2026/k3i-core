@@ -37,20 +37,42 @@ Das Prinzip basiert auf Ruhestrom. Das bedeutet: Strom fließt = Leitung ist off
 
 ## 3. Der Steuerungs-Code für die Hardware (English)
 
-const int INPUT_SIGNAL_PIN = 2;  // Signal input from geimpftem PC
-const int SAFETY_VETO_PIN = 3;   // Outputs to MOSFET and Relay
+
+const int INPUT_SIGNAL_PIN = 2;  // PC-Rauschen / PC-Noise Input
+const int SAFETY_VETO_PIN = 3;   // Ausgang zu MOSFET & Relais / Output to MOSFET & Relay
+
+unsigned long letzteAktivitaet = 0;
+const unsigned long TIMEOUT_MICROS = 2000; // 2000 Mikrosekunden = 2 Millisekunden
 
 void setup() {
   pinMode(INPUT_SIGNAL_PIN, INPUT_PULLUP);
   pinMode(SAFETY_VETO_PIN, OUTPUT);
-  digitalWrite(SAFETY_VETO_PIN, HIGH);
+  
+  // Start-Zustand: Erst sperren, um undefinierte Zustände beim Booten zu verhindern
+  digitalWrite(SAFETY_VETO_PIN, LOW); 
+  
+  // Initialisierung des Zeitstempels beim Start
+  letzteAktivitaet = micros(); 
 }
 
 void loop() {
-  int sentryStatus = digitalRead(INPUT_SIGNAL_PIN);
-  if (sentryStatus == LOW) {
-    digitalWrite(SAFETY_VETO_PIN, LOW);
-    while(true) {}
+  int signalZustand = digitalRead(INPUT_SIGNAL_PIN);
+  static int letzterZustand = LOW;
+  
+  // Erkennung von Signalflanken (Wechsel im Rauschen)
+  if (signalZustand != letzterZustand) {
+    letzteAktivitaet = micros();
+    letzterZustand = signalZustand;
+  }
+
+  // FAIL-SAFE: Überprüfung des Zeitfensters in Mikrosekunden
+  if (micros() - letzteAktivitaet > TIMEOUT_MICROS) {
+    digitalWrite(SAFETY_VETO_PIN, LOW); // Hard VETO / Sofortige physische Trennung
+    while(1) {
+      // Endlosschleife: System sperrt dauerhaft bis zum manuellen Hardware-Reset vor Ort
+    }
+  } else {
+    digitalWrite(SAFETY_VETO_PIN, HIGH); // Normalbetrieb: Leitung bleibt offen (geschaltet)
   }
 }
 
