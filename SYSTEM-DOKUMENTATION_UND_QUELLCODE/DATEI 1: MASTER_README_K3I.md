@@ -118,6 +118,8 @@ Die Auswertung auf der GPU berechnet die Shannon-Entropie über ein gleitendes Z
 
 ### 6.1 Technische Implementierung / CUDA Source Code (k3i_entropy.cu)
 
+### 6.1 Technische Implementierung / CUDA Source Code (k3i_entropy.cu)
+
 ```cuda
 #include <cuda_runtime.h>
 #include <device_launch_parameters.h>
@@ -141,7 +143,6 @@ __global__ void calculate_entropy_kernel(const unsigned int* d_latency_buffer, f
         // 1. Histogramm erstellen: Latenzwerte in Buckets einsortieren
         for (int i = 0; i < WINDOW_SIZE; i++) {
             unsigned int latency = d_latency_buffer[i];
-            // Einfaches Mapping der Latenz auf Buckets (Begrenzung auf BUCKET_COUNT-1)
             int bucket = latency / 10; 
             if (bucket >= BUCKET_COUNT) bucket = BUCKET_COUNT - 1;
             histogram[bucket]++;
@@ -193,14 +194,5 @@ extern "C" void run_entropy_analysis(const unsigned int* h_latency_window, float
     cudaFree(d_latency_buffer);
     cudaFree(d_entropy);
     cudaFree(d_veto_signal);
-}ny, sizeof(float), cudaMemcpyDeviceToHost);
-    cudaMemcpy(h_veto_signal, d_veto_signal, sizeof(int), cudaMemcpyDeviceToHost);
-
-    // GPU-Speicher wieder freigeben
-    cudaFree(d_latency_buffer);
-    cudaFree(d_entropy);
-    cudaFree(d_veto_signal);
 }
-
 ```
-
