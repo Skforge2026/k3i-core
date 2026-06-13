@@ -193,6 +193,14 @@ extern "C" void run_entropy_analysis(const unsigned int* h_latency_window, float
     cudaFree(d_latency_buffer);
     cudaFree(d_entropy);
     cudaFree(d_veto_signal);
+}ny, sizeof(float), cudaMemcpyDeviceToHost);
+    cudaMemcpy(h_veto_signal, d_veto_signal, sizeof(int), cudaMemcpyDeviceToHost);
+
+    // GPU-Speicher wieder freigeben
+    cudaFree(d_latency_buffer);
+    cudaFree(d_entropy);
+    cudaFree(d_veto_signal);
 }
+
 ```
 
