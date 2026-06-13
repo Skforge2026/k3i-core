@@ -127,3 +127,15 @@ Wird die Registersymmetrie verletzt, unterbricht das logische Sperrglied das Ruh
 1. Stufe 1 (Elektronisch - 1 Millisekunde): Ein rein elektronisches Halbleiter-Sperrglied (Solid-State/MOSFET) blockiert den Datenstrom der Schnittstelle instantan.
 2. Stufe 2 (Galvanisch - 12 Millisekunden): Ein mechanisch-galvanisches Bauteil (Sicherheitsrelais) fällt ab und erzeugt einen echten, physischen Luftspalt (Air Gap) in der Leitung.
 
+
+## 6. Ergänzung zur Kernel-Spezifikation & CUDA-Entropie
+
+### [DEUTSCH]
+Um die Hardware Performance Counters (HPCs) ohne Verzögerung an die CUDA-Engine zu übergeben, nutzt das System einen dedizierten Ring-Puffer im Shared Memory (DMA - Direct Memory Access). Kern 2 schreibt die Registerwerte (Unhalted Core Cycles und LLC Misses) im Takt von 10 Mikrosekunden direkt in diesen Puffer. Die CUDA-Engine auf der GPU greift asynchron auf diesen Speicherbereich zu, wodurch jeglicher Betriebssystem-Overhead (Context Switches) umgangen wird.
+
+Die Auswertung auf der GPU berechnet die Shannon-Entropie über ein gleitendes Zeitfenster von 500 Mikrosekunden der Latenz-Zeitreihen. Formel: H(X) = -Summe( P(xi) * log2 P(xi) ). Im Normalbetrieb blockieren reguläre Cache-Hits die Matrix in hochgradig repetitiven Mustern (H(X) < 1.5). Bei einem APT-Angriff steigt die Entropie sprunghaft an (H(X) > 3.8). Diese Schwellenwert-Überschreitung stoppt sofort die Signalgenerierung für den Totmann-Schalter.
+
+### [ENGLISH]
+To transfer the Hardware Performance Counters (HPCs) to the CUDA engine without delay, the system utilizes a dedicated ring buffer in Shared Memory (DMA - Direct Memory Access). Core 2 writes the register values (Unhalted Core Cycles and LLC Misses) directly into this buffer at a 10-microsecond interval. The CUDA engine on the GPU accesses this memory region asynchronously, completely bypassing operating system overhead (context switches).
+
+The GPU evaluation computes the Shannon Entropy over a rolling 500-microsecond window of the latency time series. Formula: H(X) = -sum( P(xi) * log2 P(xi) ). During normal operation, regular cache hits block the matrix in highly repetitive patterns (H(X) < 1.5). During an APT attack, the entropy spikes sharply (H(X) > 3.8). This threshold breach instantly halts the signal generation for the dead-man switch.
