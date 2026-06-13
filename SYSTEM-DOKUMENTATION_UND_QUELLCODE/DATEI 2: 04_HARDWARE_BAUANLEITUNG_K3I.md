@@ -37,8 +37,9 @@ Das Prinzip basiert auf Ruhestrom. Das bedeutet: Strom fließt = Leitung ist off
 
 ## 3. Der Steuerungs-Code für die Hardware (English)
 
-const int INPUT_SIGNAL_PIN = 2;  // PC-Rauschen / PC-Noise Input
-const int SAFETY_VETO_PIN = 3;   // Ausgang zu MOSFET & Relais / Output to MOSFET & Relay
+// Der Steuerungs-Code für die Hardware (Englisch)
+const int INPUT_SIGNAL_PIN = 2; // PC-Rauschen / PC-Noise Input
+const int SAFETY_VETO_PIN = 3;  // Ausgang zu MOSFET & Relais / Output to MOSFET & Relay
 
 unsigned long letzteAktivitaet = 0;
 const unsigned long TIMEOUT_MICROS = 2000; // 2000 Mikrosekunden = 2 Millisekunden
@@ -46,18 +47,18 @@ const unsigned long TIMEOUT_MICROS = 2000; // 2000 Mikrosekunden = 2 Millisekund
 void setup() {
   pinMode(INPUT_SIGNAL_PIN, INPUT_PULLUP);
   pinMode(SAFETY_VETO_PIN, OUTPUT);
-  
+
   // Start-Zustand: Erst sperren, um undefinierte Zustände beim Booten zu verhindern
-  digitalWrite(SAFETY_VETO_PIN, LOW); 
-  
+  digitalWrite(SAFETY_VETO_PIN, LOW);
+
   // Initialisierung des Zeitstempels beim Start
-  letzteAktivitaet = micros(); 
+  letzteAktivitaet = micros();
 }
 
 void loop() {
   int signalZustand = digitalRead(INPUT_SIGNAL_PIN);
   static int letzterZustand = LOW;
-  
+
   // Erkennung von Signalflanken (Wechsel im Rauschen)
   if (signalZustand != letzterZustand) {
     letzteAktivitaet = micros();
@@ -74,5 +75,6 @@ void loop() {
     digitalWrite(SAFETY_VETO_PIN, HIGH); // Normalbetrieb: Leitung bleibt offen (geschaltet)
   }
 }
+
 
 
