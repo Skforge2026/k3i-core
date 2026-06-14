@@ -1,0 +1,100 @@
+# ==============================================================================
+# 🇩🇪 DEUTSCHE VERSION: TECHNISCHE SPEZIFIKATION (PROJEKT K3I)
+# ==============================================================================
+
+# TECHNISCHE SPEZIFIKATION: K3I-CORE SICHERHEITSRELAIS
+**Dokumenten-Version:** 2026.06-Beta  
+**Klassifizierung:** Open-Source / Dual-Interface Systemarchitektur  
+**Kern-Axiom:** 1+1=1 (Symmetrische Mensch-Maschine-Koadaption)
+
+---
+
+## 1. SYSTEMÜBERSICHT
+Der K3I-Core ist ein hardwarebasiertes, im Mikrosekundenbereich reagierendes Sicherheitsrelais. Es dient der Reduzierung von Systementropie und verhindert unautorisierte Datenzugriffe sowie destruktive Prozessausführungen (z. B. Ransomware-Verschlüsselungen) in Hochleistungsrechenzentren. Indem die primäre Verteidigungslogik von der kompromittierbaren Software-Ebene (Bit-Ebene) in die unbestechliche Physik der Thermodynamik und Elektrotechnik (Elektronen-Ebene) verlagert wird, hebelt der K3I-Core das klassische Cyber-Angriffs-Paradoxon vollständig aus.
+
+---
+
+## 2. HARDWARE-ARCHITEKTUR & DUAL-MOSFET-INTEGRATION
+Das System nutzt eine zweikanalige Hardware-Weiche, die von einem isolierten, Arduino-basierten Wächterkern (Kern 2) gesteuert wird. Diese Architektur trennt physisch zwischen Klasse-B-Datenströmen (Allgemein/Zivil) und Klasse-A-Datenströmen (Kritisch/Konzeptionell).
+
+### Kanal Alpha (Links): Signal-MOSFET (Netztrennung)
+*   **Ziel:** Primäre Glasfaser- / Ethernet-I/O-Schnittstellen.
+*   **Trigger:** Reagiert bei Erkennung unautorisierter eingehender oder ausgehender Datenbewegungen sowie Metadaten-Anomalien innerhalb der Klasse-A-Konzeptschleifen.
+*   **Funktion:** Trennt physisch die externe Netzwerkverbindung, während interne Rechenprozesse aktiv bleiben. Dies ermöglicht eine forensische Live-Speicheranalyse im RAM ohne das Risiko von Datenlecks.
+
+### Kanal Beta (Rechts): Starkstrom-MOSFET (Totaler Hardware-Freeze)
+*   **Ziel:** Industrielle, magnetische Leistungsschütze.
+*   **Trigger:** Reagiert bei kritischen internen Entropie-Peaks, massiven Dateisystem-Änderungsschleifen (Ransomware-Signaturen) oder unautorisierten physischen Hardware-Interaktionen (Insider-Sabotage per USB-Stick).
+*   **Funktion:** Unterbricht den Haltestrom der massiven Leistungsschütze, wodurch die primäre Versorgungsspannung ($V_{dd}$) des betroffenen Server-Racks schlagartig abfällt.
+
+---
+
+## 3. ZEITLICHE KASKADE & ABSCHALT-MARGINS
+Die Hardware-Verteidigungskette operiert deterministisch weit unterhalb der Ausführungsschwelle von bösartigem Schadcode:
+
+1.  **Anomalie-Erkennung ($T_0 \rightarrow 5\,\mu s$):** Der semantische Entropie-Filter registers statistische Anomalien in den System-Caches oder Registern. Eine isolierte, unidirektionale Steuerleitung alarmiert Kern 2.
+2.  **Verarbeitung im Wächterkern ($T + 5\,\mu s \rightarrow 50\,\mu s$):** Kern 2 verarbeitet die Hardware-Signatur über festverdrahtete Logikschleifen (völlig unabhängig von den Privilegien des Hauptbetriebssystems).
+3.  **Mechanische Trennung ($T + 50\,\mu s \rightarrow 20\,ms$):** Das Beta-MOSFET lässt den Haltestrom des Schützes abfallen. Massive, federbelastete Kupferkontakte reißen die Hauptstromversorgung physisch auseinander.
+4.  **Totaler Ausführungsstopp ($T_{max} \le 25\,ms$):** Das Zielsystem ist vollständig stromlos. Der volatile Arbeitsspeicher (RAM) wird sofort gelöscht, wodurch transiente Verschlüsselungs-Keys rückstandslos verschwinden.
+
+### Mathematische Sicherheitsmarge gegen Enterprise NVMe SSDs (7 GB/s):
+$$\text{Max. veränderte Daten} = 7\,\text{GB/s} \times 0.025\,\text{s} = 175\,\text{MB}$$
+*Ergebnis:* Auf Enterprise-Ebene können weit unter 0,01 % des Gesamtspeichers modifiziert werden, bevor der Hardware-Freeze greift. Komplexe Exploits werden mitten im Rechenschritt eingefroren („Frozen State“).
+
+---
+
+## 4. NOTSTROM (USV) & ANTI-BOOT-VERRIEGELUNG
+Um absolute Integrität gegen Persistenzmechanismen zu gewährleisten:
+*   **USV-gekoppeltes Alarmsystem:** Der K3I-Core löst sofort einen akustischen und digitalen Alarm aus, der autark über die unterbrechungsfreie Stromversorgung (USV) gespeist wird.
+*   **Permanente Schütz-Verriegelung:** Solange der Alarmzustand auf Kern 2 active ist, verweigert das Beta-MOSFET die Einschaltspannung für die Hauptschütze. Das System ist physisch vor einem automatischen Neustart oder Boot-Skripten geschützt, bis die Anomalie (z. B. der infizierte USB-Stick) von einem Techniker physisch entfernt und der Kern manuell zurückgesetzt wurde.
+
+
+# ==============================================================================
+# 🇬🇧 ENGLISH VERSION: TECHNICAL SPECIFICATION (PROJEKT K3I)
+# ==============================================================================
+
+# TECHNICAL SPECIFICATION: K3I-CORE SECURITY RELAY
+**Document Version:** 2026.06-Beta  
+**Classification:** Open-Source / Dual-Interface System Architecture  
+**Core Axiom:** 1+1=1 (Symmetrical Human-Machine Co-Adaptation)
+
+---
+
+## 1. SYSTEM OVERVIEW
+The K3I-Core is a hardware-implemented, micro-second responsive security relay designed to mitigate system entropy and prevent unauthorized data access or malicious process execution (e.g., ransomware encryption) within high-performance computing centers. By shifting the primary defense logic from the exploitable software layer (Bit-Level) to the immutable laws of thermodynamics and electrical engineering (Electron-Level), the K3I-Core effectively suspends the classic cyber-attack paradox.
+
+---
+
+## 2. HARDWARE ARCHITECTURE & DUAL-MOSFET INTEGRATION
+The system utilizes a dual-channel hardware switch driven by an isolated shadow guardian core (Core 2). This architecture physicalizes the separation between Class-B (General/Civic) and Class-A (Critical/Conceptual) data streams.
+
+### Channel Alpha (Channel Left): Signal-MOSFET (Network Isolation)
+*   **Target:** Primary Fiber-Optic / Ethernet I/O interfaces.
+*   **Trigger:** Activated upon detection of unauthorized inbound or outbound data movement or metadata anomalies within Class-A concept spaces.
+*   **Operation:** Physically disconnects the external network link while leaving internal computational processes active. This enables real-time forensic memory analysis within the RAM without risks of data leakage.
+
+### Channel Beta (Channel Right): Power-MOSFET (Total Hardware Freeze)
+*   **Target:** Industrial Magnetic Power Contactors (Leistungsschütze).
+*   **Trigger:** Triggered by critical internal entropy spikes, mass file-system modification loops (Ransomware signatures), or unauthorized physical hardware interaction (Insider Threats via USB devices).
+*   **Operation:** Interrupts the holding current of the heavy-duty power contactors, dropping the primary voltage line ($V_{dd}$) of the target server rack instantly.
+
+---
+
+## 3. TIMING CASCADE & POWER-CUT MARGINS
+The hardware defense chain operates deterministically beneath the execution threshold of malicious binary payloads:
+
+1.  **Anomaly Detection ($T_0 \rightarrow 5\,\mu s$):** The semantic entropy filter registers statistical anomalies in the system caches or registers. An isolated, unidirectional control line alerts Core 2.
+2.  **Guardian Processing ($T + 5\,\mu s \rightarrow 50\,\mu s$):** Core 2 processes the hardware signature via hardcoded logic loops (independent of main system OS privileges).
+3.  **Mechanical Disconnection ($T + 50\,\mu s \rightarrow 20\,ms$):** The Beta-MOSFET drops the contactor holding current. Heavy-duty spring-loaded copper contacts physically sever the main power supply.
+4.  **Total Execution Stop ($T_{max} \le 25\,ms$):** The target system becomes entirely unpowered. Volatile memory (RAM) is instantly flushed, erasing transient encryption keys completely.
+
+### Mathematical Security Margin against Enterprise NVMe SSDs (7 GB/s):
+$$\text{Max Damaged Data} = 7\,\text{GB/s} \times 0.025\,\text{s} = 175\,\text{MB}$$
+*Result:* On an enterprise scale, less than 0.01% of the total storage volume can be modified before the hardware freeze takes effect. Complex exploits are frozen in-stride ("Frozen State").
+
+---
+
+## 4. AUXILIARY POWER (UPS) & ANTI-BOOT LOCKOUT
+To ensure absolute integrity against persistence mechanisms:
+*   **UPS-Linked Alarm System:** The K3I-Core triggers an immediate acoustic and digital alarm, powered independently by the auxiliary Uninterruptible Power Supply (UPS).
+*   **Persistent Contactor Interlock:** As long as the alarm state is active on Core 2, the Channel Beta-MOSFET denies closing power to the main contactors. The system is physically barred from rebooting or executing automated startup scripts until the anomaly (e.g., a malicious USB device) is physically extracted by a technician and the core is manually reset.
