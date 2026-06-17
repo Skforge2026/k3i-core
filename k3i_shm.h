@@ -17,3 +17,6 @@ typedef struct {
 } k3i_shm_t;
 
 #endif /* K3I_SHM_H */
+#define K3I_SHUTTER_L_REG  0x4000E000 // Provider Line L Isolation
+#define K3I_SHUTTER_R_REG  0x4000E004 // Provider Line R Isolation
+#define K3I_MUTEX_LOCK     0x4000E008 // Atomic Hardware Interlocking
