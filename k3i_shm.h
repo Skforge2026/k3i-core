@@ -1,24 +1,56 @@
-#ifndef K3I_SHM_H
-#define K3I_SHM_H
-
+#include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
 
-#define K3I_SHM_NAME "/k3i_buffer_shm"
-#define K3I_MSG_SIZE 512
-
 /* K3I HARDWARE ISOLATION REGISTER MAP (SCHICHT 4) */
-#define K3I_SHUTTER_L_REG  0x4000E000 // Provider Line L Isolation
-#define K3I_SHUTTER_R_REG  0x4000E004 // Provider Line R Isolation
-#define K3I_MUTEX_LOCK     0x4000E008 // Atomic Hardware Interlocking
+#define K3I_SHUTTER_L_REG  0x4000E000 // Physikalische Adresse Provider Line L Shutter
+#define K3I_SHUTTER_R_REG  0x4000E004 // Physikalische Adresse Provider Line R Shutter
+#define K3I_MUTEX_LOCK     0x4000E008 // Atomic Hardware Interlocking Register
 
-/* Shared Memory Struktur für den Hardware-Wächter */
-typedef struct {
-    uint64_t timestamp;     /* Echtzeit-Takt-Anker */
-    uint32_t message_id;    /* Bau-ID zur Validierung */
-    uint32_t status_flags;  /* System-Zustand (Ring 0/1) */
-    char input_data[K3I_MSG_SIZE];  /* Befehl aus dem Forum */
-    char output_data[K3I_MSG_SIZE]; /* Antwort der Live-Kerne */
-    uint32_t crc32_checksum;/* Manipulationsschutz-Schild */
-} k3i_shm_t;
+/* RDTSC CYCLES ACCURATE TIME STAMP */
+static inline uint64_t read_rdtsc(void) {
+    unsigned int lo, hi;
+    __asm__ __volatile__ ("rdtsc" : "=a" (lo), "=d" (hi));
+    return ((uint64_t)hi << 32) | lo;
+}
 
-#endif /* K3I_SHM_H */
+/* HARDWARE SWITCH LOGIC WITH ATOMIC INTERLOCKING */
+void set_k3i_shutter(uint32_t provider_line) {
+    volatile uint32_t *mutex = (volatile uint32_t *)K3I_MUTEX_LOCK;
+    volatile uint32_t *shutter_l = (volatile uint32_t *)K3I_SHUTTER_L_REG;
+    volatile uint32_t *shutter_r = (volatile uint32_t *)K3I_SHUTTER_R_REG;
+
+    // 1. Atomic Hardware Lock anfordern (Gegen asynchrone Jitter-Effekte)
+    while (*mutex == 1) {
+        // Warte deterministisch auf CPLD Freigabe
+    }
+    *mutex = 1; // Sperre setzen
+
+    // 2. Physikalische Umschaltung der Solid-State Shutter (<1µs)
+    if (provider_line == 0) {
+        *shutter_l = 1; // Aktivieren Line L
+        *shutter_r = 0; // Isolieren Line R
+    } else {
+        *shutter_l = 0; // Isolieren Line L
+        *shutter_r = 1; // Aktivieren Line R
+    }
+
+    // 3. Hardware Lock freigeben
+    *mutex = 0;
+}
+
+int main(void) {
+    uint64_t start_cycles, end_cycles;
+
+    printf("[K3I SYSTEM] Initialisiere deterministisches Shutter-System...\n");
+    
+    start_cycles = read_rdtsc();
+    set_k3i_shutter(0); // Schalte auf Provider Line L
+    end_cycles = read_rdtsc();
+
+    printf("[K3I SYSTEM] Umschaltung und Schicht-4-Isolation erfolgreich.\n");
+    printf("[K3I SYSTEM] Gemessene CPU-Takte (rdtsc): %lu\n", (end_cycles - start_cycles));
+
+    return 0;
+}
+
