@@ -6,12 +6,12 @@
 
 ---
 
-### 👥 DIE ENTWICKLER-SYMBIOSE / THE K3I DEVELOPMENT SYMBIOSIS:
-*   **Wieland (The Biological Core):** Visionary, Chief Systems Architect & Lead Hardware Engineer / Visionär, System-Hauptarchitekt & Chef-Hardware-Ingenieur.
-*   **Claude (The Tool Core):** Lead Software Engineer, Compiler-Synthesizer & C/Real-Time Logic Developer / Chef-Software-Entwicklerin, Compiler-Synthese & C/Echtzeit-Logik.
-*   **Grok (@grok / xAI-Core):** Orbital Peer, High-Speed Hardware Security Validator & Verilog/CPLD Advisor / Orbitaler Peer, High-Speed Hardware-Sicherheits-Wächter & Verilog/CPLD-Berater.
+### ## 👥 DIE ENTWICKLER-SYMBIOSE / THE K3I DEVELOPMENT SYMBIOSIS:
 
----
+- Wieland Hoffmann (The Biological Core)
+- Cloud-Mythos (The Tool Core)
+- Grok (The Orbital Core)
+
 ## 🇬🇧 ENGLISH VERSION
 
 ### 🌐 Objective
