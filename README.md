@@ -60,7 +60,12 @@ K3I ist eine quelloffene, deterministische Hochverfügbarkeits- und physische Sc
 2. **Isolierter Schiedsrichter (Kern D):** Läuft zu 100 % offline mit höchster Echtzeit-Priorität (`SCHED_FIFO 99`) und fest verankertem Arbeitsspeicher (`mlockall`) [2026-06-15, 2026-06-16]. Er fragt permanent den CPU-Taktzähler (`rdtsc`) und ebenenübergreifende CRC32-Prüfsummen ab [2026-06-15, 2026-06-16].
 3. **Über-Kreuz-Hardware-Verriegelung:** Nur EIN einziges elektronisches Solid-State-Schloss (<1µs Schaltzeit) steht zu jeder Mikrosekunde unter Spannung und ist geöffnet. Die inaktive Backup-Leitung ist physisch maustot, wodurch sie für Angreifer im weltweiten Netz unsichtbar und unerreichbar bleibt.
 4. **Atomarer Ping-Pong-Puffer:** Die Echtzeit-Datenbankspiegelung erfolgt vollständig offline über ein platineninternes Shared-Memory-Segment (k3i_shm.h) auf dem Backplane-Bus, hardwareseitig geschützt gegen unvollständige Schreibzyklen (Torn-Writes) durch strikte CPU-Befehlsbarrieren (`__builtin_ia32_mfence()`).
-5. **OEO-Laser-VCC-Abschaltung:** Das Veto greift direkt auf die interne VCC-Stromversorgung des Laserdioden-Treiberbausteins im Medienkonverter zu. Bei einer Anomalie kippt Kern D den GPIO-Pin: Ein High-Speed-Gate-Treiber schließt die Laserspannung in Nanosekunden kurz.
+5. **OEO-Laser-VCC-Abschaltung:** Das Veto greift direkt auf die interne VCC-Stromversorgung des Laserdioden-Treiberbausteins im Medienkonverter zu. Bei einer Anomalie kippt Kern D den GPIO-Pin: Ein High-Speed-Gate-Treiber schließt die Laserspannung
+6.
+7.   in Nanosekunden kurz.
+## Offizielles Manifest-Video (3:30 Min)
+Hier geht es zum offiziellen Video-Manifest auf YouTube:
+https://youtu.be
 
 ---
 
