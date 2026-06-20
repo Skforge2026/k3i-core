@@ -65,7 +65,7 @@ K3I ist eine quelloffene, deterministische Hochverfügbarkeits- und physische Sc
 7.   in Nanosekunden kurz.
 ## Offizielles Manifest-Video (3:30 Min)
 Hier geht es zum offiziellen Video-Manifest auf YouTube:
-https://youtu.be
+https://youtu.be/ASf4twUetI0
 
 ---
 
