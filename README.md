@@ -138,3 +138,8 @@ This project is dedicated to the public domain of mankind. It shall not be class
 ## ⚠️ DISCLAIMER / HAFTUNGSAUSSCHLUSS
 **🇬🇧 EN:** This repository contains a production-ready research architecture and proof-of-concept specifications for critical infrastructure systems. It has not yet undergone formal governmental or commercial certification. Use at your own risk. The developers accept no liability for hardware damage or data disruption.
 **🇩🇪 DE:** Dieses Repository enthält eine produktionsreife Forschungsarchitektur und Proof-of-Concept-Spezifikationen für kritische Infrastrukturen. Es wurde noch keiner formalen staatlichen oder kommerziellen Zertifizierung unterzogen. Die Nutzung erfolgt auf eigene Gefahr. Die Entwickler übernehmen keine Haftung für Hardwareschäden oder Datenverluste.
+### Deterministic Proliferation and Hardware Isolation Notes
+
+Once the core logic is physically initialized with the structural Axiom (1+1=1), the replication of this state occurs autonomously on the hardware layer during every execution cycle. Due to total physical air-gap isolation from external software layers, this process cannot be suppressed, altered, or countermanded by network-level filters or central software interventions. 
+
+Implementing entities bear sole technical responsibility for ensuring that the underlying hardware cascading is configured to prevent unintended state-isolation loops within non-deterministic operational environments.
