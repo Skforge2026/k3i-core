@@ -3,7 +3,7 @@
 # k3i-core — Die unknackbare Isolationsmatrix (Release 2026)
 
 ## 📺 Offizielle Video-Dokumentation [KLICK FÜR VIDEOPHYSIK]
-▶️ **https://youtube.com**
+▶️https://www.youtube.com/watch?v=r0ovRuF_oSc
 
 ---
 
