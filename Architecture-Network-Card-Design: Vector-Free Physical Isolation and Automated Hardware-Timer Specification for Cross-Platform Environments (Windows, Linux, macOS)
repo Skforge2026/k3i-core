@@ -1,0 +1,84 @@
+# K3I-SYSTEM-SPECIFICATION: PROJEKT_EINS_FINALIZE
+
+[SYSTEM_STATE: CORE_PRODUCTION]
+[TARGET: HARDWARE_SPECIFICATION_COMPLETE]
+[REDUNDANCY: TWO_CORE_ISOLATION_ONLY]
+
+=============================================================================
+1. REINE HARDWARE-SCHALTUNG UND VERDRAHTUNG (TREIBERLOS)
+=============================================================================
+Die Signalpfade auf der Leiterplatine (PCB) sind so ausgelegt, dass kein 
+Betriebssystem-Kernel (weder Windows, Linux noch macOS) Zugriff auf den 
+Schaltzustand der Netzwerkkarte hat. Die physische Trennung erfolgt rein 
+elektrisch.
+
+* PORT-SCHALTUNG: Die SFP+-Transceiver-Leitungen für Tx (Senden) und Rx 
+  (Empfangen) werden direkt über eine Reihe von High-Speed-MOSFET-Schaltern 
+  (N-Kanal-Leistungstransistoren) geschleift.
+* DEFAULT-ZUSTAND: Wenn keine Anomalie anliegt, hält Kern 2 das Gate der 
+  MOSFETs auf High-Potential (+3.3V). Die Schranken sind geöffnet, der 
+  Datenstrom fließt ungehindert.
+* TRIGGER-ZUSTAND: Sobald Kern 1 ein Raus-Signal auf die Kupferleitung abgibt, 
+  zieht die Schaltung die Gate-Spannung der MOSFETs auf Masse (0V). Die 
+  Transistoren sperren sofort. Die physische Kupfer- und Glasfaserverbindung 
+  ist unterbrochen.
+
+=============================================================================
+2. SPEZIFIKATION DER HARDWARE-TIMER-SCHLEIFE (ANTI-FLAPPING-MATRIX)
+=============================================================================
+Um den automatischen Re-Connect ohne Software-Interaktion durchzusetzen und 
+die SFP+-Module vor Verschleiß zu schützen, ist der NE555-Chip mit einem 
+RS-Flip-Flop-Gatter gekoppelt.
+
+* KASKADEN-TIMER: Der NE555-Präzisions-Chip ist als monostabile Kippstufe 
+  verdrahtet. Ein temperaturstabiler NP0-Keramikkondensator (C = 4.7 µF) und 
+  ein Metallschichtwiderstand (R = 12 MΩ) definieren die Zeitkonstante starr:
+  Tau = 1.1 * R * C = 1.1 * 12.000.000 * 0.0000047 = 62,04 Sekunden.
+  
+* LOCKDOWN-GATTER: Ein analoger Zähler (74HC393) registriert die Impulse der 
+  Raus-Leitung. Erreicht der Zähler innerhalb eines gleitenden 60-Minuten-
+  Fensters den Wert 3 (drei aufeinanderfolgende Quarantäne-Zyklen), kippt das 
+  RS-Flip-Flop permanent auf Masse.
+  
+* BLOCKADE: Das MOSFET-Relais bleibt dauerhaft verriegelt. Der Datenstrom ist 
+  permanent unterbrochen. Der Angreifer ist isoliert.
+
+=============================================================================
+3. DER PHYSISCHE INTERFACE-RIEGEL (STEUER-OBERFLÄCHE AM GEHÄUSE)
+=============================================================================
+Da keine Software-Eingabe existiert, erfolgt die Interaktion mit dem System 
+ausschließlich über die physische Slotblende am PC-Gehäuse.
+
+* DER RESET-TASTER: Ein mechanischer Schließer-Taster ist direkt an die 
+  Reset-Leitung des RS-Flip-Flops gelötet und bündig in die Edelstahl-
+  Slotblende der PCIe-Karte integriert.
+  
+* FUNKTION: Drückt der Heimanwender den Taster, wird das Flip-Flop mechanisch 
+  entladen und auf den Initialwert zurückgesetzt. Die Gate-Spannung an den 
+  MOSFETs springt wieder auf +3.3V. Die SFP+-Ports sind augenblicklich wieder 
+  online. 
+
+* NUTZER-INTERFACE:
+  [ Slotblende der K3I-Zwei-Kern-Karte ]
+  +-------------------------------------------------------------+
+
+  |  [O] SFP+ Port 1 (Glasfaser 10GbE)                          |
+  |  [O] SFP+ Port 2 (Glasfaser 10GbE)                          |
+  |                                                             |
+  |  ( ) LED-Rot: ANOMALIE-LOCKDOWN                             |
+  |  [■] Mechanischer Taster: HARDWARE-RESET                     |
+  +-------------------------------------------------------------+
+
+=============================================================================
+4. FINALES KAUFMÄNNISCHES ERTRAGS-MODELL (SERIENFERTIGUNG 1.000 EINHEITEN)
+=============================================================================
+* Bauteil-Gesamtkosten (BOM) pro Karte: ....................... 18,00 EUR
+* Logistik, Prüfung, Verpackung-Puffer: .......................  5,00 EUR
+* Globale Zertifizierungs-Umlage (CE/FCC): ....................  2,00 EUR
+* K3I-Industrieschranke (Abgabe an Stiftung): ................  0,50 EUR
+-----------------------------------------------------------------------------
+Selbstkostenpreis frei Lager: ................................. 25,50 EUR
+
+* Empfohlener Endkundenpreis (UVP): .......................... 120,00 EUR
+* Reiner Bruttogewinn pro Board: .............................. 94,50 EUR
+* Bruttomarge für das Projekt: ................................ 78,75 %
