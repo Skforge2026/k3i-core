@@ -1,0 +1,41 @@
+# 🛠️ SYSTEM-VALIDIERUNG / SYSTEM VALIDATION
+## 💥 Phase 1: Extrem-Härtetest (16 Kerne am Limit)
+
+**Willkommen zum nächsten großen Meilenstein!**
+
+Nach den ersten erfolgreichen Kurztests haben wir das System einer professionellen, dreiteiligen Stabilitäts- und Benchmark-Validierung mit `stress-ng` unterzogen. Das Ziel: Die Hardware an die absolute Belastungsgrenze treiben, die CPU-Bremse lösen und der Community einen echten Stabilitätsbeweis liefern.
+
+---
+
+### 🏎️ Bremsen-Vergleich: Powersave vs. Performance
+
+Im ersten Durchlauf liefen die 16 CPU-Kerne im Standard-Modus `powersave`. Anschließend haben wir alle Kerne manuell auf `performance` geschaltet und denselben Test wiederholt.
+
+**Direkter Vorher-Nachher-Vergleich (Bogo Ops/s):**
+
+| Test-Szenario          | Powersave (Standard) | Performance (Entfesselt) | Veränderung     | Analyse |
+|------------------------|----------------------|---------------------------|-----------------|---------|
+| **`schedmix`** (CPU/IO-Mix) | 2.550,85            | 2.672,32                 | **+4,76 %** 🚀  | Sehr gute Reaktion auf Lastwechsel |
+| **`switch`** (Kontextwechsel) | 1.016.615,26      | 1.050.736,75             | **+3,36 %** 🚀  | Über 1 Million Prozesswechsel pro Sekunde |
+| **`mmap`** (Speicherdurchsatz) | 197,75            | 190,08                   | **-3,88 %** 📉  | RAM-Bus bereits am Limit |
+| **`aiol`** (Asynchrones I/O) | 6.113,28          | 4.722,10                 | **-22,76 %** 📉 | CPU rechnet schneller als die Festplatte folgen kann |
+
+---
+
+### 🧠 Praktische Erkenntnisse (Warum der PC „rödelt“)
+
+Während des Tests fühlte sich das System im normalen Desktop-Betrieb (Browser etc.) extrem träge an. Das ist jedoch kein Fehler, sondern ein Qualitätsmerkmal:
+
+1. Die Stressoren blockieren die CPU-Kerne zu **100 %** ohne künstliche Pausen.
+2. Der `mmap`-Test lastet den Speicherbus komplett aus.
+3. Trotz massiver Belastung blieb das System **absolut stabil** – keine Abstürze, keine Kernel-Panics, kein Speicherfehler.
+
+---
+
+### 🔥 Nächster Schritt: Der finale 5-Minuten-Crashtest
+
+Die Daten sind gesichert. Jetzt geht es „All-In“. Der nächste Test läuft über volle 5 Minuten und zwingt CPU, RAM und I/O gleichzeitig in die Knie.
+
+Entweder liefert das System danach den ultimativen Beweis – oder die Hardware raucht ab.
+
+Bleibt dran. Die Ergebnisse folgen in Kürze!
