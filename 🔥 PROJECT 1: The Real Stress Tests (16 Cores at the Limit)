@@ -45,3 +45,30 @@ Während des Härtetests wurde das System im Alltag (Browser, Desktop) extrem z�
 Die Daten sind gesichert. Jetzt gehen wir "All-In". Der nächste Test läuft über volle 5 Minuten und zwingt CPU, RAM und I/O-Schnittstellen **gleichzeitig** in die Knie. Entweder liefert das System danach den ultimativen Performance-Beweis – oder die Hardware raucht ab. 
 
 Bleibt dran, die Ergebnisse folgen sofort!
+
+# 🔥 PROJEKT 1: Der 5-Minuten-Crashtest (Der Ritterschlag!)
+
+Leute, haltet euch fest – wir sind mit Projekt 1 **All-In** gegangen! 🚀
+
+Keine halben Sachen. Wir haben CPU, RAM und das I/O-Subsystem **gleichzeitig** für volle 5 Minuten (300 Sekunden) an die absolute Belastungsgrenze gebracht.
+
+Während normale Luftkühler hier wie ein startender Düsenjet klingen würden, lief meine Kiste dank der Ölkühlung flüsterleise durch. Die Lüfter sind am Ende nur ganz entspannt angesprungen. **Kein Absturz, kein Bluescreen, keine Fehler** (`failed: 0`).
+
+Hier sind die knallharten Ergebnisse aus dem Epizentrum:
+
+### 📊 VOLLLAST-PROFIL (Alle Stressoren zeitgleich aktiv!)
+
+| Test          | Ergebnis              | Bewertung      |
+|---------------|-----------------------|----------------|
+| **Schedmix**  | 4.019 Bops/s          | **Rekord!** 🚀 |
+| **Switch**    | 574.740 Bops/s        | Brutales Multitasking |
+| **Mmap**      | 30 Bops/s             | RAM-Bus am Limit |
+| **Aiol**      | 5.391 Bops/s          | SSD hält stand |
+
+### 🧠 Tech-Analyse für die Gurus
+
+1. **Schedmix-Rekord:** Mit nur 2 Instanzen pro Stressor konnten sich die 16 Kerne optimal abwechseln. Über 1,2 Millionen Operationen in 5 Minuten – beeindruckend!
+2. **Der „Rödel-Flaschenhals“:** Der starke Einbruch beim `mmap` (30 Bops/s) erklärt, warum der Browser während des Tests kurz gezuckt hat. Der Arbeitsspeicher musste gleichzeitig CPU und Festplatte bedienen. Der Linux-Kernel hat das System jedoch stabil gehalten.
+3. **Eiskaltes I/O:** Die Festplatte ließ sich von der CPU-Schwerstarbeit nicht beeindrucken und lieferte fast identische Werte wie im Einzeltest.
+
+**Fazit:** Dieses System ist offiziell **unzerstörbar**. Die Ölkühlung hat die Reifeprüfung mit Bravour bestanden. Projekt 1 ist **rocksolid**! 🤘
