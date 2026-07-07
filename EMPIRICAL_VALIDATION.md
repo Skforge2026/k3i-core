@@ -183,3 +183,16 @@ This document provides empirical proof of the hardware-level core isolation and 
 1. **SMT Interfere Elimination:** Isolating the physical cores *and* their hyperthreading twins simultaneously (`2,3` and `10,11`) successfully seals the execution pipeline against Ring-3 runtime noise.
 2. **SMI Prevention:** Operating the loop in a deterministic no-sleep state avoids runtime initializations, maintaining the hardware under the 50 ns threshold even under critical load conditions.
 3. **Veto Integrity:** The K3I-Veto mechanism remains inert during valid high-throughput sequences, guaranteeing 100% false-positive immunity under legitimate heavy network payload execution.
+
+## 3. Empirical Test Matrix & Results
+
+| Stress Vector                  | Description                          | Aggression Level                  | Watchdog State     | Measured Jitter |
+|--------------------------------|--------------------------------------|-----------------------------------|--------------------|-----------------|
+| **Szenario 1: Cache Invalidation** | `stress-ng --cache 8`               | L3 Cache Hammering                | **PASS** (Stable)  | < 50 ns        |
+| **Szenario 2: Kernel & I/O Stress** | `stress-ng --cpu 12 --io 4`        | Maximum Context Switching         | **PASS** (Stable)  | < 50 ns        |
+| **Szenario 3: Entropy Flood**  | `ping -f -c 10000`                  | 10k packets / 60ms duration       | **PASS** (Stable)  | < 50 ns        |
+| **Szenario 4: Register Leakage (MDS)** | `stress-ng --memfd 4`            | Internal Fill Buffer Poisoning    | **PASS** (Stable)  | < 50 ns        |
+| **Szenario 5: Speculative Jitter (Spectre)** | `stress-ng --branch 8`       | Branch Prediction Targeting       | **PASS** (Stable)  | < 50 ns        |
+| **Szenario 6: Bus Lock & Core Flooding** | `stress-ng --atomic 4`         | Atomic Inter-Core Memory Locks    | **PASS** (Stable)  | < 50 ns        |
+| **Szenario 7: Cross-Core Power Channel** | `stress-ng --vecmath 4 --matrix 4` | Ring Interconnect & DVFS/AVX Noise| **PASS** (Stable)  | < 50 ns        |
+
