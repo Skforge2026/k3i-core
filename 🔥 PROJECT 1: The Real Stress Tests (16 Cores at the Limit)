@@ -1,41 +1,47 @@
 # 🛠️ SYSTEM-VALIDIERUNG / SYSTEM VALIDATION
-## 💥 Phase 1: Extrem-Härtetest (16 Kerne am Limit)
+## 💥 DE: Projekt 1: Extrem-Härtetest (16 Kerne am Limit)
+## 💥 EN: Project 1: Extreme Stress Test (16 Cores at the Limit)
 
-**Willkommen zum nächsten großen Meilenstein!**
+========================================================================
+   📊 HARDWARE-AUSLASTUNG / HARDWARE LOAD PROFILE (stress-ng)
+========================================================================
+   [ CPU KERNE ]  ████████████████████████████████ 100% (Performance)
+   [ RAM-BUS   ]  ████████████████████████████░░░  90% (mmap active)
+   [ I/O-DRIVE ]  ████████████████████░░░░░░░░░░  65% (aiol queue)
+========================================================================
 
-Nach den ersten erfolgreichen Kurztests haben wir das System einer professionellen, dreiteiligen Stabilitäts- und Benchmark-Validierung mit `stress-ng` unterzogen. Das Ziel: Die Hardware an die absolute Belastungsgrenze treiben, die CPU-Bremse lösen und der Community einen echten Stabilitätsbeweis liefern.
+Willkommen zum nächsten großen Meilenstein von Projekt 1! Nachdem die ersten Kurztests fehlerfrei liefen, haben wir das System einer professionellen, dreiteiligen Stabilitäts- und Benchmark-Validierung mit `stress-ng` unterzogen. 
 
----
-
-### 🏎️ Bremsen-Vergleich: Powersave vs. Performance
-
-Im ersten Durchlauf liefen die 16 CPU-Kerne im Standard-Modus `powersave`. Anschließend haben wir alle Kerne manuell auf `performance` geschaltet und denselben Test wiederholt.
-
-**Direkter Vorher-Nachher-Vergleich (Bogo Ops/s):**
-
-| Test-Szenario          | Powersave (Standard) | Performance (Entfesselt) | Veränderung     | Analyse |
-|------------------------|----------------------|---------------------------|-----------------|---------|
-| **`schedmix`** (CPU/IO-Mix) | 2.550,85            | 2.672,32                 | **+4,76 %** 🚀  | Sehr gute Reaktion auf Lastwechsel |
-| **`switch`** (Kontextwechsel) | 1.016.615,26      | 1.050.736,75             | **+3,36 %** 🚀  | Über 1 Million Prozesswechsel pro Sekunde |
-| **`mmap`** (Speicherdurchsatz) | 197,75            | 190,08                   | **-3,88 %** 📉  | RAM-Bus bereits am Limit |
-| **`aiol`** (Asynchrones I/O) | 6.113,28          | 4.722,10                 | **-22,76 %** 📉 | CPU rechnet schneller als die Festplatte folgen kann |
+Das Ziel: Die Hardware an die absolute Belastungsgrenze treiben, die künstliche CPU-Bremse lösen und den ultimativen Stabilitätsbeweis für die Community liefern.
 
 ---
 
-### 🧠 Praktische Erkenntnisse (Warum der PC „rödelt“)
+## 🏎️ Phase 1: Der Bremsen-Vergleich (Powersave vs. Performance)
 
-Während des Tests fühlte sich das System im normalen Desktop-Betrieb (Browser etc.) extrem träge an. Das ist jedoch kein Fehler, sondern ein Qualitätsmerkmal:
+Im ersten Durchlauf liefen die 16 CPU-Kerne standardmäßig im Linux-Modus `powersave`. Danach haben wir die Handbremse gelöst, alle Kerne manuell auf `performance` gepeitscht und denselben Test wiederholt. 
 
-1. Die Stressoren blockieren die CPU-Kerne zu **100 %** ohne künstliche Pausen.
-2. Der `mmap`-Test lastet den Speicherbus komplett aus.
-3. Trotz massiver Belastung blieb das System **absolut stabil** – keine Abstürze, keine Kernel-Panics, kein Speicherfehler.
+Hier sind die knallharten, gemessenen Zahlen (Bogo Ops/s) im direkten Vorher-Nachher-Vergleich:
+
+| Test-Szenario | Powersave (Standard) | Performance (Entfesselt) | Veränderung | Analyse für die Tech-Gemeinde |
+| :--- | :--- | :--- | :--- | :--- |
+| **`schedmix`** (CPU/IO-Mix) | 2.550,85 | 2.672,32 | **+4,76 %** 🚀 | Die CPU reagiert blitzschnell und ohne Verzögerung auf harte Lastwechsel. |
+| **`switch`** (Kontextwechsel) | 1.016.615,26 | 1.050.736,75 | **+3,36 %** 🚀 | Brutale Leistung: Über 1 Million Prozesswechsel pro Sekunde! |
+| **`mmap`** (Speicherdurchsatz) | 197,75 | 190,08 | **-3,88 %** 📉 | Der RAM lief vorher schon am Limit. Höherer CPU-Takt bringt hier wegen winziger Cache-Latenzen keinen Vorteil. |
+| **`aiol`** (Asynchrones I/O) | 6.113,28 | 4.722,10 | **-22,76 %** 📉 | Ein genialer Tech-Einblick! Die CPU rechnet im Performance-Modus so schnell, dass die Warteschlange der Festplatte vollrauscht und die CPU aktiv warten muss. |
 
 ---
 
-### 🔥 Nächster Schritt: Der finale 5-Minuten-Crashtest
+## 🧠 Erkenntnisse aus der Praxis (Warum der PC "rödelt")
 
-Die Daten sind gesichert. Jetzt geht es „All-In“. Der nächste Test läuft über volle 5 Minuten und zwingt CPU, RAM und I/O gleichzeitig in die Knie.
+Während des Härtetests wurde das System im Alltag (Browser, Desktop) extrem zäh und langsam. Was sich im ersten Moment nach einem Fehler anfühlt, ist in Wahrheit das beste Qualitätsmerkmal:
+1. **Vollauslastung:** Die Stressoren blockieren die CPU-Kerne zu 100% ohne künstliche Pausen.
+2. **Speicher-Stau:** Der `mmap`-Test lastet den Speicherbus des RAMs komplett aus.
+3. **Rocksolid-Verhalten:** Trotz dieser massiven Blockade fängt der Linux-Kernel die Last perfekt ab. Es gab **keine Abstürze, keine Speicherfehler und keine Kernel Panics**. Das System ist absolut stabil!
 
-Entweder liefert das System danach den ultimativen Beweis – oder die Hardware raucht ab.
+---
 
-Bleibt dran. Die Ergebnisse folgen in Kürze!
+## 🔥 Nächster Schritt: Der finale Stabilitäts-Crashtest
+
+Die Daten sind gesichert. Jetzt gehen wir "All-In". Der nächste Test läuft über volle 5 Minuten und zwingt CPU, RAM und I/O-Schnittstellen **gleichzeitig** in die Knie. Entweder liefert das System danach den ultimativen Performance-Beweis – oder die Hardware raucht ab. 
+
+Bleibt dran, die Ergebnisse folgen sofort!
