@@ -17,7 +17,7 @@ Nachdem die ersten Kurztests fehlerfrei liefen, haben wir das System einer profe
 
 ### 🏎️ Phase 1: Der Bremsen-Vergleich (Powersave vs. Performance)
 
-Im ersten Durchlauf liefen die 16 CPU-Kerne im Standard-Modus `powersave`. Anschließend haben wir alle Kerne manuell auf `performance` geschaltet (Strom ist dank der eigenen Solaranlage schließlich egal!) und denselben Test wiederholt.
+Im ersten Durchlauf liefen die 16 CPU-Kerne im Standard-Modus `powersave`. Anschließend haben wir alle Kerne manuell auf `performance` geschaltet.
 
 **Direkter Vorher-Nachher-Vergleich (Bogo Ops/s):**
 
