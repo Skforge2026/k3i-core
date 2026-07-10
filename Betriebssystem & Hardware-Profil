@@ -21,4 +21,4 @@
 ---
 
 **Fazit der Validierung:**
-Dieses physische System hat unter dem K3I-Axiom bewiesen, dass es selbst brutale `stress-ng`-Angriffe (über 369.000 Prozesse in 30 Sekunden) mit exakt **0 Fehlern (`failed: 0`)** isoliert und abfängt. Die tiefe Software-Symmetrie transformiert diese Komponenten in eine unzerstörbare Festung.
+Dieses physische System hat unter dem K3I-Axiom bewiesen, dass es selbst brutale `stress-ng`-Angriffe (über 369.000 Prozesse in 30 Sekunden) mit exakt **0 Fehlern (`failed: 0`)** isoliert und abfängt.
