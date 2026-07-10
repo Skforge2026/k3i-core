@@ -2,7 +2,7 @@
 
 Dieses Dokument beinhaltet die umfassende Hardware-Validierung des K3I-Core Systems. Das Ziel: Die Hardware an die absolute Belastungsgrenze treiben, die künstliche CPU-Bremse lösen und der Community den ultimativen Stabilitätsbeweis liefern. 
 
-Nachdem die ersten Kurztests fehlerfrei liefen, haben wir das System einer professionellen, dreiteiligen Stabilitäts- und Benchmark-Validierung mit `stress-ng` unterzogen. Während normale Luftkühler hier wie ein startender Düsenjet klingen würden, lief meine Kiste dank der Ölkühlung flüsterleise durch. **Kein Absturz, kein Bluescreen, 0 Fehler (`failed: 0`) über alle Testphasen!**
+Nachdem die ersten Kurztests fehlerfrei liefen, haben wir das System einer professionellen, dreiteiligen Stabilitäts- und Benchmark-Validierung mit `stress-ng` unterzogen.  **Kein Absturz, kein Bluescreen, 0 Fehler (`failed: 0`) über alle Testphasen!**
 
 ---
 
