@@ -1,7 +1,7 @@
 ===============================================================================
 ALLGEMEINE FREIE GEMEINSCHAFTSLIZENZ (K3I-SYSTEM)
 ===============================================================================
-RECHTSINHABER: SK-Forge UG (haftungsbeschränkt) i.G.
+RECHTSINHABER: SK-Forge UG (haftungsbeschränkt)
 GÜLTIGKEIT:    Weltweit für private, akademische und nicht-kommerzielle Zwecke
 ===============================================================================
 
