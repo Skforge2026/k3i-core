@@ -1,7 +1,7 @@
 ===============================================================================
 ALLGEMEINER LIZENZVERTRAG FÜR COMMERZIELLE & BEHÖRDLICHE ANWENDER (K3I-SYSTEM)
 ===============================================================================
-RECHTSINHABER: SK-Forge UG (haftungsbeschränkt) i.G.
+RECHTSINHABER: SK-Forge UG (haftungsbeschränkt)
 SCHUTZRECHT:   Angemeldet beim DPMA am 10.06.2026 (Hardware & Verfahren)
 GÜLTIGKEIT:    Weltweit für kommerzielle, industrielle und betriebliche Nutzung
 ===============================================================================
