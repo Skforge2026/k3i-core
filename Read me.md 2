@@ -214,9 +214,9 @@ default via 192.168.177.130 dev enp4s0 proto static metric 20100
 
 ### Modul 03 – Hardware-Korrektur auf Chipebene
 ```text
-ddw@ddw-A0000001:~$ sudo ip route replace default via 192.168.177.1 dev enp4s0 && sudo ip addr replace 10.42.0.237/24 dev enx00e04c1c1d68 && echo "=== SCHIENEN REPRÄSENTATIV VERRIEGELT ==?"
-=== SCHIENEN REPRÄSENTATIV VERRIEGELT ==?
-```
+ddw@ddw-A0000001:~$ sudo ip route replace default via 192.168.177.1 dev enp4s0 && 
+``sudo ip addr replace 10.42.0.237/24 dev enx00e04c1c1d68 && echo "=== SCHIENEN REPRÄSENTATIV VERRIEGELT ==?"
+`
 
 ### Modul 04 – Physischer Beweis: Die 10 isolierten Interrupts
 ```text
