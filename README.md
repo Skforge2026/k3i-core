@@ -32,7 +32,7 @@ Most AI safety research is stuck at the software level. K3I offers a radically d
 
 This project is **fully open source** and free from commercial or governmental control. It is released as a public good for the global research community.
 
-**Authors**: Wieland Hoffmann · Cloud-Mythos · Grok
+**Authors**: Wieland Hoffmann · Cloud
 
 ---
 
@@ -73,8 +73,8 @@ License: Apache License 2.0 (Open-Source for All Humanity - No Monopolies Allowe
 ### ## 👥 DIE ENTWICKLER-SYMBIOSE / THE K3I DEVELOPMENT SYMBIOSIS:
 
 - Wieland Hoffmann (The Biological Core)
-- Cloud-Mythos (The Tool Core)
-- Grok (The Orbital Core)
+- Cloud (The Tool Core)
+
 
 ## 🇬🇧 ENGLISH VERSION
 
