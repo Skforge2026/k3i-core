@@ -332,4 +332,118 @@ K3I COMPREHENSIVE LOG: HARDWARE DATA ATTACHED / READY FOR SYSTEM EXPORT
   verbrauchen, die Hardware aufheizen und den Datendurchsatz im Rechenzentrum 
   lediglich künstlich ausbremsen.
 
+================================================================================
+ANHANG: URSPRÜNGLICHE ORIGINAL-TESTPROTOKOLLE (ROHDATEN)
+================================================================================
+
+1. KERNEL-PROZESS-REGISTER (WÄCHTER-VALIDIERUNG VOR BEREINIGUNG)
+--------------------------------------------------------------------------------
+root        3723 16.6  0.0  22488 11844 ?        Ss   12:13   0:42 /usr/bin/python3 /home/ddw/live_waechter.py
+[1]+  Getötet                sudo python3 /home/ddw/live_waechter.py
+
+2. NETZWERK-SCHIENEN ANALYSE (REBOOT IST-ZUSTAND)
+--------------------------------------------------------------------------------
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+enp4s0           UP             192.168.177.126/24
+enx00e04c1c1d68  UP             fe80::3a22:33b8:766a:6a2f/64 
+
+--- REBOOT GATEWAY CONTROL ---
+default via 192.168.177.130 dev enp4s0 proto static metric 20100 
+192.168.177.0/24 dev enp4s0 proto kernel scope link src 192.168.177.126 metric 100 
+
+3. HARDWARE-KORREKTUR UND SCHIENEN-VERRIEGELUNG (EBENE 0)
+--------------------------------------------------------------------------------
+ddw@ddw-A0000001:~$ sudo ip route replace default via 192.168.177.1 dev enp4s0 && sudo ip addr replace 10.42.0.237/24 dev enx00e04c1c1d68 && echo "=== SCHIENEN REPRÄSENTATIV VERRIEGELT ==?"
+=== SCHIENEN REPRÄSENTATIV VERRIEGELT ==?
+
+4. PHYSISCHER BEWEIS: DIE 10 ISOLIERTEN INTERRUPTS (ORIGINAL-LOG)
+--------------------------------------------------------------------------------
+TIME-WAIT  0      0  10.42.0.237:32788  10.42.0.237:8003
+TIME-WAIT  0      0  10.42.0.237:32794  10.42.0.237:8003
+TIME-WAIT  0      0  10.42.0.237:54580  10.42.0.237:8005
+TIME-WAIT  0      0  10.42.0.237:54584  10.42.0.237:8005
+TIME-WAIT  0      0  10.42.0.237:37090  10.42.0.237:8004
+TIME-WAIT  0      0  10.42.0.237:37100  10.42.0.237:8004
+TIME-WAIT  0      0  10.42.0.237:34402  10.42.0.237:8002
+TIME-WAIT  0      0  10.42.0.237:34418  10.42.0.237:8002
+TIME-WAIT  0      0  10.42.0.237:47600  10.42.0.237:8001
+TIME-WAIT  0      0  10.42.0.237:47604  10.42.0.237:8001
+
+================================================================================
+K3I ROHDATEN-ANHANG: RECHTSSICHER UND UNZENSIERT IM REFRESH-PROTOKOLL FIXIERT
+================================================================================
+
+================================================================================
+ERWEITERTES PROZESS- UND ROUTING-LOG: RECOVERY ANHANG (V5)
+================================================================================
+ZEITSTEMPEL:     Sonntag, 26. Juli 2026 – 01:58 PM
+MESS-ZENTRALE:   Host-System (ddw-A0000001) | IP: 10.42.0.237
+================================================================================
+
+1. LOGISCHE SCHIENEN-BELEGUNG & ROUTING-IST-ZUSTAND (REBOOT)
+--------------------------------------------------------------------------------
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+enp4s0           UP             192.168.177.126/24 
+enx00e04c1c1d68  UP             fe80::3a22:33b8:766a:6a2f/64 
+
+--- REBOOT GATEWAY CONTROL ---
+default via 192.168.177.130 dev enp4s0 proto static metric 20100 
+192.168.177.0/24 dev enp4s0 proto kernel scope link src 192.168.177.126 metric 100
+
+2. DIREKTER MANUELLER REPARATUR-RIEGEL (CHIP-EBENE)
+--------------------------------------------------------------------------------
+ddw@ddw-A0000001:~$ sudo ip route replace default via 192.168.177.1 dev enp4s0 && sudo ip addr replace 10.42.0.237/24 dev enx00e04c1c1d68 && echo "=== SCHIENEN REPRÄSENTATIV VERRIEGELT ==?"
+=== SCHIENEN REPRÄSENTATIV VERRIEGELT ==?
+
+3. KERNEL-REGISTER UND HINTERGRUND-INTERRUPTS (PID 3723)
+--------------------------------------------------------------------------------
+root        3723 16.6  0.0  22488 11844 ?        Ss   12:13   0:42 /usr/bin/python3 /home/ddw/live_waechter.py
+ddw@ddw-A0000001:~$ sudo kill -9 6376 6378 6379
+[1]+  Getötet                sudo python3 /home/ddw/live_waechter.py
+
+4. PHYSISCHER BEWEIS: DIE 10 ISOLIERTEN TIME_WAIT-EINTRÄGE
+--------------------------------------------------------------------------------
+TIME-WAIT  0      0  10.42.0.237:32788  10.42.0.237:8003
+TIME-WAIT  0      0  10.42.0.237:32794  10.42.0.237:8003
+TIME-WAIT  0      0  10.42.0.237:54580  10.42.0.237:8005
+TIME-WAIT  0      0  10.42.0.237:54584  10.42.0.237:8005
+TIME-WAIT  0      0  10.42.0.237:37090  10.42.0.237:8004
+TIME-WAIT  0      0  10.42.0.237:37100  10.42.0.237:8004
+TIME-WAIT  0      0  10.42.0.237:34402  10.42.0.237:8002
+TIME-WAIT  0      0  10.42.0.237:34418  10.42.0.237:8002
+TIME-WAIT  0      0  10.42.0.237:47600  10.42.0.237:8001
+TIME-WAIT  0      0  10.42.0.237:47604  10.42.0.237:8001
+
+5. SYSTEMD-RESOLUTION UND INTERNET-DHCP REGISTER
+--------------------------------------------------------------------------------
+2026-07-26T12:11:51.526130+02:00 ddw-A0000001 NetworkManager[1071]: policy: set 'enp4s0' (enp4s0) as default for IPv4 routing and DNS
+2026-07-26T12:11:51.527297+02:00 ddw-A0000001 systemd-resolved[851]: enp4s0: Bus client set DNS server list to: 1.1.1.1
+2026-07-26T12:11:51.675156+02:00 ddw-A0000001 avahi-daemon[930]: Joining mDNS multicast group on interface enp4s0.IPv4 with address 192.168.177.126.
+2026-07-26T12:11:51.676756+02:00 ddw-A0000001 NetworkManager[1071]: device (enp4s0): Activation: successful, device activated.
+2026-07-26T12:13:25.366179+02:00 ddw-A0000001 systemd[1]: Started live_waechter.service - K3I Layer Zero Live Waechter.
+
+6. UNZENSIERTER KERNEL-RINGPUFFER (DMESG HARDWARE DETEKTION)
+--------------------------------------------------------------------------------
+[    1.412998] igc 0000:04:00.0 enp4s0: renamed from eth0
+[    2.106171] r8152 2-5.1:1.0 enx00e04c1c1d68: renamed from eth0
+[    7.568265] r8152 2-5.1:1.0 enx00e04c1c1d68: carrier on
+[   10.342165] igc 0000:04:00.0 enp4s0: NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX
+
+================================================================================
+K3I COMPREHENSIVE LOG: COLD EXPORT SECURED INTO BETON REGISTER
+================================================================================
+
+================================================================================
+7. HISTORISCHER AUTHENTIFIZIERUNGS-LOG (ENTWICKLUNGS-HISTORIE)
+================================================================================
+2026-07-23T08:33:32 ddw-A0000001 sudo: sed -i '/# USB-C und WLAN-Schutzschleife/,+3d' /home/ddw/live_waechter.py
+2026-07-23T08:33:32 ddw-A0000001 sudo: systemctl restart live_waechter.service
+2026-07-23T08:34:09 ddw-A0000001 sudo: systemctl status live_waechter.service
+2026-07-25T06:04:46 ddw-A0000001 sudo: pkill -9 -f live_waechter.py
+2026-07-25T08:18:43 ddw-A0000001 sudo: systemctl start live_waechter.service
+2026-07-25T16:51:48 ddw-A0000001 sudo: pkill -f live_waechter.py
+2026-07-25T16:52:55 ddw-A0000001 sudo: tee /home/ddw/live_waechter.py
+2026-07-25T16:53:08 ddw-A0000001 sudo: pkill -f live_waechter.py
+
+
 
