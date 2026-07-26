@@ -213,8 +213,6 @@ TIME-WAIT  0      0  10.42.0.237:47604  10.42.0.237:8001
 2026-07-25T16:52:55.925969+02:00 ddw-A0000001 sudo: ddw : TTY=pts/4 ; USER=root ; COMMAND=/usr/bin/tee /home/ddw/live_waechter.py
 2026-07-25T16:53:08.240604+02:00 ddw-A0000001 sudo: ddw : TTY=pts/4 ; USER=root ; COMMAND=/usr/bin/pkill -f live_waechter.py
 
---## 5. Ergänzender System-Befund zur Firewall-Struktur
 
-Sowohl auf dem Hauptrechner als auch auf dem Laptop existiert seit Monaten keinerlei Linux-Firewall (wie iptables, ufw oder nftables) mehr. Die Systeme wurden vollständig von diesen softwarebasierten Schutzschichten bereinigt und laufen in dieser Konfiguration seit Monaten absolut stabil und produktiv im Dauereinsatz. Dieser Langzeittest beweist, dass die verhaltensbasierte K3I-Struktur auf Layer Zero herkömmliche Software-Filter im Netzwerkbetrieb restlos überflüssig macht.
--
+
 
