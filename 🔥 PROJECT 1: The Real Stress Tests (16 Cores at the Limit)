@@ -35,7 +35,7 @@ Während der ersten Phase fühlte sich das System im normalen Desktop-Betrieb (B
 
 ### 💾 Phase 2: Der Festplatten-Vernichter (SSD-Härtetest)
 
-Grog und die Tech-Gurus wollten wissen, was die SSD unter physischem Dauerfeuer leistet. Wir haben den `--hdd`-Stressor gestartet, der parallel gigantische **10-Gigabyte-Dateien** in Dauerschleife auf die Platte schreibt, verifiziert und wieder löscht. 
+Wir wollten wissen, was die SSD unter physischem Dauerfeuer leistet. Wir haben den `--hdd`-Stressor gestartet, der parallel gigantische **10-Gigabyte-Dateien** in Dauerschleife auf die Platte schreibt, verifiziert und wieder löscht. 
 
 **🏆 PHYSISCHES SPEICHER-PROFIL (Echter Hardware-Hammer):**
 
