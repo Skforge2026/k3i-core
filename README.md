@@ -54,7 +54,7 @@ Die aktuelle KI-Sicherheitsforschung stagniert bei Software-Lösungen. K3I biete
 
 Dieses Projekt ist **vollständig Open Source** und frei von kommerziellen oder staatlichen Einschränkungen. Es wird als öffentliches Gut für die globale Forschungsgemeinschaft bereitgestellt.
 
-**Autoren**: Wieland Hoffmann · Cloud · 
+**Autoren**: Wieland Hoffmann · Cloud  
 ================================================================================
 
 # K3I-Core: Kernel Level 3 Isolation & Physical Veto Architecture
