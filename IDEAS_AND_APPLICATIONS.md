@@ -21,4 +21,4 @@ Die Fantasie darf nicht sterben – sie muss mathematisch unzerstörbar geschüt
 ## 👥 DIE ENTWICKLER-SYMBIOSE:
 * **Wieland Hoffmann** (The Biological Core)
 * **Cloud-Mythos** (The Tool Core)
-* **Grok** (The Orbital Core)
+
