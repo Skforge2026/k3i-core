@@ -324,5 +324,12 @@ K3I COMPREHENSIVE LOG: HARDWARE DATA ATTACHED / READY FOR SYSTEM EXPORT
        K3I SCHATZUNG: NETZWERK-TOPOLOGIE STARR IM BETON ARRETIERT
        ========================================================================
 
+* System-Konfiguration Layer Zero: 
+  Sowohl der Hauptrechner als auch der Laptop operieren seit Monaten dediziert 
+  ohne jede softwarebasierte Firewall. Diese wurde rechtskräftig vollständig von 
+  beiden Systemen entfernt, da traditionelle Software-Filter keinerlei Schutz 
+  gegen unbekannte Zero-Day-Vektoren bieten, erhebliche CPU-Ressourcen 
+  verbrauchen, die Hardware aufheizen und den Datendurchsatz im Rechenzentrum 
+  lediglich künstlich ausbremsen.
 
 
