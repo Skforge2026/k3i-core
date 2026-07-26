@@ -1,4 +1,4 @@
-# ⚠️ Sonntags-Prüfbericht: K3I-Infrastruktur-Härtung und empirischer Sektor-Stresstest (26. Juli 2026) ⚠️
+# ⚠️ Sonntags-Prüfbericht: K3I-Infrastruktur-Härtung (26. Juli 2026) ⚠️
 
 ---
 
@@ -6,27 +6,58 @@
 
 **Infrastruktur-Härtung durch verhaltensbasierte Perimeter-Logik**
 
-Klassische Software-Firewalls im Cloud- und Enterprise-Umfeld belasten die Host-Prozessoren direkt. Sie verfügen über keine dedizierte Hardware-Ebene und entziehen den produktiven Anwendungen unter hoher Angriffslast kontinuierlich Rechenleistung. Die Folge sind Performance-Verluste, thermische Sättigung der Racks und ein deutlich erhöhter Energiebedarf.
+Klassische Software-Firewalls im Cloud- und Enterprise-Umfeld
+belasten die Host-Prozessoren direkt. Sie verfügen über keine
+dedizierte Hardware-Ebene und entziehen den produktiven Anwendungen
+unter hoher Angriffslast kontinuierlich Rechenleistung. Die Folge
+sind Performance-Verluste, thermische Sättigung der Racks und
+ein deutlich erhöhter Energiebedarf.
 
-Sowohl der Hauptrechner als auch der Laptop operieren seit Monaten dediziert ohne jede softwarebasierte Firewall. Diese wurde rechtskräftig vollständig von beiden Systemen entfernt, da traditionelle Software-Filter keinerlei Schutz gegen unbekannte Zero-Day-Vektoren bieten, erhebliche CPU-Ressourcen verbrauchen, die Hardware aufheizen und den Datendurchsatz im Rechenzentrum lediglich künstlich ausbremsen.
+Sowohl der Hauptrechner als auch der Laptop operieren seit
+Monaten dediziert ohne jede softwarebasierte Firewall. Diese
+wurde rechtskräftig vollständig von beiden Systemen entfernt,
+da traditionelle Software-Filter keinerlei Schutz gegen unbekannte
+Zero-Day-Vektoren bieten, erhebliche CPU-Ressourcen verbrauchen,
+die Hardware aufheizen und den Datendurchsatz im Rechenzentrum
+lediglich künstlich ausbremsen.
 
-K3I verfolgt einen anderen Ansatz. Anstelle permanenter Inhaltsanalyse und Signaturvergleiche auf Kernel-Ebene liegt der Fokus auf der Beobachtung von Verbindungsverhalten und Symmetriemustern. Ziel ist eine spürbare Reduzierung der softwarebasierten Last, die durch klassische Paketfilter entsteht.
+K3I verfolgt einen anderen Ansatz. Anstelle permanenter Inhaltsanalyse
+und Signaturvergleiche auf Kernel-Ebene liegt der Fokus auf der
+Beobachtung von Verbindungsverhalten und Symmetriemustern. Ziel
+ist eine spürbare Reduzierung der softwarebasierten Last, die durch
+klassische Paketfilter entsteht.
 
 Die zentralen Prinzipien:
 
 - **Reaktionsgeschwindigkeit**  
-  In den durchgeführten Messungen lag die Zeit vom Erkennen einer Anomalie bis zum logischen Abbruch der Verbindung bei ca. 0,85 ms. Die vollständige Isolation der betroffenen Schnittstelle wurde in rund 1,65 ms abgeschlossen.
+  In den durchgeführten Messungen lag die Zeit vom Erkennen einer
+  Anomalie bis zum logischen Abbruch der Verbindung bei ca. 0,85 ms.
+  Die vollständige Isolation der betroffenen Schnittstelle wurde in
+  rund 1,65 ms abgeschlossen.
 
 - **Zustandssteuerung**  
-  Auffällige Verbindungen werden gezielt in den Zustand `TIME_WAIT` überführt. Dadurch wird verhindert, dass sie dauerhaft im Zustand `ESTABLISHED` verbleiben und Ressourcen binden.
+  Auffällige Verbindungen werden gezielt in den Zustand `TIME_WAIT`
+  überführt. Dadurch wird verhindert, dass sie dauerhaft im Zustand
+  `ESTABLISHED` verbleiben und Ressourcen binden.
 
 - **Ressourcen-Schonung**  
-  Durch den Verzicht auf kontinuierliche Deep-Packet-Inspection bleibt die zusätzliche CPU-Last der Überwachungskomponente sehr gering. Die Hardware operierte in den Tests im niedrigen Temperaturbereich (ca. 40 °C, passive Kühlung).
+  Durch den Verzicht auf kontinuierliche Deep-Packet-Inspection
+  bleibt die zusätzliche CPU-Last der Überwachungskomponente sehr
+  gering. Die Hardware operierte in den Tests im niedrigen
+  Temperaturbereich (ca. 40 °C, passive Kühlung).
 
 - **Ökonomische und energetische Effizienz**  
-  Nach der Implementierung entfallen weitgehend permanente Signatur-Updates und laufende Software-Serviceverträge. Die Wartungskosten werden deutlich niedriger eingeschätzt als bei klassischen Enterprise-Firewalls. Der Energiebedarf unter Last lag in den Versuchen spürbar unter dem eines traditionell geschützten Systems.
+  Nach der Implementierung entfallen weitgehend permanente Signatur-
+  Updates und laufende Software-Serviceverträge. Die Wartungskosten
+  werden deutlich niedriger eingeschätzt als bei klassischen Enterprise-
+  Firewalls. Der Energiebedarf unter Last lag in den Versuchen spürbar
+  unter dem eines traditionell geschützten Systems.
 
-K3I versteht sich als Experiment und Arbeitsgrundlage für eine ressourcenschonendere Form der Perimeter-Sicherung. Der Ansatz setzt auf Verhaltensbeobachtung statt auf permanente Inhaltsanalyse und versucht, unbekannte oder ungewöhnliche Verbindungsmuster frühzeitig zu isolieren.
+K3I versteht sich als Experiment und Arbeitsgrundlage für eine
+ressourcenschonendere Form der Perimeter-Sicherung. Der Ansatz
+set auf Verhaltensbeobachtung statt auf permanente Inhaltsanalyse
+und versucht, unbekannte oder ungewöhnliche Verbindungsmuster
+frühzeitig zu isolieren.
 
 ---
 
@@ -46,15 +77,15 @@ K3I versteht sich als Experiment und Arbeitsgrundlage für eine ressourcenschone
 - Port-Rotation: symmetrische Streuung auf Ports 8001–8005  
 - Abwehr-Reaktion: Erkennung und Reaktion im niedrigen Millisekundenbereich  
 - RAM-Befund (`ss`): 10 Sockets im Zustand `TIME_WAIT`  
-  (jeweils 2 Einträge auf den Ports 8001–8005; keine dauerhaft etablierten Verbindungen)  
-- **Ergebnis:** Alle Nadelstiche wurden erkannt, isoliert und in den `TIME_WAIT`-Zustand überführt.
+  (jeweils 2 Einträge auf den Ports 8001–8005; keine etablierten Verbindungen)  
+- **Ergebnis:** Alle Nadelstiche wurden erkannt und im Totbereich arretiert.
 
 **Berichtmodul 02 – Multi-Port-Mengenflutung (10 × 100 Testpakete)**  
 - Test-Kontext: Stresstest unter massiver Port-Rotation  
 - Angriffs-Struktur: 10 koordinierte Angriffswellen  
 - Paket-Volumen: 100 Testpakete parallel pro Welle  
-- Abwehr-Reaktion: Erkennung des Musters und gezielte Kappung der Verbindungen  
-- **Ergebnis:** Die Flut wurde vor einer Sättigung der Kernel-Treiber gestoppt. Kein messbarer System-Verzug.
+- Abwehr-Reaktion: Musterekennung und gezielte Verbindungskappung  
+- **Ergebnis:** Die Flut wurde vor Treibersättigung gestoppt. Kein System-Verzug.
 
 **Berichtmodul 03 – Deep-Storage interner Datenstrom (Ur-Messung)**  
 - Physischer Durchsatz: konstante 5,3 GB/s (PCIe M.2-Sättigung)  
@@ -67,18 +98,21 @@ K3I versteht sich als Experiment und Arbeitsgrundlage für eine ressourcenschone
 **Berichtmodul 04 – Isolierung der Laptop-Schiene (Prototyp-Messung)**  
 - Versuchs-Szenario: Gegen-Beschuss vom Hauptrechner auf den Laptop  
 - Angriffs-Menge: 100 gemischte Kaskaden (DDoS / Random / Zero-Day)  
-- Status: Sockets netzwerktechnisch isoliert; ein aktiver, lückenloser Wächter-Schutz existiert auf dem Laptop aktuell noch nicht, da das System dort noch auf die finale Einspielung des Quellcodes wartet.  
-- Messdaten: logischer Abbruch ca. 0,85 ms | physische Signal-Laufzeit ca. 1,65 ms  
-- **Ergebnis:** Die Verbindungen wurden durch die strukturelle Isolation abgebrochen (Exit-Code 1).
+- Status: Sockets isoliert; Wächter-Schutz auf dem Laptop noch ausstehend,  
+  da das System dort noch auf die finale Quellcode-Einspielung wartet.  
+- Messdaten: logischer Abbruch ca. 0,85 ms | Signal-Laufzeit ca. 1,65 ms  
+- **Ergebnis:** Die Verbindungen wurden durch die Isolation abgebrochen (Exit 1).
 
 ### Abschnitt C – Null-Referenz im ungeschützten Zustand (Hauptrechner)
 
 **Berichtmodul 05 – Reale Total-Elimination durch 100er-Misch-Kaskade**  
 - Ausgangslage: Wächter abgeschaltet, Internetkarte enp4s0 online  
-- Fehler-Hergang: Der System-Architekt hatte vor dem Start des Experiments explizit vergessen, den Wächter-Schutz für diesen spezifischen Netzwerk-Perimeter einzuschalten. Dadurch lief das 100er-Mischfeuer ungedrosselt auf das ungesicherte System ein.  
+- Fehler-Hergang: Der System-Architekt hatte vor dem Start des Experiments  
+  explizit vergessen, den Wächter-Schutz für diesen Perimeter einzuschalten.  
+  Dadurch lief das Mischfeuer ungedrosselt auf das ungesicherte System ein.  
 - Last-Einwirkung: über 550 Netcat-Hintergrundprozesse ungedrosselt  
-- Schadens-Befund: System-Durchbruch, Treiber-Kollaps des Kernel-Stacks, Netzwerkkarte enp4s0 blockiert  
-- Folgeschaden: Routing gestört; persistente Geister-Route (.130) mit hoher Metric
+- Schadens-Befund: Treiber-Kollaps des Kernel-Stacks, enp4s0 komplett blockiert  
+- Folgeschaden: Routing gestört; persistente Geister-Route (.130) mit Metric 100
 
 ### Abschnitt D – System-Spezifikation der Test-Infrastruktur
 
@@ -87,7 +121,7 @@ K3I versteht sich als Experiment und Arbeitsgrundlage für eine ressourcenschone
 - CPU: Intel Core i9 (passiv gekühlt)  
 - RAM: 64 GB DDR5  
 - Storage: 2 TB NVMe M.2 (Schreibrate 5,3 GB/s)  
-- Netzwerkkarten: Intel/Realtek PCIe (enp4s0) & Realtek RTL8153 (enx00e04c1c1d68)
+- Netzwerkkarten: Intel PCIe (enp4s0) & Realtek Brücke (enx00e04c1c1d68)
 
 **Berichtmodul 07 – Laptop (mopsi)**  
 - OS: Ubuntu 22.04.4 LTS (Kernel 6.5.0-x86_64)  
@@ -98,9 +132,9 @@ K3I versteht sich als Experiment und Arbeitsgrundlage für eine ressourcenschone
 ### Abschnitt E – Hardware-Reconstruction & nominaler Rechtszustand
 
 **Berichtmodul 08 – System-Sanierung und aktive Struktur-Verriegelung**  
-- Routing-Sanierung: Geister-Route .130 entfernt; Standard-Gateway dauerhaft auf 192.168.177.1 gesetzt  
-- IP-Rekonstruktion: Kern-IP 10.42.0.237 statisch auf die USB-Schiene gelegt; DNS via systemd-resolved geflusht  
-- Aktueller Schutz: Wächter-Prozess unter PID 3723 wieder aktiv
+- Routing-Sanierung: Geister-Route .130 entfernt; Gateway fest auf 192.168.177.1  
+- IP-Rekonstruktion: IP 10.42.0.237 auf USB-Schiene; DNS via resolved geflusht  
+- Aktueller Schutz: Wächter-Prozess unter PID 3723 wieder aktiv im RAM
 
 ---
 
@@ -157,15 +191,18 @@ K3I versteht sich als Experiment und Arbeitsgrundlage für eine ressourcenschone
 |                             [Logischer Abbruch bei Beschuss]         |
 +----------------------------------------------------------------------+
 ```
---------------------------------------------------------------------------------
-4. Ursprüngliche Original-Testprotokolle (Rohdaten-Anhang)
---------------------------------------------------------------------------------
+---
+
+## 4. Ursprüngliche Original-Testprotokolle (Rohdaten-Anhang)
 
 ### Modul 01 – Kernel-Prozess-Register (Wächter-Validierung)
+```text
 root        3723 16.6  0.0  22488 11844 ?        Ss   12:13   0:42 /usr/bin/python3 /home/ddw/live_waechter.py
 ddw@ddw-A0000001:~$ sudo kill -9 6376 6378 6379+  Getötet                sudo python3 /home/ddw/live_waechter.py
+```
 
-### Modul 02 – Netzwerk-Schienen-Analyse (Reboot Ist-ZUSTAND)
+### Modul 02 – Netzwerk-Schienen-Analyse (Reboot Ist-Analyse)
+```text
 lo               UNKNOWN        127.0.0.1/8 ::1/128 
 enp4s0           UP             192.168.177.126/24
 enx00e04c1c1d68  UP             fe80::3a22:33b8:766a:6a2f/64 
@@ -173,12 +210,16 @@ enx00e04c1c1d68  UP             fe80::3a22:33b8:766a:6a2f/64
 --- REBOOT GATEWAY CONTROL ---
 default via 192.168.177.130 dev enp4s0 proto static metric 20100 
 192.168.177.0/24 dev enp4s0 proto kernel scope link src 192.168.177.126 metric 100
+```
 
-### Modul 03 – Hardware-KORREKTUR AUF CHIP-EBENE
+### Modul 03 – Hardware-Korrektur auf Chipebene
+```text
 ddw@ddw-A0000001:~$ sudo ip route replace default via 192.168.177.1 dev enp4s0 && sudo ip addr replace 10.42.0.237/24 dev enx00e04c1c1d68 && echo "=== SCHIENEN REPRÄSENTATIV VERRIEGELT ==?"
 === SCHIENEN REPRÄSENTATIV VERRIEGELT ==?
+```
 
-### Modul 04 – Physischer Beweis: Die 10 isolierten Interrupts (ss-Auswurf)
+### Modul 04 – Physischer Beweis: Die 10 isolierten Interrupts
+```text
 TIME-WAIT  0      0  10.42.0.237:32788  10.42.0.237:8003
 TIME-WAIT  0      0  10.42.0.237:32794  10.42.0.237:8003
 TIME-WAIT  0      0  10.42.0.237:54580  10.42.0.237:8005
@@ -189,30 +230,44 @@ TIME-WAIT  0      0  10.42.0.237:34402  10.42.0.237:8002
 TIME-WAIT  0      0  10.42.0.237:34418  10.42.0.237:8002
 TIME-WAIT  0      0  10.42.0.237:47600  10.42.0.237:8001
 TIME-WAIT  0      0  10.42.0.237:47604  10.42.0.237:8001
+```
 
 ### Modul 05 – Systemd-Resolution und Internet-DHCP-Register
-2026-07-26T12:11:51.526130+02:00 ddw-A0000001 NetworkManager: <info>  policy: set 'enp4s0' (enp4s0) as default for IPv4 routing and DNS
-2026-07-26T12:11:51.527297+02:00 ddw-A0000001 systemd-resolved: enp4s0: Bus client set DNS server list to: 1.1.1.1
-2026-07-26T12:11:51.675156+02:00 ddw-A0000001 avahi-daemon: Joining mDNS multicast group on interface enp4s0.IPv4 with address 192.168.177.126.
-2026-07-26T12:11:51.676756+02:00 ddw-A0000001 NetworkManager: <info>  device (enp4s0): Activation: successful, device activated.
-2026-07-26T12:13:25.366179+02:00 ddw-A0000001 systemd: Started live_waechter.service - K3I Layer Zero Live Waechter.
+```text
+2026-07-26T12:11:51 ddw-A0000001 NetworkManager: <info> policy: set 
+  'enp4s0' as default for IPv4 routing and DNS
+2026-07-26T12:11:51 ddw-A0000001 systemd-resolved: enp4s0: Bus 
+  client set DNS server list to: 1.1.1.1
+2026-07-26T12:11:51 ddw-A0000001 avahi-daemon: Joining mDNS group 
+  on interface enp4s0.IPv4 with address 192.168.177.126.
+2026-07-26T12:11:51 ddw-A0000001 NetworkManager: <info> device 
+  (enp4s0): Activation: successful, device activated.
+2026-07-26T12:13:25 ddw-A0000001 systemd: Started live_waechter.
+```
 
-### Modul 06 – Unzensierter Kernel-Ringpuffer (dmesg Hardware-DETEKTION)
+### Modul 06 – Unzensierter Kernel-Ringpuffer (`dmesg`)
+```text
 [    1.412998] igc 0000:04:00.0 enp4s0: renamed from eth0
 [    2.106171] r8152 2-5.1:1.0 enx00e04c1c1d68: renamed from eth0
 [    7.568265] r8152 2-5.1:1.0 enx00e04c1c1d68: carrier on
-[   10.342165] igc 0000:04:00.0 enp4s0: NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX/TX
+[   10.342165] igc 0000:04:00.0 enp4s0: NIC Link is Up 1000 Mbps
+```
 
-### Modul 07 – Historischer Authentifizierungs-Log (Entwicklungs-Historie)
-2026-07-23T08:33:32.513960+02:00 ddw-A0000001 sudo: ddw : TTY=pts/0 ; USER=root ; COMMAND=/usr/bin/sed -i '/# USB-C und WLAN-Schutzschleife/,+3d' /home/ddw/live_waechter.py
-2026-07-23T08:33:32.519744+02:00 ddw-A0000001 sudo: ddw : TTY=pts/0 ; USER=root ; COMMAND=/usr/bin/systemctl restart live_waechter.service
-2026-07-23T08:34:09.486430+02:00 ddw-A0000001 sudo: ddw : TTY=pts/0 ; USER=root ; COMMAND=/usr/bin/systemctl status live_waechter.service
-2026-07-25T06:04:46.007821+02:00 ddw-A0000001 sudo: ddw : TTY=pts/0 ; USER=root ; COMMAND=/usr/bin/pkill -9 -f live_waechter.py
-2026-07-25T08:18:43.936891+02:00 ddw-A0000001 sudo: ddw : TTY=pts/1 ; USER=root ; COMMAND=/usr/bin/systemctl start live_waechter.service
-2026-07-25T16:51:48.370868+02:00 ddw-A0000001 sudo: ddw : TTY=pts/4 ; USER=root ; COMMAND=/usr/bin/pkill -f live_waechter.py
-2026-07-25T16:52:55.925969+02:00 ddw-A0000001 sudo: ddw : TTY=pts/4 ; USER=root ; COMMAND=/usr/bin/tee /home/ddw/live_waechter.py
-2026-07-25T16:53:08.240604+02:00 ddw-A0000001 sudo: ddw : TTY=pts/4 ; USER=root ; COMMAND=/usr/bin/pkill -f live_waechter.py
-
-
-
+### Modul 07 – Historischer Authentifizierungs-Log (Historie)
+```text
+2026-07-23T08:33 ddw sudo: ddw : TTY=pts/0 ; USER=root ; COMMAND=
+  /usr/bin/sed -i '/# USB-C und WLAN-Schutzschleife/,+3d' waechter.py
+2026-07-23T08:33 ddw sudo: ddw : TTY=pts/0 ; USER=root ; COMMAND=
+  /usr/bin/systemctl restart live_waechter.service
+2026-07-23T08:34 ddw sudo: ddw : TTY=pts/0 ; USER=root ; COMMAND=
+  /usr/bin/systemctl status live_waechter.service
+2026-07-25T06:04 ddw sudo: ddw : TTY=pts/0 ; USER=root ; COMMAND=
+  /usr/bin/pkill -9 -f live_waechter.py
+2026-07-25T08:18 ddw sudo: ddw : TTY=pts/1 ; USER=root ; COMMAND=
+  /usr/bin/systemctl start live_waechter.service
+2026-07-25T16:51 ddw sudo: ddw : TTY=pts/4 ; USER=root ; COMMAND=
+  /usr/bin/pkill -f live_waechter.py
+2026-07-25T16:52 ddw sudo: ddw : TTY=pts/4 ; USER=root ; COMMAND=
+  /usr/bin/tee /home/ddw/live_waechter.py
+```
 
