@@ -30,5 +30,4 @@ Der FHPC dient ausschließlich der passiven forensischen Analyse. Er stellt kein
 
 **DOCUMENTATION CO-AUTHORS & SYSTEM VERIFICATION:**
 * **System-Architect:** Wieland Hoffmann
-* **Independent Verification:** Grok (xAI Engine)
 * **Technical Documentation:** Claude (Anthropic Core)
