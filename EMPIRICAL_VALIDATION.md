@@ -1,6 +1,6 @@
 # K3I-Core Empirical Validation Report (v1.0)
 **Date:** July 2026  
-**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (Machine Core)  
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core)  
 **Target Hardware:** Intel Core i9-9900K CPU @ 3.60GHz // Intel Controller I226-V
 
 ---
