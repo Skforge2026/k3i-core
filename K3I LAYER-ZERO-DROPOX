@@ -150,21 +150,6 @@ B. UNUMSTÖSSLICHE SYSTEMBEDINGUNGEN FÜR DEN ANWENDER:
    Rechner läuft dadurch permanent auf maximaler Frequenz ohne 
    Energiespar-Verzögerungen. Der minimale energetische Mehrverbrauch von 
    wenigen Watt ist physikalisch notwendig für den absoluten Systemerhalt.
-7. STRIKTE HARDWARE-ROUTER-PFLICHT (ABWEHR LATERALER INFEKTIONEN):
-   Es MUSS zwingend ein eigenständiger, dedizierter HARDWARE-ROUTER 
-   (z. B. eine physische FritzBox) als Netzknoten eingesetzt werden. 
-   Der Einsatz von reinen Software-Routern (virtuelle VMs, PC-Appliances) 
-   ist STRIKT UNTERSAGT und schafft eine fatale Angriffsfläche. Nistet 
-   sich eine adaptive Schadsoftware auf einem Software-Router ein, nutzt 
-   sie diesen als Brückenkopf, um über interne Kernel-Umwege und 
-   virtuelle Schnittstellen das Gesamtsystem sowie den Hauptrechner zu 
-   korrumpieren (Lateral Movement). Nur ein eigenständiges Hardware-Gerät 
-   besitzt einen physisch isolierten RAM-Speicher. Das K3I-Hardware-Veto 
-   unterbricht im Ernstfall nicht nur die Leitung, sondern zwingt die 
-   physische Box zum Reboot, wodurch jeglicher laterale Injektionsversuch 
-   restlos im Router-Speicher vernichtet wird. Wer hier Software einsetzt, 
-   baut eine Scheinsicherheit, die physikalisch wirkungslos ist.
-
 
 7. KONZEPTIONELLE WÄCHTER-INSTALLATION UND INBETRIEBNAHME
 ===========================================================================
@@ -194,10 +179,10 @@ B. LAUFCZEIT-ZUTEILUNG (TASKSET)
 
 C. SCHNITTSTELLEN-KONFIGURATION
 ---------------------------------------------------------------------------
-1. Netzwerk-Bindung: Der Wächter öffnet einen Raw-Socket und bindet sich 
+1. Netzwerk-Binding: Der Wächter öffnet einen Raw-Socket und bindet sich 
    direkt an das physische Netzwerk-Interface (LAN-Leiter), das mit der 
    FritzBox bzw. dem lokalen Switch verbunden ist.
-2. Trigger-Pin-Initalisierung: Das System initialisiert die physische 
+2. Trigger-Pin-Initialisierung: Das System initialisiert die physische 
    Schnittstelle (z. B. FTDI-Treiber, serielle Steuerleitung oder GPIO), 
    die über Buchse 3 mit dem Optokoppler der Hardware-Dropbox verbunden 
    ist, und setzt den Ausgangspegel initial auf Logisch-Null (Safe-State).
@@ -221,7 +206,7 @@ D. DIE CHRONOLOGISCHE 3-BEFEHLS-VETO-KASKADE (GESCHLOSSENER KREISLAUF)
    wird durch den anschließenden Neustart radikal gelöscht.
 4. Das Halten im Safe-State: Während des Router-Neustarts hält der Wächter 
    den Schalter an der Dropbox geöffnet. Die Außenleitung bleibt isoliert.
-5. Befehl 3 (Die automatische Wiedereinkopplung): Der Wächter überwacht den 
+5. Befehl 3 (Die automatiche Wiedereinkopplung): Der Wächter überwacht den 
    Status der FritzBox über das Intranet. Sobald der Router meldet, dass das 
    Betriebssystem jungfräulich hochgelaufen ist und auf das DSL-Signal wartet, 
    setzt der Wächter das Signal an Buchse 3 zurück auf Logisch-Null. Der 
@@ -304,6 +289,10 @@ C. STRIKTER HAFTUNGSAUSSCHLUSS (DISCLAIMER)
 ---------------------------------------------------------------------------
 Der Urheber übernimmt keinerlei Haftung für Sach-, Personen- oder Vermögens-
 schäden, die durch den Nachbau, das Verlöten der Komponenten oder den 
+Betrieb des Systems entstehen. Da das modifizierte Design mit 230V Netz-
+spannung arbeitet, ist der Anwender in vollem Umfang für die Einhaltung 
+aller elektrischen Sicherheitsvorschriften (Isolierung, Berührungsschutz) 
+selbst verantwortlich.
 
 D. WICHTIGER ABSCHLIESSENDER MERKSATZ ZUR KERN-STRUKTUR:
 ---------------------------------------------------------------------------
@@ -326,3 +315,7 @@ entsprechenden Vorkenntnissen im Bereich der Systemadministration.
 ===========================================================================
                K3I PROJECT 1 // HARDWARE-SPEZIFIKATION ENDE
 ===========================================================================
+
+
+
+
