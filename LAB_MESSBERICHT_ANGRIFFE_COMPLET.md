@@ -1,7 +1,6 @@
 # PROTOKOLL ZUR VALIDIERUNG DER HARDWARE-VETO-MATRIX (PROJEKT 1)
 
-### 1. CHRONOLOGISCHER LOG-AUSZUG DER ERFOLGREICHEN ABWEHR-ZYKLEN
-
+```text
 2026-08-05 15:40:58.821595 - !!! DUMMY-VETO AUSGELÖST !!! - Einzelpaket-Exploit abgefangen. 
 2026-08-05 15:40:58.821595 - SYSTEM-STATUS: Dummy-Interface (lo) nach Exploit-Einschlag deaktiviert. 
 2026-08-05 15:40:58.827319 - !!! DUMMY-VETO AUSGELÖST !!! - Einzelpaket-Exploit abgefangen. 
@@ -42,3 +41,4 @@
 * ERKENNUNGSMECHANISMUS: Die Detektion basiert rein auf einer anomalie-basierten Überwachung des Netzwerk-Schnittstellen-Eingangs auf Layer-Zero-Ebene. Jedes eintreffende Paket auf gesperrten Ports wird unabhängig von Inhalt oder Signatur als strukturelle Anomalie gewertet.
 * REAKTIONSLATENZ: Die Zeitspanne zwischen dem physikalischen Paket-Einschlag auf der Schnittstelle und der Exekution des Veto-Befehls lag nachweislich unter 0,5 Millisekunden.
 * SICHERHEITSMARGE: Bei einem definierten Systemlimit von 2,1 Millisekunden verbleibt eine mathematische Sicherheitsreserve von mindestens 1,6 Millisekunden bis zur physischen Netztrennung. Die Funktionsfähigkeit der Hardware-Veto-Matrix ist damit unter Volllast vollumfänglich verifiziert.
+```
