@@ -14,7 +14,50 @@ Moderne Heimrouter verfügen meist über Multi-Core-Prozessoren (z. B. Quad-Core
 
 ### ⚙️ 2. Physischer Hardware-Veto-Mechanismus
 Der entscheidende Unterschied zu reiner Software-Sicherheit liegt in der direkten Koppelung an das Substrat:
+```mermaid
+graph TD
+    subgraph Provider ["LAYER ZERO: PROVIDER INFRASCHLEIFE"]
+        LAN_In([Physisches Ethernet-Signal / RJ45])
+    end
 
+    subgraph Veto_Schloss ["K3I VETO-SCHLOSS / ROUTER MATRIX"]
+        Gatter{ODER-Logik 74LVC32A}
+        
+        subgraph Stufe_1 ["STUFE 1: ELEKTRONISCH (<10ns)"]
+            HF_Schalter[Analog Devices ADG904 HF-Schalter]
+        end
+        
+        subgraph Stufe_2 ["STUFE 2: GALVANISCH (5-10ms)"]
+            Relais[Panasonic DS4E-M-DC5V Relais]
+        end
+    end
+
+    subgraph Host_System ["i9 HAUPTRECHNER / KERNEL CONTROLLER"]
+        Wächter(((Isolierter Wächter-Core / rdtsc)))
+        PHY[(Netzwerk-Controller / enp4s0)]
+    end
+
+    %% Signalwege
+    LAN_In -->|Differenzielle Paare DA/DB/DC/DD| HF_Schalter
+    
+    Wächter -->|Symmetrie-Überwachung 1+1=1| Gatter
+    Gatter -->|Sofort-Veto-Signal| HF_Schalter
+    
+    HF_Schalter -->|Verzögerungsfreie Blockade| Relais
+    Relais -->|Mechanische Luftbrücke| PHY
+
+    %% Nativer GitHub-Mermaid Design-Stil
+    style Provider fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style Veto_Schloss fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+    style Stufe_1 fill:#ffebee,stroke:#b71c1c,stroke-width:1px
+    style Stufe_2 fill:#fff8e1,stroke:#f57f17,stroke-width:1px
+    style Host_System fill:#f5f5f5,stroke:#424242,stroke-width:2px
+    style Gatter fill:#fff9c4,stroke:#f57f17,stroke-width:2px
+    style HF_Schalter fill:#ffffff,stroke:#b71c1c,stroke-width:2px
+    style Relais fill:#ffffff,stroke:#f57f17,stroke-width:2px
+    style Wächter fill:#ffecb3,stroke:#ff8f00,stroke-width:2px
+    style PHY fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    style LAN_In fill:#ffffff,stroke:#01579b,stroke-width:2px
 
 
 * **Die Schaltung:** Die Hauptstromversorgung des WAN-Ports oder des integrierten Modems wird über einen ultraschnellen elektronischen Schalter (einen Power-MOSFET) auf der Platine geführt.
@@ -30,38 +73,3 @@ Der entscheidende Unterschied zu reiner Software-Sicherheit liegt in der direkte
 * **Echter Schutz:** Schützt alle Geräte im Heimnetzwerk (PCs, NAS-Speicher, Smart-Home) vor externen Angriffen und Ransomware, selbst wenn die Software-Firewall bereits vollständig kompromittiert ist.
 * **Einfache Nachrüstung:** Für Entwickler und die OpenWrt-Community auf Entwicklerboards mit direktem GPIO-Zugriff sofort experimentell umsetzbar.
 
-%% Das zweistufige K3I Veto-Schloss (Hardware-Ebene)
-subgraph Veto_Schloss [K3I VETO-SCHLOSS / ROUTER MATRIX]
-    Gatter[Hardware ODER-Logik: 74LVC32A]
-    
-    %% Stufe 1: Ultraschnelle elektronische Abriegelung
-    subgraph Stufe_1 [STUFE 1: ELEKTRONISCH <10ns]
-        HF_Schalter[Analog Devices ADG904 / HF-Halbleiter-Matrix]
-    end
-    
-    %% Stufe 2: Physische, galvanische Trennung
-    subgraph Stufe_2 [STUFE 2: GALVANISCH 5-10ms]
-        Relais[Panasonic DS4E-M-DC5V / Bistabiler Endschalter]
-    end
-end
-
-%% Host-System und Netzwerk-Controller
-subgraph Host_System [i9 HAUPTRECHNER / KERNEL CONTROLLER]
-    Wächter[Isolierter Wächter-Core / Taktprüfung rdtsc]
-    PHY[Netzwerk-Controller / enp4s0 Schnittstelle]
-end
-
-%% Signalfluss und logische Verriegelung
-LAN_In -->|Differenzielle Paare DA/DB/DC/DD| HF_Schalter
-
-Wächter -->|Symmetrie-Überwachung 1+1=1| Gatter
-Gatter -->|Sofort-Veto-Signal| HF_Schalter
-
-HF_Schalter -->|Verzögerungsfreie Blockade| Relais
-Relais -->|Mechanische Luftbrücke| PHY
-
-%% Design-Stile für die Grafik
-style Veto_Schloss fill:#f9f,stroke:#333,stroke-width:2px
-style Stufe_1 fill:#ffe6e6,stroke:#cc0000,stroke-width:1px
-style Stufe_2 fill:#fff2cc,stroke:#d6b656,stroke-width:1px
-style Wächter fill:#ff9,stroke:#333,stroke-width:2px
