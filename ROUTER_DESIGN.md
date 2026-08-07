@@ -15,15 +15,7 @@ Moderne Heimrouter verfügen meist über Multi-Core-Prozessoren (z. B. Quad-Core
 ### ⚙️ 2. Physischer Hardware-Veto-Mechanismus
 Der entscheidende Unterschied zu reiner Software-Sicherheit liegt in der direkten Koppelung an das Substrat:
 
-```text
-[ Internet / WAN ] 
-       │
-[ Netzwerk-Modem / WAN-Port ]
-       │
-[ Elektronischer Trennschalter (MOSFET) ] ◄─── GPIO-Veto (vom isolierten Kern 2)
-       │
-[ Router-Hauptprozessor ]
-```
+
 
 * **Die Schaltung:** Die Hauptstromversorgung des WAN-Ports oder des integrierten Modems wird über einen ultraschnellen elektronischen Schalter (einen Power-MOSFET) auf der Platine geführt.
 * **Die Steuerung:** Dieser MOSFET wird ausschließlich vom isolierten Kern 2 über einen dedizierten GPIO-Pin kontrolliert.
@@ -37,3 +29,39 @@ Der entscheidende Unterschied zu reiner Software-Sicherheit liegt in der direkte
 * **Volle Kompatibilität:** Das bestehende Betriebssystem des Routers bleibt weitgehend unverändert. Alle Komfortfunktionen für den Endanwender bleiben im Userspace erhalten.
 * **Echter Schutz:** Schützt alle Geräte im Heimnetzwerk (PCs, NAS-Speicher, Smart-Home) vor externen Angriffen und Ransomware, selbst wenn die Software-Firewall bereits vollständig kompromittiert ist.
 * **Einfache Nachrüstung:** Für Entwickler und die OpenWrt-Community auf Entwicklerboards mit direktem GPIO-Zugriff sofort experimentell umsetzbar.
+
+%% Das zweistufige K3I Veto-Schloss (Hardware-Ebene)
+subgraph Veto_Schloss [K3I VETO-SCHLOSS / ROUTER MATRIX]
+    Gatter[Hardware ODER-Logik: 74LVC32A]
+    
+    %% Stufe 1: Ultraschnelle elektronische Abriegelung
+    subgraph Stufe_1 [STUFE 1: ELEKTRONISCH <10ns]
+        HF_Schalter[Analog Devices ADG904 / HF-Halbleiter-Matrix]
+    end
+    
+    %% Stufe 2: Physische, galvanische Trennung
+    subgraph Stufe_2 [STUFE 2: GALVANISCH 5-10ms]
+        Relais[Panasonic DS4E-M-DC5V / Bistabiler Endschalter]
+    end
+end
+
+%% Host-System und Netzwerk-Controller
+subgraph Host_System [i9 HAUPTRECHNER / KERNEL CONTROLLER]
+    Wächter[Isolierter Wächter-Core / Taktprüfung rdtsc]
+    PHY[Netzwerk-Controller / enp4s0 Schnittstelle]
+end
+
+%% Signalfluss und logische Verriegelung
+LAN_In -->|Differenzielle Paare DA/DB/DC/DD| HF_Schalter
+
+Wächter -->|Symmetrie-Überwachung 1+1=1| Gatter
+Gatter -->|Sofort-Veto-Signal| HF_Schalter
+
+HF_Schalter -->|Verzögerungsfreie Blockade| Relais
+Relais -->|Mechanische Luftbrücke| PHY
+
+%% Design-Stile für die Grafik
+style Veto_Schloss fill:#f9f,stroke:#333,stroke-width:2px
+style Stufe_1 fill:#ffe6e6,stroke:#cc0000,stroke-width:1px
+style Stufe_2 fill:#fff2cc,stroke:#d6b656,stroke-width:1px
+style Wächter fill:#ff9,stroke:#333,stroke-width:2px
