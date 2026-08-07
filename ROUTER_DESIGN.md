@@ -14,6 +14,8 @@ Moderne Heimrouter verfügen meist über Multi-Core-Prozessoren (z. B. Quad-Core
 
 ### ⚙️ 2. Physischer Hardware-Veto-Mechanismus
 Der entscheidende Unterschied zu reiner Software-Sicherheit liegt in der direkten Koppelung an das Substrat:
+
+
 ```mermaid
 graph TD
     subgraph Provider ["LAYER ZERO: PROVIDER INFRASCHLEIFE"]
@@ -58,18 +60,3 @@ graph TD
     style Wächter fill:#ffecb3,stroke:#ff8f00,stroke-width:2px
     style PHY fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
     style LAN_In fill:#ffffff,stroke:#01579b,stroke-width:2px
-
-
-* **Die Schaltung:** Die Hauptstromversorgung des WAN-Ports oder des integrierten Modems wird über einen ultraschnellen elektronischen Schalter (einen Power-MOSFET) auf der Platine geführt.
-* **Die Steuerung:** Dieser MOSFET wird ausschließlich vom isolierten Kern 2 über einen dedizierten GPIO-Pin kontrolliert.
-* **Der Signalabriss (Veto):** Im Normalzustand hält Kern 2 den Pin auf `HIGH` (Verbindung aktiv). Bei einer erkannten Anomalie oder einer `rdtsc`-Zyklen-Explosion fällt der Pin in Nanosekunden auf `LOW`. 
-* **Der Effekt:** Es erfolgt ein sofortiger physischer Stromabriss. Der Router ist augenblicklich und mechanisch zu 100 % vom Internet getrennt, noch bevor Schadcode Daten abgreifen oder das lokale Netzwerk infizieren kann.
-
----
-
-### 🌐 3. Vorteile und Nutzen
-* **Sehr geringe Mehrkosten:** Zusätzliche Bauteile (MOSFET und Leiterbahnen-Anpassung) liegen in der Massenproduktion unter 1,00 Euro.
-* **Volle Kompatibilität:** Das bestehende Betriebssystem des Routers bleibt weitgehend unverändert. Alle Komfortfunktionen für den Endanwender bleiben im Userspace erhalten.
-* **Echter Schutz:** Schützt alle Geräte im Heimnetzwerk (PCs, NAS-Speicher, Smart-Home) vor externen Angriffen und Ransomware, selbst wenn die Software-Firewall bereits vollständig kompromittiert ist.
-* **Einfache Nachrüstung:** Für Entwickler und die OpenWrt-Community auf Entwicklerboards mit direktem GPIO-Zugriff sofort experimentell umsetzbar.
-
