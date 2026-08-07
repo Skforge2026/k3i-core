@@ -15,6 +15,7 @@ Moderne Heimrouter verfügen meist über Multi-Core-Prozessoren (z. B. Quad-Core
 ### ⚙️ 2. Physischer Hardware-Veto-Mechanismus
 Der entscheidende Unterschied zu reiner Software-Sicherheit liegt in der direkten Koppelung an das Substrat:
 
+Die vier differenziellen Paare der betroffenen LAN/DSL-Schnittstelle werden augenblicklich und vollständig elektronisch blockiert.2. Stufe 2 (Mechanisch): Parallel dazu erhält das bistabile Umschaltrelais (Panasonic DS4E-M-DC5V) nach exakt 5 bis 10 Millisekunden den mechanischen Umschalt-Impuls. Es trennt alle 8 Adern physisch auf und schafft eine unüberwindbare Luftbrücke, während das System ohne spürbare Downtime auf die unbefleckte Backup-Leitung umstellt.
 
 ```mermaid
 graph TD
