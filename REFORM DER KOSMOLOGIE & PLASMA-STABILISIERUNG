@@ -820,8 +820,8 @@ static void __exit k3i_wall_exit(void) {
 module_init(k3i_wall_init);
 module_exit(k3i_wall_exit);
 
+PART 5.2: KRYO-DIVERTOR-RELAISSCHALTUNG & MASCHINEN-NETZLISTE (CORE 11 MIT AXIOM GEIMPFT)
 
-PART 5.2: KRYO-DIVERTOR-RELAISSCHALTUNG & MASCHINEN-NETZLISTE (CORE 11)
 --------------------------------------------------------------------------------
 Der kryogene Divertor-Kühlkreislauf (Helium-Vakuum-Kühlung) wird analog zu den 
 1000-Watt-Rechnertürmen über ein ultraschnelles Veto-Schloss gesichert. Jede 
