@@ -1016,5 +1016,48 @@ Dieses System dient ausschließlich dem Schutz ziviler, friedlicher Infrastruktu
 **Betreiber:** SK-Forge UG (haftungsbeschränkt)
 ================================================================================
 
+/* 
+===============================================================================
+K3I REAL-TIME CORE ARCHITECTURE & SYSTEM LOG
+Target CPU: Intel Core i9 (14th Gen) @ Max Boost Clock
+Isolated Cores: 2, 3, 10, 11 (GRUB: isolcpus=2,3,10,11)
+Kernel Config: nohz_full=2,3,10,11 rcu_nocbs=2,3,10,11
+Trigger: Asynchronous Network Interrupts via enp4s0
+===============================================================================
+*/
+
+#include <stdint.h>
+#include <x86intrin.h>
+
+// Definition der Latenz-Parameter und Register-Adressen
+#define LATENCY_THRESHOLD_CYCLES 4500
+#define PCIE_GPIO_BASE_ADDR      0xFEB00000
+
+/**
+ * Prueft die Zyklenlatenz ueber den hardwarenahen TSC-Zaehler.
+ * Initiiert bei Zeitueberschreitung das sofortige Veto-Signal.
+ */
+void check_plasma_latency_and_veto(volatile uint32_t* network_buffer) {
+    volatile uint32_t* gpio_register = (volatile uint32_t*)PCIE_GPIO_BASE_ADDR;
+    uint64_t start_time, current_time;
+    
+    // Initialer Zeitstempel direkt aus dem Hardware-Counter (Schicht Null)
+    start_time = __rdtsc();
+
+    while(1) {
+        // Kontinuierliche Abfrage des Netzwerk-Buffers
+        if (*network_buffer == 1) { 
+            current_time = __rdtsc();
+            
+            // Berechnung der exakten Differenz-Zyklen
+            if ((current_time - start_time) > LATENCY_THRESHOLD_CYCLES) {
+                // Veto-Blitzschaltung an das physische Register
+                *gpio_register = 0xFFFFFFFF; 
+                break;
+            }
+        }
+    }
+}
+
 
 
