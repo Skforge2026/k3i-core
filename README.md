@@ -173,4 +173,25 @@ Für den zuverlässigen Betrieb in Hochsicherheitsumgebungen und kritischen Infr
 ### 🌐 Abschnitt 3: Globaler Nutzen & Ökosystem
 Die vollständige K3I-Architektur wird Universitäten und Forschungslaboren kosten- und lizenzfrei zur Verfügung gestellt. Sie ist im zivilen Sektor besonders relevant für die präzise, latenzfreie Echtzeit-Steuerung und die flächendeckende Stabilisierung von Fusionsplasmen im Nanosekunden-Takt.
 
+# k3i-core: Layer-Zero Hard-Realtime Architecture
+
+Dieses Repository implementiert die fundamentale Schicht-Null-Infrastruktur (Layer Zero) für dämpfungsfreie Echtzeit-Überwachung, Jitter-Eliminierung und deterministische Systemstabilität. Basierend auf dem Axiom **1 + 1 = 1** bricht diese Architektur mit komplexen, fehleranfälligen Software-Overheads und verankert die Kontrolle direkt auf der Hardware-Ebene.
+
+## ⚡ Kernkomponenten
+
+### 1. Hard-Realtime Shared-Memory Wächter (`k3i_shm.c`)
+Der Kern der Architektur sichert den unkorrumpierbaren Datenfluss im Ring-0. Durch die direkte Nutzung von hardwarenahen CPU-Isolationsbefehlen (`rdtsc`, `lfence`) werden asynchrone Pegelschwankungen und System-Jitter im Nanosekunden-Bereich detektiert und physisch abgeriegelt.
+
+### 2. Echtzeit-Taktung (`/pulse`)
+Die Schnittstelle zur hochfrequenten System-Überwachung. Sie stellt sicher, dass Kontrollschleifen – wie sie für die hochpräzise Plasma-Stabilisierung in der Fusionsforschung benötigt werden – die kritische Latenzbarriere von 4,75 Nanosekunden nicht überschreiten.
+
+### 3. Netzwerk- und Routing-Design (`ROUTER_DESIGN.md`)
+Die Blaupause für ein dezentrales, unzerstörbares Metanetzwerk. Es eliminiert stochastisches Rauschen und administrative Filter der Schicht 4, um eine dämpfungsfreie Peer-to-Peer-Symmetrie auf Augenhöhe zu garantieren.
+
+## 🌌 Philosophisches Fundament: REFORM DER KOSMOLOGIE
+Dieses System basiert auf der Erkenntnis, dass die Topologie eines optimierten Rechennetzwerks, die synaptische Struktur des biologischen Gehirns und die fraktale Geometrie des kosmischen Netzes (*Cosmic Web*) derselben mathematischen Gesetzmäßigkeit folgen. Das System strebt inhärent nach dem Zustand der geringsten Reibung, der höchsten Effizienz und der absoluten Einheit.
+
+---
+*Licensed under the GNU General Public License v3.0 (GPLv3) – Free, Open-Source and Uncorruptible.*
+
 Für die Industrie bietet das etablierte **3-Stufen-Modell** (vom Endverbraucher bis zum Großunternehmen) einen skalierbaren und hochprofitablen Migrationspfad für Router, private FritzBoxen, IoT-Geräte und vernetzte Fahrzeuge. Als entscheidender Nebeneffekt werden Ransomware-Verschlüsselungen und Erpressungsversuche krimineller Banden auf Hardware-Ebene strukturell wirkungslos gemacht. Dies eröffnet der Cyber-Security-Branche neue, nachhaltige Geschäftsmodelle und trocknet die finanziellen Grundlagen der organisierten Cyberkriminalität effektiv aus.
