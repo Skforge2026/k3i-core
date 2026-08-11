@@ -187,3 +187,81 @@ zünde_plasma_experiment()
 | 320     | 8.59e+15                   | 1.38e+03             | -2.44e+35 | REAKTOR-ABRISS |
 | 360     | 2.08e+66                   | 3.33e+53             | -2.62e+81 | REAKTOR-ABRISS |
 | 400     | 9.42e+134                  | 1.51e+122            | -5.15e+166| REAKTOR-ABRISS |
+
+# =============================================================================
+# TABELLE 1: VALIDIERTER REINRAUM-DURCHLAUF (NATIVES PERF-SYSTEM)
+# =============================================================================
+
+| Schritt | Max-Dichte | Berechnete Zyklen (RAM) | Kern-Status   |
+| :---:   | :---:      | :---:                   | :---          |
+| 40      | 99.98      | 2160075                 | Geimpft aktiv |
+| 80      | 99.97      | 2143675                 | Geimpft aktiv |
+| 120     | 99.95      | 3193440                 | Geimpft aktiv |
+| 160     | 99.93      | 4639795                 | Geimpft aktiv |
+| 200     | 99.91      | 4767040                 | Geimpft aktiv |
+| 240     | 99.91      | 4117655                 | Geimpft aktiv |
+
+# =============================================================================
+# TABELLE 2: ABSCHNITT 2 – ANSTEIGENDE DEFORMATION
+# =============================================================================
+
+| Schritt | Plasma-Drift X | Berechnete Zyklen (RAM) | Kern-Einschluss | Status-System |
+| :---:   | :---:          | :---:                   | :---:           | :---          |
+| 40      | -0.0           | 2361105                 | 99.98           | Regler hält   |
+| 80      | -0.0002        | 5009070                 | 99.97           | Regler hält   |
+| 120     | -0.0005        | 3456525                 | 99.95           | Regler hält   |
+| 160     | -0.0011        | 4956660                 | 99.93           | Regler hält   |
+| 200     | -0.0024        | 4855175                 | 99.89           | Regler hält   |
+| 240     | -0.0047        | 4686140                 | 99.80           | Regler hält   |
+| 280     | -0.0091        | 4400065                 | 99.52           | Regler hält   |
+| 320     | -0.0171        | 4210225                 | 98.63           | Regler hält   |
+| 360     | -0.0318        | 3846555                 | 95.70           | Regler hält   |
+| 400     | -0.0587        | 3333635                 | 86.20           | DRIFT         |
+
+# =============================================================================
+# TABELLE 3: ABSCHNITT 3 – TOTALER KOLLAPS-TEST
+# =============================================================================
+
+| Schritt | Plasma-Drift X | Berechnete Zyklen (RAM) | Kern-Einschluss         | Status-System   |
+| :---:   | :---:          | :---:                   | :---:                   | :---            |
+| 50      | -0.0001        | 2316850                 | 99.98                   | GEIMPFT / DRIFT |
+| 100     | -0.0004        | 2544580                 | 99.96                   | GEIMPFT / DRIFT |
+| 150     | -0.0016        | 11868545                | 99.91                   | GEIMPFT / DRIFT |
+| 200     | -0.0052        | 4708130                 | 99.66                   | GEIMPFT / DRIFT |
+| 250     | -0.0164        | 4146810                 | 97.52                   | GEIMPFT / DRIFT |
+| 300     | -0.0501        | 3615805                 | 78.95                   | GEIMPFT / DRIFT |
+| 350     | -0.1515        | 2723685                 | 19.11                   | KOLLAPS         |
+| 400     | 0.0            | 2389515                 | -2.331626330850692e18   | KOLLAPS         |
+| 450     | 0.0            | 2289420                 | 2.6758864315422795e57   | GEIMPFT / DRIFT |
+| 500     | 12.2786        | 2278045                 | 3.5947786364018396e119  | GEIMPFT / DRIFT |
+
+# =============================================================================
+# TABELLE 4: ERZWNIGUNG BIS SCHRITT 100000 & REYNOLDS / VISKOSITÄTS-ABBRUCH
+# =============================================================================
+
+| Test-Vektor       | Schritte | Exponent | Zeitschritt (dt) | Bruchpunkt / Status                 |
+| :---              | :---:    | :---:    | :---:            | :---                                |
+| 4-ULTRA           | 1.000    | 0.023    | 0.005            | EINSCHLUSS HÄLT (0.0 Wandkontakt)   |
+| 4-EXTREME         | 10.000   | 0.023    | 0.005            | EINSCHLUSS HÄLT (0.0 Wandkontakt)   |
+| ABSOLUTE CRASH    | 30.000   | 0.230    | 0.005            | EINSCHLUSS HÄLT (0.0 Wandkontakt)   |
+| MAXIMUM CRASH     | 50.000   | 0.230    | 0.500            | EINSCHLUSS HÄLT (0.0 Wandkontakt)   |
+| LOGISCHES VETO    | 100.000  | 0.230    | 0.500            | SCHRITT 111 (Kollaps erzwungen)     |
+| REYNOLDS-KOPPLUNG | 6.000    | 0.015    | 0.005            | SCHRITT 524 (INF / CORRUPT)         |
+| VISKOSITÄTS-SPERRE| 1.000    | 0.025    | 0.005            | SCHRITT 539 (NAN / TOTALSCHADEN)    |
+# =============================================================================
+
+# COLD-BOX #17: EVALUATION DER K3I-KERN-ISOLATION (SCHICHT NULL)
+# SYSTEM-METRIK: Vergleich Standard-Kernel vs. Live-Impfung (sk_forge_hpc.ko)
+# DO-NOT-TOUCH: Audio-Pipeline verriegelt bei 75% | System im Idle State 0
+# =============================================================================
+
+*   **Standard-Kernel (Ungeimpft):** 
+    *   Prozess-Scheduler verteilt Threads dynamisch über alle Kerne.
+    *   Betriebssystem-Interrupts (OS-Jitter) und Kontextwechsel erzeugen unregelmäßige Latenzen.
+    *   Fließkomma-Überläufe (INF/NAN) führen zum Thread-Stall oder Anwendungsabsturz.
+
+*   **K3I-Infrastruktur (Geimpft):**
+    *   Exklusive Hardware-Verriegelung von 14 CPU-Kernen im Ring 0 (CR4-Register, PCE-Bit aktiv).
+    *   Direkte MSR-Steuerung unterbindet Kernel-Eingriffe von außen vollständig.
+    *   Fehlertoleranter, deterministischer Takt-Durchsatz selbst bei numerischer Sättigung.
+
