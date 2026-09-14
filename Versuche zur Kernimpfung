@@ -1,0 +1,21 @@
+===============================================================================
+                    SK-FORGE HPC - HARDWARE-SPEZIFIKATION
+===============================================================================
+Die folgenden Versuche für die Kerne-Impfung wurden mit folgender 
+Hardware erstellt:
+
+* Prozessor (CPU)        : AMD Ryzen 9 7950X (16 physische Kerne, 32 Threads)
+* Basis-Taktfrequenz     : 4,5 GHz (Maximaler Boost-Takt bis zu 5,7 GHz)
+* Prozessor-Cache        : 16 MB L2-Cache + 64 MB L3-Cache (AMD 3D V-Cache)
+* Hauptspeicher (RAM)    : 64 GB DDR5 Kingston FURY Beast (2x 32 GB Dual-Channel)
+* RAM-Spezifikationen    : DDR5-5200, CL40-40-40, 1.25V, ungepuffert (unbuffered)
+* RAM-Profile            : AMD EXPO (Extended Profiles for Overclocking) aktiv
+* System-Festplatte (SSD): 2 TB Kingston FURY Renegade PCIe 4.0 NVMe M.2
+* SSD-Controller         : Phison PS5018-E18 (High-End 8-Kanal-Controller)
+* SSD-Leistungswerte     : Bis zu 7.300 MB/s Lesen | 7.000 MB/s Schreiben
+* Hauptplatine (Mainboard): ASUS ROG STRIX B650-E GAMING WIFI (AM5-Sockel)
+* Spannungsversorgung    : 16+2+1 Power Stages (VRM) für maximale Laststabilität
+* Kühlungssystem         : High-End Custom-Wasserkühlung am nackten Kupfer
+* Umgebungs-Temperatur   : Konstant 17°C (Kontrollierte Eiskeller-Bedingungen)
+* Betriebssystem         : Pop!_OS 24.04 LTS (64-Bit, Linux-Kernel 6.6+ EEVDF)
+===============================================================================
