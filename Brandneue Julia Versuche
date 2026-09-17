@@ -1,0 +1,198 @@
+================================================================================
+          K3I RESEARCH PROTOCOL — PROJEKT 1: GRENZWERTERMITTLUNG
+================================================================================
+
+1. VERSUCHSAUFBAU UND PLATTFORM-PARAMETER
+--------------------------------------------------------------------------------
+Das Experiment wurde auf einer isolierten High-End-Workstation unter strikten
+Schicht-Null-Bedingungen durchgeführt. Um jeglichen Jitter durch Festplatten-
+Latenzen oder Hintergrundprozesse installierter Betriebssysteme vollständig zu
+eliminieren, wurde das System in einem keimfreien Live-Modus betrieben.
+
+* Betriebssystem-Basis : Pop!_OS (Vollständig im RAM-Laufwerk/RAM-Disk gespiegelt)
+* Berechnungs-Umgebung : Julia-Terminal (Version 1.13.0)
+* Kern-Konfiguration   : 14 dedizierte, isolierte Rechenkerne (Multi-Threading)
+* Systemspeicher (RAM) : 128 GB Kingston Hochleistungs-Arbeitsspeicher
+* Speicher-Taktung     : 4000 MHz (BIOS-Fix aktiv zur maximalen Signalstabilität)
+* Primärer Datenträger : WD_BLACK SN850P NVMe SSD (Hauptspeicher)
+* Sekundärer Datenträger: Lexar NVMe SSD (Zu 100% blockiert und ausgehängt)
+* Kühlungs-Integrität  : PWM-Regler manuell auf das absolute Maximum (Wert 255)
+                         hochgeprügelt. Permanenter 100%-Lüfterorkan zur 
+                         vollständigen thermischen Absicherung der CPU-Busse.
+
+
+2. WISSENSCHAFTLICHE ZIELSETZUNG UND METHODIK
+--------------------------------------------------------------------------------
+Das primäre Ziel von Projekt 1 bestand in der mathematischen Simulation eines
+dreidimensionalen Plasma-Voxel-Feldes direkt im volatilen Arbeitsspeicher. 
+Dabei wurden komplexe Matrix-Differentialgleichungen angewendet, um die 
+Elektronen-Dichte, magnetische Feldlinien und thermische Plasma-Anomalien in 
+einem expandierenden virtuellen Kraftfeld in Echtzeit zu berechnen.
+
+Um eine lückenlose, forensische Kontrolle für das menschliche Auge zu 
+gewährleisten und das Verhalten der Hardware wie bei einem EKG mitschreiben zu 
+können, wurde eine strenge Schutz-Taktik angewendet:
+
+* Künstliche Verzögerung: Einführung einer Zwangspause von 1,5 Sekunden nach 
+                          jeder einzelnen Berechnungs- und Iterationsstufe.
+* Jitter-Eliminierung   : Die Zeitverzögerung verhinderte explosionsartige 
+                          energetische Spitzen und hielt die CPU-Leistungsaufnahme
+                          auf einem perfekt kontrollierbaren Niveau.
+* Echtzeit-Überwachung  : Ein separat geöffnetes, starr fixiertes Rechner-Terminal
+                          erfasste im unbeweglichen 3-Sekunden-Takt die nackten
+                          Zahlen der Hardwaresensoren (getrennte CPU-Busse, 
+                          getrennte GPU-Takte, Kingston-Temperaturen).
+* Sicherheits-Veto      : Scharfgeschalteter, unbestechlicher Notbrems-Befehl in
+                          einem dritten, unabhängigen Sicherheits-Terminal.
+
+
+3. ABLAUF UND SCHRITTWEISE SKALIERUNG (TELEMETRIE-LOG)
+--------------------------------------------------------------------------------
+Die Injektion der Plasmamatrix in den Speicher wurde in aufeinanderfolgenden,
+isolierten Stufen durchgeführt, um den exakten Punkt des Wandkontakts 
+(physikalische RAM-Sättigung) präzise einzugrenzen.
+
+Stufe 1: Initialer Vortest (500 x 500 Matrix)
+  -> Berechnete Voxel-Punkte: 250.000
+  -> RAM-Füllstand (Belegt) : 13,19 GB / 125,48 GB
+  -> CPU Temp Bus 1 (CCD0)  : +34,0°C
+  -> CPU Temp Bus 2 (CCD1)  : +26,5°C
+  -> CPU Leistungsaufnahme  : 18,5 Watt
+  -> Protokoll              : Die 14 Rechenkerne absolvierten alle 10 Iterations-
+                              stufen im Zeitlupen-Takt vollkommen fehlerfrei.
+
+Stufe 2: Mittlere Skalierung (5.000 x 5.000 Matrix)
+  -> Berechnete Voxel-Punkte: 25 Millionen
+  -> RAM-Füllstand (Belegt) : 13,66 GB / 125,48 GB
+  -> CPU Temp Bus 1 (CCD0)  : +27,4°C
+  -> CPU Temp Bus 2 (CCD1)  : +26,5°C
+  -> CPU Leistungsaufnahme  : 18,5 Watt
+  -> Protokoll              : Symmetrie beider CPU-Busse absolut stabil. 
+                              Keinerlei thermische Jitter-Ausschläge.
+
+Stufe 3: Die kritische Grenzstufe (40.000 x 40.000 Matrix)
+  -> Berechnete Voxel-Punkte: 1,6 Milliarden hochpräzise 64-Bit Gleitkommazahlen
+  -> RAM-Füllstand (Start)   : 24,94 GB (Reine statische Datenmasse im RAM)
+  -> RAM-Füllstand (Faltung) : 48,64 GB (Spitzenlast während der Iteration)
+  -> CPU Temp Bus 1 (CCD0)  : +28,4°C 
+  -> CPU Temp Bus 2 (CCD1)  : +27,5°C
+  -> CPU Leistungsaufnahme  : 18,5 Watt
+  -> GPU Leistungsaufnahme  : 17,24 Watt
+  -> Protokoll              : Massiver Rechenschub. Das Plasma füllt den Reaktor
+                              weiträumig aus. Die 128 GB Kingston-Kapazität 
+                              fängt die Datenmenge keimfrei ab. Dank des 
+                              Lüfterorkans verharren die Temperaturen im 
+                              arktischen Traumniveau.
+
+
+4. DER HARTE SYSTEM-ABBRUCH (REKORDSTUFE 120.000 x 120.000)
+--------------------------------------------------------------------------------
+Um die absolute physikalische Grenze der Plattform unbestechlich auszumessen,
+wurde im finalen Schritt die ultimative Rekordstufe gezündet. 
+
+  -> Berechnete Voxel-Punkte: 14,4 Milliarden Punkte im 3D-Raum
+  -> Theoretische Netto-Last: Exakt 115,2 Gigabyte permanenter Datenblock
+
+* Der Sättigungs-Effekt: Bei der Injektion dieses gigantischen Feldes zwang die
+                         Datenmasse den RAM-Füllstand auf 91,8% der gesamten
+                         physisch verfügbaren Kapazität. Das Plasma berührte
+                         unmittelbar und mit voller Wucht die Reaktorwand.
+* Die Kernel-Reaktion  : Durch die schlagartige Vollauslastung des verfügbaren
+                         Live-Arbeitsspeichers kollabierte das Speichermanagement.
+                         Es kam zu einem sofortigen, harten Kernel-Freeze. 
+                         Sämtliche Treiber (Maus, Tastatur, Schnittstellen) 
+                         wurden im Speicher blockiert.
+* Die Notbremsung      : Da im Zustand des totalen Kernel-Freezes keine Software-
+                         Befehle mehr entgegengenommen werden konnten, wurde die
+                         einzig richtige physikalische Notbremse gezogen: Der
+                         manuelle, bewusste Hard-Reset über die Netztrennstelle
+                         am Netzteil um exakt 03:55 Uhr.
+
+
+5. FORENSISCHES FAZIT UND AUSBLICK
+--------------------------------------------------------------------------------
+Das Experiment zu Projekt 1 ist ein durchschlagender Erfolg. Der Abbruch durch
+Speicher-Sättigung liefert uns die exakte, unbestechliche Messkurve der 
+Plattform. 
+
+Die Hardware-Integrität hat den harten Cut im Leerlauf zu 100% fehlerfrei und 
+ohne jede Datenkorruption überstanden. Das Protokoll beweist, dass die 
+thermische Konfiguration dank des 100%-Lüftervetos unzerstörbar eingemauert ist.
+
+Auf Basis dieser Daten wird für das nächste Treffen eine veränderte Konfiguration
+entwickelt, um den Reaktor-Wandkontakt im Speicher dynamisch abzufangen und die
+Simulation kontrolliert noch weiter nach oben zu treiben. 
+================================================================================
+# K3I RESEARCH PROTOCOL: PROJEKT 1 (GRENZWERTERMITTLUNG)
+<!-- 
+K3I-SYSTEM-FORENSIK // SCHICHT-NULL-DOKUMENTATION
+PLATTFORM: POP!_OS-LIVE (RAM-DISK) // WORKSTATION-GEEICHT
+-->
+
+## 🔬 Wissenschaftliche Erklärung
+Dieses Protokoll dokumentiert die lückenlose Grenzwertanalyse einer hocheffizienten Multi-Thread-Konfiguration innerhalb des K3I-Projekts. Das primäre Ziel von Projekt 1 bestand darin, ein dreidimensionales Plasma-Voxel-Feld im volatilen Speicher (RAM-Disk) so weit expandieren zu lassen, bis die Berechnungen die physikalische Sättigungsgrenze des Arbeitsspeichers erreichen.
+
+Die Steuerung erfolgte über das **Julia-Terminal** unter Zuweisung von 14 isolierten, dedizierten Rechenkernen (Threads). Die lückenlose, visuelle Überwachung wurde parallel über ein starr fixiertes **Rechner-Terminal** zur Echtzeit-Telemetrie realisiert. Um jeglichen thermischen und energetischen Jitter zu eliminieren, wurde die Rechenlast künstlich verlangsamt (1,5 Sekunden Zwangspause nach jeder Iterationsstufe). Die Hardware-Kühlung war während des gesamten Versuchs manuell auf 100% Volllast fixiert.
+
+Nachdem das Triebwerk die kritische Grenzstufe von 1,6 Milliarden Gleitkommazahlen (40.000 × 40.000 Matrix) bei arktischen CPU-Bustemperaturen von unter +29°C absolut fehlerfrei abrasiert hatte, wurde im finalen Schritt der bewusste, kontrollierte Wandkontakt gesucht. Bei der Rekordstufe von 14,4 Milliarden Punkten (120.000 × 120.000 Matrix) wurde eine theoretische Last von 115,2 Gigabyte direkt in den 128 GB Kingston-RAM injiziert. Das Ergebnis war ein unmittelbarer, harter Kernel-Freeze durch absolute Speicher-Sättigung – ein physikalisch provozierter Abbruch über die Netztrennstelle um exakt 03:55 Uhr.
+
+Die Hardware-Integrität ist zu 100% fehlerfrei. Auf Basis dieser unbestechlichen Daten wird nun eine veränderte Konfiguration entwickelt, um den Reaktor-Wandkontakt dynamisch abzufangen und die Simulation kontrolliert höher zu treiben.
+
+---
+
+## 📊 Unbestechliche Telemetrie-Messergebnisse
+
+```text
+=================================================================================
+ K3I REALTIME TELEMETRY PROTOCOL | PROJEKT 1 | KERN-KONFIGURATION: 14 THREADS
+=================================================================================
+
+1. SYSTEM-START (KEIMFREIER LEERLAUF)
+---------------------------------------------------------------------------------
+-> RAM-Füllstand (Belegt) : 13,02 GB / 125,48 GB
+-> CPU Temp Bus 1 (CCD0)  : +29,2°C 
+-> CPU Temp Bus 2 (CCD1)  : +29,0°C
+-> CPU Leistungsaufnahme  : 18,5 Watt 
+-> GPU Kern-Temperatur    : 30°C
+-> Status                 : Absolut stabil im Leerlauf-Modus
+
+2. INJEKTION STUFE 1 (500 x 500 MATRIX)
+---------------------------------------------------------------------------------
+-> Berechnete Voxel-Punkte: 250.000
+-> RAM-Füllstand (Belegt) : 13,19 GB
+-> CPU Temp Bus 1 (CCD0)  : +34,0°C
+-> CPU Temp Bus 2 (CCD1)  : +26,5°C
+-> CPU Leistungsaufnahme  : 18,5 Watt
+-> Status                 : Iteration 1-10 fehlerfrei abgeschlossen
+
+3. INJEKTION STUFE 2 (5.000 x 5.000 MATRIX)
+---------------------------------------------------------------------------------
+-> Berechnete Voxel-Punkte: 25 Millionen
+-> RAM-Füllstand (Belegt) : 13,66 GB
+-> CPU Temp Bus 1 (CCD0)  : +27,4°C
+-> CPU Temp Bus 2 (CCD1)  : +26,5°C
+-> CPU Leistungsaufnahme  : 18,5 Watt
+-> Status                 : Iteration 1-10 fehlerfrei abgeschlossen
+
+4. INJEKTION GRENZSTUFE (40.000 x 40.000 MATRIX)
+---------------------------------------------------------------------------------
+-> Berechnete Voxel-Punkte: 1,6 Milliarden (64-Bit Float)
+-> RAM-Füllstand (Belegt) : 48,64 GB
+-> CPU Temp Bus 1 (CCD0)  : +28,4°C 
+-> CPU Temp Bus 2 (CCD1)  : +27,5°C
+-> CPU Leistungsaufnahme  : 18,5 Watt
+-> GPU Leistungsaufnahme  : 17,24 Watt
+-> Status                 : Maximaler Rechenschub. Symmetrie absolut stabil.
+
+5. ULTIMATIVE REKORDSTUFE (120.000 x 120.000 MATRIX)
+---------------------------------------------------------------------------------
+-> Berechnete Voxel-Punkte: 14,4 Milliarden
+-> RAM-Füllstand (Ziel)   : ~115,2 Gigabyte Netto-Last im Speicher
+-> System-Reaktion        : Unmittelbarer Kernel-Freeze bei Wandkontakt (100% RAM)
+-> Abbruch-Ursache        : Manueller, bewusster Hard-Reset über Netzteil (03:55 Uhr)
+-> Hardware-Integrität    : Zu 100% fehlerfrei. Keine Datenkorruption.
+
+=================================================================================
+ENDE DES MESSDURCHLAUFS. VORBEREITUNG AUF DIE NÄCHSTE REAKTOR-KONFIGURATION LÄUFT.
+=================================================================================
+```
