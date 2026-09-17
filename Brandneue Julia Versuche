@@ -116,31 +116,7 @@ Speicher-Sättigung liefert uns die exakte, unbestechliche Messkurve der
 Plattform. 
 
 Die Hardware-Integrität hat den harten Cut im Leerlauf zu 100% fehlerfrei und 
-ohne jede Datenkorruption überstanden. Das Protokoll beweist, dass die 
-thermische Konfiguration dank des 100%-Lüftervetos unzerstörbar eingemauert ist.
-
-Auf Basis dieser Daten wird für das nächste Treffen eine veränderte Konfiguration
-entwickelt, um den Reaktor-Wandkontakt im Speicher dynamisch abzufangen und die
-Simulation kontrolliert noch weiter nach oben zu treiben. 
-================================================================================
-# K3I RESEARCH PROTOCOL: PROJEKT 1 (GRENZWERTERMITTLUNG)
-<!-- 
-K3I-SYSTEM-FORENSIK // SCHICHT-NULL-DOKUMENTATION
-PLATTFORM: POP!_OS-LIVE (RAM-DISK) // WORKSTATION-GEEICHT
--->
-
-## 🔬 Wissenschaftliche Erklärung
-Dieses Protokoll dokumentiert die lückenlose Grenzwertanalyse einer hocheffizienten Multi-Thread-Konfiguration innerhalb des K3I-Projekts. Das primäre Ziel von Projekt 1 bestand darin, ein dreidimensionales Plasma-Voxel-Feld im volatilen Speicher (RAM-Disk) so weit expandieren zu lassen, bis die Berechnungen die physikalische Sättigungsgrenze des Arbeitsspeichers erreichen.
-
-Die Steuerung erfolgte über das **Julia-Terminal** unter Zuweisung von 14 isolierten, dedizierten Rechenkernen (Threads). Die lückenlose, visuelle Überwachung wurde parallel über ein starr fixiertes **Rechner-Terminal** zur Echtzeit-Telemetrie realisiert. Um jeglichen thermischen und energetischen Jitter zu eliminieren, wurde die Rechenlast künstlich verlangsamt (1,5 Sekunden Zwangspause nach jeder Iterationsstufe). Die Hardware-Kühlung war während des gesamten Versuchs manuell auf 100% Volllast fixiert.
-
-Nachdem das Triebwerk die kritische Grenzstufe von 1,6 Milliarden Gleitkommazahlen (40.000 × 40.000 Matrix) bei arktischen CPU-Bustemperaturen von unter +29°C absolut fehlerfrei abrasiert hatte, wurde im finalen Schritt der bewusste, kontrollierte Wandkontakt gesucht. Bei der Rekordstufe von 14,4 Milliarden Punkten (120.000 × 120.000 Matrix) wurde eine theoretische Last von 115,2 Gigabyte direkt in den 128 GB Kingston-RAM injiziert. Das Ergebnis war ein unmittelbarer, harter Kernel-Freeze durch absolute Speicher-Sättigung – ein physikalisch provozierter Abbruch über die Netztrennstelle um exakt 03:55 Uhr.
-
-Die Hardware-Integrität ist zu 100% fehlerfrei. Auf Basis dieser unbestechlichen Daten wird nun eine veränderte Konfiguration entwickelt, um den Reaktor-Wandkontakt dynamisch abzufangen und die Simulation kontrolliert höher zu treiben.
-
----
-
-## 📊 Unbestechliche Telemetrie-Messergebnisse
+ohne jede Datenkorruption überstanden. Das Protokoll beweist, dass die 55
 
 ```text
 =================================================================================
@@ -193,6 +169,85 @@ Die Hardware-Integrität ist zu 100% fehlerfrei. Auf Basis dieser unbestechliche
 -> Hardware-Integrität    : Zu 100% fehlerfrei. Keine Datenkorruption.
 
 =================================================================================
+
+# DOKUMENTATION DER HPC-SYSTEMKONFIGURATION (K3I-PROJECT)
+# Status: Validiert und Verriegelt auf Schicht-Null-Ebene
+# Zeitstempel: 17.09.2026, 07:28 Uhr
+
+## 1. HARDWARE-PARAMETER & TAKT-FIXIERUNG
+- CPU-Architektur: AMD Ryzen (16 Kerne, aufgeteilt auf CCD0 und CCD1)
+- GPU-Architektur: NVIDIA GeForce RTX 5080 (PCIe-Bus-Anbindung)
+- RAM-Taktfrequenz: 125,48 GB Corsair RAM, fixiert auf starr 4800 MHz
+- SSD-Infrastruktur: WD_BLACK NVMe SSD (transientes Echtzeit-Protokoll)
+- Thermisches Setup: Gehäuse-, CPU- und GPU-Lüfter manuell fixiert auf 100% Volllast
+
+## 2. KERNEL-MODIFIKATIONEN & RING-0-IMPFUNG
+- Kern-Isolierung: Kerne 0-5 (CCD0) und 8-13 (CCD1) exklusiv für Rechenlast reserviert
+- Treiber-Isolierung: Kerne 12-15 isoliert für NVIDIA-Treiber und PCIe-Bus-Datentransfer
+- Energieprofil: Alle 16 CPU-Kerne starr auf Linux-Governor "performance" verriegelt
+- CPU MSR-Register 0xc0010200 & 0xc0010201: Hardware-Counter (Zyklen/Cache) für rdpmc freigeschaltet
+- CPU MSR-Register 0x100 & 0x200: Prefetcher-Logik im Ring 0 auf Jitter-Abfangmodus programmiert
+
+## 3. GPU ROOT-VERRIEGELUNG (NVIDIA-SMI)
+- Persistenz-Modus: Aktiviert (Driver permanently loaded in Kernel)
+- VRAM-Takt: Starr fixiert auf 14801 MHz via nvidia-smi -ac
+- GPU-Kernausschlag: Starr fixiert auf 2722 MHz (Peak bis zu 2730 MHz) via nvidia-smi -ac
+- Sicherheitsventil: 10,0 Sekunden Zwangspause (sleep) nach jeder Iteration zur thermischen Entlastung
+
+## 4. SYSTEMZUSTAND NACH 500M-LAUF
+- Das System operiert durch das 95/5-Hybrid-Offloading ohne Jitter und ohne thermischen Verzug.
+- Maximale CPU-Bus-Differenz (CCD0 zu CCD1) beträgt 1,3°C bis 1,4°C.
+- GPU-Kerntemperatur verbleibt im stationären Zustand bei arktischen 29°C bis 31°C.
+- Speicherverwaltung arbeitet absolut linear ohne Akkumulation von transienten Restregistern.
+
 ENDE DES MESSDURCHLAUFS. VORBEREITUNG AUF DIE NÄCHSTE REAKTOR-KONFIGURATION LÄUFT.
 =================================================================================
-```
+
+# DOKUMENTATION DER HPC-SYSTEMKONFIGURATION (K3I-PROJECT)
+# Status: Validiert und Verriegelt auf Schicht-Null-Ebene
+# Zeitstempel: 17.09.2026, 07:28 Uhr
+
+## 1. HARDWARE-PARAMETER & TAKT-FIXIERUNG
+- CPU-Architektur: AMD Ryzen (16 Kerne, aufgeteilt auf CCD0 und CCD1)
+- GPU-Architektur: NVIDIA GeForce RTX 5080 (PCIe-Bus-Anbindung)
+- RAM-Taktfrequenz: 125,48 GB Corsair RAM, fixiert auf starr 4800 MHz
+- SSD-Infrastruktur: WD_BLACK NVMe SSD (transientes Echtzeit-Protokoll)
+- Thermisches Setup: Gehäuse-, CPU- und GPU-Lüfter manuell fixiert auf 100% Volllast
+
+## 2. KERNEL-MODIFIKATIONEN & RING-0-IMPFUNG
+- Kern-Isolierung: Kerne 0-5 (CCD0) und 8-13 (CCD1) exklusiv für Rechenlast reserviert
+- Treiber-Isolierung: Kerne 12-15 isoliert für NVIDIA-Treiber und PCIe-Bus-Datentransfer
+- Energieprofil: Alle 16 CPU-Kerne starr auf Linux-Governor "performance" verriegelt
+- CPU MSR-Register 0xc0010200 & 0xc0010201: Hardware-Counter (Zyklen/Cache) für rdpmc freigeschaltet
+- CPU MSR-Register 0x100 & 0x200: Prefetcher-Logik im Ring 0 auf Jitter-Abfangmodus programmiert
+
+## 3. GPU ROOT-VERRIEGELUNG (NVIDIA-SMI)
+- Persistenz-Modus: Aktiviert (Driver permanently loaded in Kernel)
+- VRAM-Takt: Starr fixiert auf 14801 MHz via nvidia-smi -ac
+- GPU-Kernausschlag: Starr fixiert auf 2722 MHz (Peak bis zu 2730 MHz) via nvidia-smi -ac
+- Sicherheitsventil: 10,0 Sekunden Zwangspause (sleep) nach jeder Iteration zur thermischen Entlastung
+
+## 4. SYSTEMZUSTAND NACH 500M-LAUF
+- Das System operiert durch das 95/5-Hybrid-Offloading ohne Jitter und ohne thermischen Verzug.
+- Maximale CPU-Bus-Differenz (CCD0 zu CCD1) beträgt 1,3°C bis 1,4°C.
+- GPU-Kerntemperatur verbleibt im stationären Zustand bei arktischen 29°C bis 31°C.
+- Speicherverwaltung arbeitet absolut linear ohne Akkumulation von transienten Restregistern.
+
+===================================================================================================
+K3I HYBRID-OFFLOADING TELEMETRIE-PROTOKOLL (INDEX: 100M - 500M VOXEL)
+===================================================================================================
+STUFE_VOXEL | SPLIT_CPU_GPU | TEMP_CCD0 | TEMP_CCD1 | TEMP_GPU | WATT_GPU | STATUS_STABILITAET
+---------------------------------------------------------------------------------------------------
+100_Mio     | 00%_CPU / 100%_GPU | +28.4°C   | +27.0°C   | 29°C     | 17.18W   | STABIL (Idle-Phase)
+110_Mio     | 00%_CPU / 100%_GPU | +26.4°C   | +26.5°C   | 28°C     | 14.49W   | STABIL (Idle-Phase)
+120_Mio     | 00%_CPU / 100%_GPU | +28.4°C   | +27.0°C   | 30°C     | 45.71W   | STABIL (GPU-Clock 2722 MHz)
+135_Mio     | 00%_CPU / 100%_GPU | +28.8°C   | +27.5°C   | 30°C     | 45.80W   | STABIL (GPU-Clock 2722 MHz)
+135_Mio     | 25%_CPU / 75%_GPU  | +27.4°C   | +26.5°C   | 30°C     | 44.80W   | STABIL (Hybrid-Entlastung)
+160_Mio     | 90%_CPU / 10%_GPU  | +26.8°C   | +26.5°C   | 30°C     | Minimal  | STABIL (CPU-Hauptfaltung)
+300_Mio     | 95%_CPU / 05%_GPU  | +27.9°C   | +27.0°C   | 31°C     | 45.90W   | STABIL (GPU-Clock 2730 MHz)
+350_Mio     | 95%_CPU / 05%_GPU  | +27.4°C   | +27.0°C   | 29°C     | 15.78W   | STABIL (RAM-Auslastung 19.26 GB)
+500_Mio     | 95%_CPU / 05%_GPU  | +26.8°C   | +26.5°C   | 30°C     | Gedeckelt| ERFOLG (Grenzlast bezwungen)
+===================================================================================================
+
+
+
