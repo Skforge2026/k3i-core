@@ -29,20 +29,21 @@ Unter diesen spezifischen Bedingungen ist eine automatisierte Wiederöffnung der
 Sicherheits-Feature bei Stromausfall: Sollte das Gesamtsystem oder die Energieversorgung des Labors komplett ausfallen, verliert die Relaisschaltung automatisch ihre Spannung. Die Kontakte öffnen sich selbsttätig (Fail-Safe), und das Internet wird sofort sicher vom Hausnetz isoliert.
 
 ---
-Code kopieren und auf dem eignen Rechner ausführen.
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Bauplan für DSL Vetoschloß</title>
+    <title>K3I-CORE: Bauplan für DSL Vetoschloß</title>
     <style>
-        body { font-family: sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
-        h1 { color: #0066cc; border-bottom: 2px solid #0066cc; padding-bottom: 10px; }
-        h2 { color: #333; margin-top: 30px; }
-        .box { background: #f4f4f4; border-left: 5px solid #0066cc; padding: 15px; margin: 20px 0; }
-        .image-container { text-align: center; margin-top: 40px; }
-        img { max-width: 100%; height: auto; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        body { font-family: sans-serif; line-height: 1.6; color: #e2e8f0; background-color: #0f172a; max-width: 900px; margin: 0 auto; padding: 30px; }
+        h1 { color: #38bdf8; border-bottom: 2px solid #38bdf8; padding-bottom: 10px; font-size: 24px; }
+        h2 { color: #f43f5e; margin-top: 30px; font-size: 18px; border-left: 4px solid #f43f5e; padding-left: 10px; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+        strong { color: #38bdf8; }
+        .alert-box { background: #1e293b; border-left: 5px solid #22c55e; padding: 15px; margin: 20px 0; border-radius: 4px; }
+        .img-box { text-align: center; margin-top: 30px; padding: 15px; background: #1e293b; border-radius: 8px; border: 1px solid #334155; }
+        img { max-width: 100%; height: auto; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -65,7 +66,7 @@ Code kopieren und auf dem eignen Rechner ausführen.
     <p>Sobald die Software-Phalanx eine kritische Anomalie isoliert, wird eine automatisierte zweistufige Verteidigungskette in Gang gesetzt:</p>
     <ul>
         <li><strong>Schritt 1: Das physische Schloss öffnet sich.</strong> Das Steuersignal an Pin 2 der Datenkarte wird augenblicklich auf LOW gesetzt (0 V). Das MOSFET-Modul verliert die Spannung, die Relais K1 und K2 fallen ab und trennen die DSL-Adern 3 und 4 im Bruchteil einer Millisekunde. Das System ist sofort lokal isoliert.</li>
-        <li><strong>Schritt 2: Erzwungener Router-Neustart (IP-Reset).</strong> Parallel zur Trennung steuert der Wächter über ein drittes Relais (oder einen Steuerbefehl) den Stromzyklus des Routers an und zwingt diesen zu einem vollständigen Neustart. Während die DSL-Leitung noch blockiert ist, fährt der Router komplett runter und wieder hoch.</li>
+        <li><strong>Schritt 2: Erzwungener Router-Neustart (IP-Reset).</strong> Parallel zur Trennung steuert der Wächter über ein drittes Relais den Stromzyklus des Routers an und zwingt diesen zu einem vollständigen Neustart. Während die DSL-Leitung noch blockiert ist, fährt der Router komplett runter und wieder hoch.</li>
     </ul>
 
     <h2>4. Die automatisierte 5-Minuten-Wiederöffnung nach IP-Wechsel</h2>
@@ -77,25 +78,15 @@ Code kopieren und auf dem eignen Rechner ausführen.
         <li>Nach Ablauf dieser 5-minütigen Sicherheitsphase schaltet der Wächter das Signal an der Datenkarte vollautomatisch wieder auf HIGH. Die Relais K1 und K2 schließen sich, und der Internetzugang wird auf der neuen IP-Adresse sicher und unblockiert wiederhergestellt.</li>
     </ul>
 
-    <div class="box">
+    <div class="alert-box">
         <strong>Sicherheits-Feature bei Stromausfall:</strong> Sollte das Gesamtsystem oder die Energieversorgung des Labors komplett ausfallen, verliert die Relaisschaltung automatisch ihre Spannung. Die Kontakte öffnen sich selbsttätig (Fail-Safe), und das Internet wird sofort sicher vom Hausnetz isoliert.
     </div>
 
     <h2>5. Technische Konstruktionszeichnung der Hardware-Phalanx</h2>
-    <div class="image-container">
-        <!-- HIER IST DAS BILD ALS DIREKTER HTML-TEXTCODE EINGEBETTET -->
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABXgAAAKFAQMAAADfC0pCAAAABlBMVEUAAAD///+l2Z/dAAAAAXRSTlMAQObYZgAAAAlwSFlzAAAOxAAADsQBlssOGwAAAs9JREFUeNrd3b9rFEEUAMDxby9G9CrRIn9BsEihSBEksbNREorYptBCYmchpFBsbZVCG6vYWNiKkCKWNoKtYp1gK9gogp0WVoK63N7Fvbe3Nzu7t/O+75vN982GzO68H/vbeXvDMCwFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgM8SWe3N0933mI90u29vTbe7U0Z7fN3te87v0R79vof8Hvv90Ww/vI6m7SOnm6XpfqT98PojvY6mXUfL9pHbL6+jWde99pHTfXgdTTvvY6c9+v0x6Xbk9NfR7D397vv9/fWp7b7fX/un90pP749JtyPnI7N99HQfXu/Z9+vIdN9bH5vuyOnIdx1NuyOnv+nZezrd30fOR2a7v9WvW/Z73+/rU9t9t+9tZ9v9mHTf767b0WwfZvvo6Y6cjpyPzPbR0314vWffryPTfW99bLojpyNyvud0m9mR2f72/pWb9mvRfo1gI1g7WMFGsFGsHazgI9g7WAXvYA/WwfVgFbyDFXwEq+Ad7ME6eAdXsAVb9pEt2LKP7GAFm/Yp2A52LlgFV398EayC68EquB6sgmvw3j0wUvAGfCngS7H3Euy9BHsvwd5LsPfS6SXYu6fcS7B3S7mXYO9v0ksF/z69fP7V7R8b9m8W/K/Z/fN6wX88vX7S7cgpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwF9bS0q83v8v0o9r+0fN2W3v2z/9v/6rtH7v7Y263rT17S/ujZ/fO9uwt7Y+e3Tvba/df2X61+19l+1Ft37p+l9ttP3p9/9T9aGv7ofbHfvdH++f9UfpRtn/77m96/6rtf7f9Xbfbbm3fut3ZfvX61u3OdvsZ6mZ7w9V+9v99v6Fpd6Zpd+Z73XW73ZruZ7XdqbZf1Xan2l6b7f9Z7VfP7me3PdO9bZ6vPdPtu+mNf0v7tWhv1vaW9sfH/G7wAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgX/EP76Z0pbe3Z7RntGe0Z7RntGe0Z7RntGe0Z7RntPfjP6W7092Z0pXpzpSufj7+FwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIB98gOnT3SlN7ZntGe0Z7RntGe0Z7RntGe0Z7RntGe09+M/pLvT3ZnSlenOlK5+Pv4XAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgH3yA6dPdKU3tme0Z7RntGe0Z7RntGe0Z7RntGe0Z7T34z+ku9PdmdKV6c6Urn4+/hcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgH36BY9UdE6WjYy1AAAAAElFTkSuQmCC" alt="Physikalisches DSL-Vetoschloss">
+    <div class="img-box">
+        <!-- Das Bild wird hier direkt geladen -->
+        <img src="veto_schloss.png" alt="Hardware-Phalanx Konstruktion">
     </div>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
