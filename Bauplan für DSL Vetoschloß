@@ -29,6 +29,8 @@ Unter diesen spezifischen Bedingungen ist eine automatisierte Wiederöffnung der
 Sicherheits-Feature bei Stromausfall: Sollte das Gesamtsystem oder die Energieversorgung des Labors komplett ausfallen, verliert die Relaisschaltung automatisch ihre Spannung. Die Kontakte öffnen sich selbsttätig (Fail-Safe), und das Internet wird sofort sicher vom Hausnetz isoliert.
 
 ---
+Code kopieren und auf dem eignen Rechner ausführen.
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
