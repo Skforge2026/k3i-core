@@ -1,0 +1,35 @@
+# Physische DSL-Abschaltung über MOSFET-Treibermodul und Relais-Sicherung
+
+## 1. Das Konzept des physischen Digitalschotts
+Hochentwickelte kriminelle oder staatliche Schadsoftware ist im Ernstfall in der Lage, logische Software-Sperren oder Firewalls innerhalb des Betriebssystems zu umgehen oder zu manipulieren. Um eine absolute Sicherheit vor Datenexfiltration oder fortlaufenden Angriffen zu garantieren, implementiert dieses System ein unknackbares Hardware-Veto, das direkt am physischen Eintrittspunkt des Internets (vor dem Router) ansetzt.
+
+Der entscheidende Vorteil dieser Konstruktion liegt im Erhalt der lokalen Netzinfrastruktur: Bei einer Auslösung des Wächters wird ausschließlich die externe DSL-Leitung physisch unterbrochen. Das gesamte interne Haus- und Labornetzwerk bleibt physisch vollständig intakt. Lokale Server, Steuerrechner und Drucker können im isolierten Kreis ohne Unterbrechung weiterarbeiten, während das Netzwerk für Angreifer von außen augenblicklich unsichtbar wird.
+
+## 2. Technische Funktionsweise und galvanische Trennung
+Die Hardware-Schaltung ist so konzipiert, dass eine vollständige galvanische Trennung zwischen dem Computer-Steuerkreis und dem realen DSL-Spannungskreis gewährleistet ist. Es existiert keine gemeinsame Masse, was das Gesamtsystem immun gegen elektrische Störungen oder Überspannungen macht.
+
+* Steuerung über die Datenkarte: Der Wächter-Dienst sendet im Normalbetrieb ein konstantes Steuersignal (HIGH, z. B. 5 V) über Pin 2 und Pin 25 einer SUB-D25-Buchse an den Steuereingang des MOSFET-Treibermoduls.
+* Das MOSFET-Treibermodul: Das optoelektronisch isolierte Modul schaltet bei anliegendem Steuersignal die separate Relaisspannungsversorgung (z. B. 12 V DC) auf die Spulen der beiden Relais K1 und K2 durch.
+* Der DSL-Signalweg: Die Relais K1 und K2 sind als Schließer (NO - Normally Open) verdrahtet. Solange Spannung anliegt, sind die Relais geschlossen, und die kritischen Adern 3 und 4 der RJ45-Buchsen (DSL IN vom Anbieter zu DSL OUT zum Router) sind sauber miteinander verbunden. Das Internet steht bereit.
+
+## 3. Der doppelte Counter-Schlag im Ernstfall
+Sobald die Software-Phalanx eine kritische Anomalie isoliert, wird eine automatisierte zweistufige Verteidigungskette in Gang gesetzt:
+
+* Schritt 1: Das physische Schloss öffnet sich. Das Steuersignal an Pin 2 der Datenkarte wird augenblicklich auf LOW gesetzt (0 V). Das MOSFET-Modul verliert die Spannung, die Relais K1 und K2 fallen ab und trennen die DSL-Adern 3 und 4 im Bruchteil einer Millisekunde. Das System ist sofort lokal isoliert.
+* Schritt 2: Erzwungener Router-Neustart (IP-Reset). Parallel zur Trennung steuert der Wächter über ein drittes Relais (oder einen Steuerbefehl) den Stromzyklus des Routers an und zwingt diesen zu einem vollständigen Neustart. Während die DSL-Leitung noch blockiert ist, fährt der Router komplett runter und wieder hoch.
+
+## 4. Die automatisierte 5-Minuten-Wiederöffnung nach IP-Wechsel
+Durch den erzwungenen Neustart fordert der Router beim Internet-Anbieter eine brandneue, unbefleckte IP-Adresse an. Da der Angreifer nur die alte IP-Adresse im Visier hatte, läuft jeder weitere Angriffsversuch ab diesem Moment vollständig ins Leere.
+
+Unter diesen spezifischen Bedingungen ist eine automatisierte Wiederöffnung der Schiene sicher realisierbar:
+* Der Wächter überwacht im Hintergrund den Status des Routers nach dem Reset.
+* Sobald das Router-Triebwerk wieder vollständig hochgefahren und empfangsbereit ist, startet eine feste Zeitschleife von exakt 5 Minuten.
+* Nach Ablauf dieser 5-minütigen Sicherheitsphase schaltet der Wächter das Signal an der Datenkarte vollautomatisch wieder auf HIGH. Die Relais K1 und K2 schließen sich, und der Internetzugang wird auf der neuen IP-Adresse sicher und unblockiert wiederhergestellt.
+
+Sicherheits-Feature bei Stromausfall: Sollte das Gesamtsystem oder die Energieversorgung des Labors komplett ausfallen, verliert die Relaisschaltung automatisch ihre Spannung. Die Kontakte öffnen sich selbsttätig (Fail-Safe), und das Internet wird sofort sicher vom Hausnetz isoliert.
+
+---
+
+### Technische Konstruktionszeichnung der Hardware-Phalanx
+
+![Physische DSL-Trennung über MOSFET-Treibermodul](image_IkxLqB.png)
