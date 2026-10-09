@@ -28,6 +28,9 @@ Unter diesen spezifischen Bedingungen ist eine automatisierte Wiederöffnung der
 
 Sicherheits-Feature bei Stromausfall: Sollte das Gesamtsystem oder die Energieversorgung des Labors komplett ausfallen, verliert die Relaisschaltung automatisch ihre Spannung. Die Kontakte öffnen sich selbsttätig (Fail-Safe), und das Internet wird sofort sicher vom Hausnetz isoliert.
 
+***WICHTIGER PHYSIKALISCHER HARDWARE-HINWEIS:***
+*Diese galvanische Relaisschaltung funktioniert AUSSCHLIESSLICH bei DSL-Leitungen! Bei normalen Netzwerkkabeln (LAN) ist diese Schaltung absolut unbrauchbar, da die mechanischen Kontakte massive elektromagnetische Interferenzen und Signalzerstörung verursachen. Für Netzwerksignale muss zwingend eine rein optische Trennung verwendet werden, während bei DSL wiederum die optische Trennung das Signal komplett versaut und nur die hier dokumentierte, radikale galvanische Relais-Trennung fehlerfrei läuft.*
+
 ![Physisches DSL-Vetoschloss](veto_schloss.png)
 *Hinweis: Die physische Konstruktionszeichnung befindet sich direkt als Datei "veto_schloss.png" im Hauptverzeichnis des Projekts.*
 vetoschloss.png (ich bin einfach zu dämlich, das bild hier reinzuladen ;-) )
