@@ -29,4 +29,5 @@ Unter diesen spezifischen Bedingungen ist eine automatisierte Wiederöffnung der
 Sicherheits-Feature bei Stromausfall: Sollte das Gesamtsystem oder die Energieversorgung des Labors komplett ausfallen, verliert die Relaisschaltung automatisch ihre Spannung. Die Kontakte öffnen sich selbsttätig (Fail-Safe), und das Internet wird sofort sicher vom Hausnetz isoliert.
 
 ![Technische Konstruktionszeichnung der Hardware-Phalanx](Eingefügtes%20Bild.png)
+![Technische Konstruktionszeichnung der Hardware-Phalanx](<Eingefügtes Bild.png>)
 
