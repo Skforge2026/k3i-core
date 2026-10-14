@@ -27,7 +27,8 @@ Folgende Funktionen und Fehlerbehebungen wurden im Projektordner implementiert:
    - Ein manueller Lösch-Button tilgt alle Eingaben bei Bedarf sofort rückstandslos aus dem Arbeitsspeicher und den JSON-Registern.
    - Auf der Startoberfläche wird automatisch eine interaktive Kachel generiert, die die Zieladresse auf Knopfdruck anwählt.
 
-Das System läuft im Leerlauf extrem ressourcenschonend bei ca. 65 MB Grundlast und ist voll einsatzbereit..
+Das System läuft im Leerlauf extrem ressourcenschonend bei ca. 65 MB Grundlast und ist voll einsatzbereit..Der Browser ist für jeden lizensfrei und für low. jeder kann ihn so konfigurieren, wie er will.
+Bei Fragen stehen wir mit Rat und Tat zur Verfügung. Sollte der Browser Fehler beinhalten, wären wir für Hinweise dankbar.
 
 import sys, os, gi
 gi.require_version("Gtk", "3.0")
