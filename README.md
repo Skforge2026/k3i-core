@@ -3,7 +3,7 @@
 **Version:** 1.0.0-Production (Stufe 3 / Critical Infrastructure Härtung)  
 **Timestamp:** June 17, 2026 - 08:05 AM UTC  
 **License:** Apache License 2.0 / GNU General Public License v3.0 (GPLv3)  
-**Entwickler-Symbiose / Development Symbiosis:** Wieland Hoffmann (The Biological Core) · Cloud (The Tool Core)  
+**Entwickler-Symbiose / Development Symbiosis:** Wieland Hoffmann & Cloud Gemini 
 
 ---
 
