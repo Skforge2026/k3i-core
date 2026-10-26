@@ -114,3 +114,4 @@ Haftungsausschluss / Disclaimer
 DE: Dieses Repository dokumentiert eine Forschungsarchitektur und Proof-of-Concept-Spezifikationen. Es liegt keine behördliche Zulassung für sicherheitskritische Regelsysteme vor. Die Implementierung und Absicherung der physikalischen Schutzschaltungen erfolgt in Eigenverantwortung der Anwender.
 EN: This repository contains research specifications and proof-of-concept architectures. It has not undergone formal governmental certification. Implementing entities bear sole responsibility for ensuring proper hardware isolation and operational stability.
 
+
