@@ -27,43 +27,79 @@ Einsatzbereiche: Schutz kritischer Infrastrukturen, Fusionsreaktoren, autonome L
 ---## 3. Systemarchitektur & Spezifikation (Dual-Line Split)
 
 Das Design eliminiert softwaredefinierte Routing-Schwachstellen (z. B. ARP-Poisoning, BGP-Hijacking, Buffer Overflows), indem die Schutzgrenze als physikalische Trennung über zwei Leitungen mit einem isolierten Out-of-Band-Wächterkern realisiert wird.
-
                                   Global Internet
                                          │
                  ┌───────────────────────┴───────────────────────┐ (Physical Fiber TAP)
                  ▼                                               ▼
-      Provider-Linie Links (IP-L)                     Provider-Linie Rechts (IP-R)
+      Provider Line Left (IP-L)                       Provider Line Right (IP-R)
                  │                                               │
    ┌───────────────────────────┐                   ┌───────────────────────────┐
    │   SOLID-STATE SHUTTER L   │                   │   SOLID-STATE SHUTTER R   │
    │  (MOSFET Gate Gated <1µs) │                   │  (MOSFET Gate Gated <1µs) │
    └─────────────┬─────────────┘                   └─────────────┬─────────────┘
-                 │ (Aktiv / Leitend)                             │ (Getrennt / Isoliert)
+                 │ (Active / Conducting)                         │ (Open / Isolated)
                  ▼                                               ▼
    ┌───────────────────────────┐                   ┌───────────────────────────┐
    │     LIVE NODE L (Ring 3)  │                   │   STANDBY NODE R (Ring 3) │
-   │   (Aktive Datenbank-I/O)  │                   │ (Isolierter RAM State-Cache)│
+   │   (Active Database I/O)   │                   │ (Isolated RAM State Cache)│
    └─────────────┬─────────────┘                   └─────────────┬─────────────┘
                  │                                               │
                  └───────────────────────┬───────────────────────┘
-                                         │ (Backplane-Bus / Inter-Core Shared Memory)
+                                         │ (Backplane Bus / Inter-Core Shared Memory)
                                          ▼
                          ┌───────────────────────────────┐
-                         │   ISOLIERTER ARBITER KERN D   │
+                         │   ISOLATED ARBITER CORE D     │
                          │    (100% Offline / Ring 0)    │
-                         │  rdtsc-Polling & CRC32-Check  │
+                         │  rdtsc Polling & CRC32 Check  │
                          └───────────────┬───────────────┘
                                          │
                  ┌───────────────────────┴───────────────────────┐
                  ▼                                               ▼
          [ GPIO Out 1: High ]                            [ GPIO Out 2: Low ]
-       (Hält Shutter L geöffnet)                       (Hält Shutter R gesperrt)
+       (Keeps Shutter L open)                          (Keeps Shutter R locked)
                  │                                               │
                  ▼                                               ▼
    ┌───────────────────────────┐                   ┌───────────────────────────┐
-   │   OEO-Laser-VCC aktiv     │                   │   OEO-Laser kurzgeschlossen│
-   │      (Normalbetrieb)      │                   │   (Optisch vollständig tot)│
+   │   OEO Laser VCC active    │                   │   OEO Laser shorted       │
+   │      (Normal operation)   │                   │   (Optically fully dead)  │
    └───────────────────────────┘                   └───────────────────────────┘
+3. Core Repository Components
+Hard-Realtime Shared-Memory Watchdog (k3i_shm.c)
+Implements the control logic in Ring 0. Uses hardware-near CPU instructions (rdtsc, lfence) to detect asynchronous level fluctuations and system jitter at sub-microsecond level and to control switching operations.
+Realtime Clocking (/pulse)
+Interface for high-frequency integrity verification. Control-loop latencies in the nanosecond range (e.g., 4.75 nanoseconds for plasma stabilization in the experimental setup).
+Network and Routing Design (ROUTER_DESIGN.md)
+Architecture guideline for redundant nodes. Avoids Layer-4 filter bottlenecks and establishes symmetric point-to-point communication.
+4. Technical Integration Guidelines & Protection Principles
+For reliable operation in safety-critical domains, the following parameters must be observed:
+
+Galvanic and logical isolation: Separation of the watchdog core via strict CPU isolation in the OS kernel (e.g., isolcpus).
+Runtime clock control: Permanent cycle verification via assembler-level instructions to detect processing drift.
+Hardware veto actuation: Direct connection of the emergency shutdown signal to physical switching elements without intermediate driver layers.
+Important note on system symmetry: Incomplete isolation (such as shared buses or registers to unsecured networks) causes the overall system to transition into a locked idle state for self-protection upon state errors. Standards-compliant system separation is a prerequisite for uninterrupted operation.
+
+5. Industrial Migration Path & Ecosystem
+The 3-stage model enables scaling from endpoint devices to enterprise data centers:
+
+Consumer and Edge Level: Protection of routers, gateways, IoT units, and vehicle electrical systems against Layer-Zero manipulation.
+Infrastructure Level: Physical neutralization of encryption attacks (ransomware), as unauthorized state changes at system boundaries trigger the hardware veto.
+Science and Research: Free provision of specifications for universities researching latency-free control systems and reactive plasma physics.
+6. Cosmological and Theoretical Context
+The system model transfers topological principles of natural networks to data structures: optimized computer architectures, neural connections, and higher-order cosmic distribution structures (Cosmic Web) exhibit analogous properties of minimal friction losses. The goal of the architecture is to realize a state of minimal systemic entropy with deterministic computability.
+
+7. Sovereignty Statement, License & Disclaimer
+Sovereignty
+This project is released as open-source infrastructure for the global research community. It is not subject to monopolies or access restrictions by individual organizations.
+
+License
+Licensed under the GNU General Public License v3.0 (GPLv3).
+
+Disclaimer
+EN: This repository contains research specifications and proof-of-concept architectures. It has not undergone formal governmental certification. Implementing entities bear sole responsibility for ensuring proper hardware isolation and operational stability.
+DE: Dieses Repository dokumentiert eine Forschungsarchitektur und Proof-of-Concept-Spezifikationen. Es liegt keine behördliche Zulassung für sicherheitskritische Regelsysteme vor. Die Implementierung und Absicherung der physikalischen Schutzschaltungen erfolgt in Eigenverantwortung der Anwender.
+
+
+
 
 ## 4. Kernkomponenten des Repositories
 
