@@ -46,7 +46,43 @@ Das Design eliminiert softwaredefinierte Routing-Schwachstellen (z. B. ARP-Poiso
 4. **Atomarer Ping-Pong-Puffer:** Zustandsabgleich über interne Backplane-Shared-Memory-Strukturen (`k3i_shm.h`). Speicherbarrieren (`__builtin_ia32_mfence()`) verhindern unvollständige Schreibzyklen (Torn-Writes).
 5. **OEO-Laser-VCC-Abschaltung:** Bei Anomalieerkennung steuert Kern D über GPIO-Pins einen High-Speed-Gate-Treiber an, der die Stromversorgung (VCC) des Laserdioden-Treibers im Medienkonverter im Nanosekundenbereich unterbricht.
 
----
+6. Global Internet
+                                         │
+                 ┌───────────────────────┴───────────────────────┐ (Physical Fiber TAP)
+                 ▼                                               ▼
+      Provider-Linie Links (IP-L)                     Provider-Linie Rechts (IP-R)
+                 │                                               │
+   ┌───────────────────────────┐                   ┌───────────────────────────┐
+   │   SOLID-STATE SHUTTER L   │                   │   SOLID-STATE SHUTTER R   │
+   │  (MOSFET Gate Gated <1µs) │                   │  (MOSFET Gate Gated <1µs) │
+   └─────────────┬─────────────┘                   └─────────────┬─────────────┘
+                 │ (Aktiv / Leitend)                             │ (Getrennt / Isoliert)
+                 ▼                                               ▼
+   ┌───────────────────────────┐                   ┌───────────────────────────┐
+   │     LIVE NODE L (Ring 3)  │                   │   STANDBY NODE R (Ring 3) │
+   │   (Aktive Datenbank-I/O)  │                   │ (Isolierter RAM State-Cache)
+   └─────────────┬─────────────┘                   └─────────────┬─────────────┘
+                 │                                               │
+                 └───────────────────────┬───────────────────────┘
+                                         │ (Backplane-Bus / Inter-Core Shared Memory)
+                                         ▼
+                         ┌───────────────────────────────┐
+                         │   ISOLIERTER ARBITER KERN D   │
+                         │    (100% Offline / Ring 0)    │
+                         │  rdtsc-Polling & CRC32-Check  │
+                         └───────────────┬───────────────┘
+                                         │
+                 ┌───────────────────────┴───────────────────────┐
+                 ▼                                               ▼
+         [ GPIO Out 1: High ]                            [ GPIO Out 2: Low ]
+       (Hält Shutter L geöffnet)                       (Hält Shutter R gesperrt)
+                 │                                               │
+                 ▼                                               ▼
+   ┌───────────────────────────┐                   ┌───────────────────────────┐
+   │   OEO-Laser-VCC aktiv     │                   │   OEO-Laser kurzgeschlossen
+   │      (Normalbetrieb)      │                   │   (Optisch vollständig tot)
+   └───────────────────────────┘                   └───────────────────────────
+   
 
 ## 4. Kernkomponenten des Repositories
 
