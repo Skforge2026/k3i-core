@@ -29,8 +29,7 @@ Einsatzbereiche: Schutz kritischer Infrastrukturen, Fusionsreaktoren, autonome L
 Das Design eliminiert softwaredefinierte Routing-Schwachstellen (z. B. ARP-Poisoning, BGP-Hijacking, Buffer Overflows), indem die Schutzgrenze als physikalische Trennung über zwei Leitungen mit einem isolierten Out-of-Band-Wächterkern realisiert wird.
 
                                 
-      Provider-Linie Links (IP-L)                     Provider-Linie Rechts (IP-R)
-                 │                                               │
+      
    ┌───────────────────────────┐                   ┌───────────────────────────┐
    │   SOLID-STATE SHUTTER L   │                   │   SOLID-STATE SHUTTER R   │
    │  (MOSFET Gate Gated <1µs) │                   │  (MOSFET Gate Gated <1µs) │
