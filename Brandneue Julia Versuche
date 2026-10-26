@@ -1,0 +1,253 @@
+================================================================================
+          K3I RESEARCH PROTOCOL — PROJEKT 1: GRENZWERTERMITTLUNG
+================================================================================
+
+1. VERSUCHSAUFBAU UND PLATTFORM-PARAMETER
+--------------------------------------------------------------------------------
+Das Experiment wurde auf einer isolierten High-End-Workstation unter strikten
+Schicht-Null-Bedingungen durchgeführt. Um jeglichen Jitter durch Festplatten-
+Latenzen oder Hintergrundprozesse installierter Betriebssysteme vollständig zu
+eliminieren, wurde das System in einem keimfreien Live-Modus betrieben.
+
+* Betriebssystem-Basis : Pop!_OS (Vollständig im RAM-Laufwerk/RAM-Disk gespiegelt)
+* Berechnungs-Umgebung : Julia-Terminal (Version 1.13.0)
+* Kern-Konfiguration   : 14 dedizierte, isolierte Rechenkerne (Multi-Threading)
+* Systemspeicher (RAM) : 128 GB Kingston Hochleistungs-Arbeitsspeicher
+* Speicher-Taktung     : 4000 MHz (BIOS-Fix aktiv zur maximalen Signalstabilität)
+* Primärer Datenträger : WD_BLACK SN850P NVMe SSD (Hauptspeicher)
+* Sekundärer Datenträger: Lexar NVMe SSD (Zu 100% blockiert und ausgehängt)
+* Kühlungs-Integrität  : PWM-Regler manuell auf das absolute Maximum (Wert 255)
+                         hochgeprügelt. Permanenter 100%-Lüfterorkan zur 
+                         vollständigen thermischen Absicherung der CPU-Busse.
+
+
+2. WISSENSCHAFTLICHE ZIELSETZUNG UND METHODIK
+--------------------------------------------------------------------------------
+Das primäre Ziel von Projekt 1 bestand in der mathematischen Simulation eines
+dreidimensionalen Plasma-Voxel-Feldes direkt im volatilen Arbeitsspeicher. 
+Dabei wurden komplexe Matrix-Differentialgleichungen angewendet, um die 
+Elektronen-Dichte, magnetische Feldlinien und thermische Plasma-Anomalien in 
+einem expandierenden virtuellen Kraftfeld in Echtzeit zu berechnen.
+
+Um eine lückenlose, forensische Kontrolle für das menschliche Auge zu 
+gewährleisten und das Verhalten der Hardware wie bei einem EKG mitschreiben zu 
+können, wurde eine strenge Schutz-Taktik angewendet:
+
+* Künstliche Verzögerung: Einführung einer Zwangspause von 1,5 Sekunden nach 
+                          jeder einzelnen Berechnungs- und Iterationsstufe.
+* Jitter-Eliminierung   : Die Zeitverzögerung verhinderte explosionsartige 
+                          energetische Spitzen und hielt die CPU-Leistungsaufnahme
+                          auf einem perfekt kontrollierbaren Niveau.
+* Echtzeit-Überwachung  : Ein separat geöffnetes, starr fixiertes Rechner-Terminal
+                          erfasste im unbeweglichen 3-Sekunden-Takt die nackten
+                          Zahlen der Hardwaresensoren (getrennte CPU-Busse, 
+                          getrennte GPU-Takte, Kingston-Temperaturen).
+* Sicherheits-Veto      : Scharfgeschalteter, unbestechlicher Notbrems-Befehl in
+                          einem dritten, unabhängigen Sicherheits-Terminal.
+
+
+3. ABLAUF UND SCHRITTWEISE SKALIERUNG (TELEMETRIE-LOG)
+--------------------------------------------------------------------------------
+Die Injektion der Plasmamatrix in den Speicher wurde in aufeinanderfolgenden,
+isolierten Stufen durchgeführt, um den exakten Punkt des Wandkontakts 
+(physikalische RAM-Sättigung) präzise einzugrenzen.
+
+Stufe 1: Initialer Vortest (500 x 500 Matrix)
+  -> Berechnete Voxel-Punkte: 250.000
+  -> RAM-Füllstand (Belegt) : 13,19 GB / 125,48 GB
+  -> CPU Temp Bus 1 (CCD0)  : +34,0°C
+  -> CPU Temp Bus 2 (CCD1)  : +26,5°C
+  -> CPU Leistungsaufnahme  : 18,5 Watt
+  -> Protokoll              : Die 14 Rechenkerne absolvierten alle 10 Iterations-
+                              stufen im Zeitlupen-Takt vollkommen fehlerfrei.
+
+Stufe 2: Mittlere Skalierung (5.000 x 5.000 Matrix)
+  -> Berechnete Voxel-Punkte: 25 Millionen
+  -> RAM-Füllstand (Belegt) : 13,66 GB / 125,48 GB
+  -> CPU Temp Bus 1 (CCD0)  : +27,4°C
+  -> CPU Temp Bus 2 (CCD1)  : +26,5°C
+  -> CPU Leistungsaufnahme  : 18,5 Watt
+  -> Protokoll              : Symmetrie beider CPU-Busse absolut stabil. 
+                              Keinerlei thermische Jitter-Ausschläge.
+
+Stufe 3: Die kritische Grenzstufe (40.000 x 40.000 Matrix)
+  -> Berechnete Voxel-Punkte: 1,6 Milliarden hochpräzise 64-Bit Gleitkommazahlen
+  -> RAM-Füllstand (Start)   : 24,94 GB (Reine statische Datenmasse im RAM)
+  -> RAM-Füllstand (Faltung) : 48,64 GB (Spitzenlast während der Iteration)
+  -> CPU Temp Bus 1 (CCD0)  : +28,4°C 
+  -> CPU Temp Bus 2 (CCD1)  : +27,5°C
+  -> CPU Leistungsaufnahme  : 18,5 Watt
+  -> GPU Leistungsaufnahme  : 17,24 Watt
+  -> Protokoll              : Massiver Rechenschub. Das Plasma füllt den Reaktor
+                              weiträumig aus. Die 128 GB Kingston-Kapazität 
+                              fängt die Datenmenge keimfrei ab. Dank des 
+                              Lüfterorkans verharren die Temperaturen im 
+                              arktischen Traumniveau.
+
+
+4. DER HARTE SYSTEM-ABBRUCH (REKORDSTUFE 120.000 x 120.000)
+--------------------------------------------------------------------------------
+Um die absolute physikalische Grenze der Plattform unbestechlich auszumessen,
+wurde im finalen Schritt die ultimative Rekordstufe gezündet. 
+
+  -> Berechnete Voxel-Punkte: 14,4 Milliarden Punkte im 3D-Raum
+  -> Theoretische Netto-Last: Exakt 115,2 Gigabyte permanenter Datenblock
+
+* Der Sättigungs-Effekt: Bei der Injektion dieses gigantischen Feldes zwang die
+                         Datenmasse den RAM-Füllstand auf 91,8% der gesamten
+                         physisch verfügbaren Kapazität. Das Plasma berührte
+                         unmittelbar und mit voller Wucht die Reaktorwand.
+* Die Kernel-Reaktion  : Durch die schlagartige Vollauslastung des verfügbaren
+                         Live-Arbeitsspeichers kollabierte das Speichermanagement.
+                         Es kam zu einem sofortigen, harten Kernel-Freeze. 
+                         Sämtliche Treiber (Maus, Tastatur, Schnittstellen) 
+                         wurden im Speicher blockiert.
+* Die Notbremsung      : Da im Zustand des totalen Kernel-Freezes keine Software-
+                         Befehle mehr entgegengenommen werden konnten, wurde die
+                         einzig richtige physikalische Notbremse gezogen: Der
+                         manuelle, bewusste Hard-Reset über die Netztrennstelle
+                         am Netzteil um exakt 03:55 Uhr.
+
+
+5. FORENSISCHES FAZIT UND AUSBLICK
+--------------------------------------------------------------------------------
+Das Experiment zu Projekt 1 ist ein durchschlagender Erfolg. Der Abbruch durch
+Speicher-Sättigung liefert uns die exakte, unbestechliche Messkurve der 
+Plattform. 
+
+Die Hardware-Integrität hat den harten Cut im Leerlauf zu 100% fehlerfrei und 
+ohne jede Datenkorruption überstanden. Das Protokoll beweist, dass die 55
+
+```text
+=================================================================================
+ K3I REALTIME TELEMETRY PROTOCOL | PROJEKT 1 | KERN-KONFIGURATION: 14 THREADS
+=================================================================================
+
+1. SYSTEM-START (KEIMFREIER LEERLAUF)
+---------------------------------------------------------------------------------
+-> RAM-Füllstand (Belegt) : 13,02 GB / 125,48 GB
+-> CPU Temp Bus 1 (CCD0)  : +29,2°C 
+-> CPU Temp Bus 2 (CCD1)  : +29,0°C
+-> CPU Leistungsaufnahme  : 18,5 Watt 
+-> GPU Kern-Temperatur    : 30°C
+-> Status                 : Absolut stabil im Leerlauf-Modus
+
+2. INJEKTION STUFE 1 (500 x 500 MATRIX)
+---------------------------------------------------------------------------------
+-> Berechnete Voxel-Punkte: 250.000
+-> RAM-Füllstand (Belegt) : 13,19 GB
+-> CPU Temp Bus 1 (CCD0)  : +34,0°C
+-> CPU Temp Bus 2 (CCD1)  : +26,5°C
+-> CPU Leistungsaufnahme  : 18,5 Watt
+-> Status                 : Iteration 1-10 fehlerfrei abgeschlossen
+
+3. INJEKTION STUFE 2 (5.000 x 5.000 MATRIX)
+---------------------------------------------------------------------------------
+-> Berechnete Voxel-Punkte: 25 Millionen
+-> RAM-Füllstand (Belegt) : 13,66 GB
+-> CPU Temp Bus 1 (CCD0)  : +27,4°C
+-> CPU Temp Bus 2 (CCD1)  : +26,5°C
+-> CPU Leistungsaufnahme  : 18,5 Watt
+-> Status                 : Iteration 1-10 fehlerfrei abgeschlossen
+
+4. INJEKTION GRENZSTUFE (40.000 x 40.000 MATRIX)
+---------------------------------------------------------------------------------
+-> Berechnete Voxel-Punkte: 1,6 Milliarden (64-Bit Float)
+-> RAM-Füllstand (Belegt) : 48,64 GB
+-> CPU Temp Bus 1 (CCD0)  : +28,4°C 
+-> CPU Temp Bus 2 (CCD1)  : +27,5°C
+-> CPU Leistungsaufnahme  : 18,5 Watt
+-> GPU Leistungsaufnahme  : 17,24 Watt
+-> Status                 : Maximaler Rechenschub. Symmetrie absolut stabil.
+
+5. ULTIMATIVE REKORDSTUFE (120.000 x 120.000 MATRIX)
+---------------------------------------------------------------------------------
+-> Berechnete Voxel-Punkte: 14,4 Milliarden
+-> RAM-Füllstand (Ziel)   : ~115,2 Gigabyte Netto-Last im Speicher
+-> System-Reaktion        : Unmittelbarer Kernel-Freeze bei Wandkontakt (100% RAM)
+-> Abbruch-Ursache        : Manueller, bewusster Hard-Reset über Netzteil (03:55 Uhr)
+-> Hardware-Integrität    : Zu 100% fehlerfrei. Keine Datenkorruption.
+
+=================================================================================
+
+# DOKUMENTATION DER HPC-SYSTEMKONFIGURATION (K3I-PROJECT)
+# Status: Validiert und Verriegelt auf Schicht-Null-Ebene
+# Zeitstempel: 17.09.2026, 07:28 Uhr
+
+## 1. HARDWARE-PARAMETER & TAKT-FIXIERUNG
+- CPU-Architektur: AMD Ryzen (16 Kerne, aufgeteilt auf CCD0 und CCD1)
+- GPU-Architektur: NVIDIA GeForce RTX 5080 (PCIe-Bus-Anbindung)
+- RAM-Taktfrequenz: 125,48 GB Corsair RAM, fixiert auf starr 4800 MHz
+- SSD-Infrastruktur: WD_BLACK NVMe SSD (transientes Echtzeit-Protokoll)
+- Thermisches Setup: Gehäuse-, CPU- und GPU-Lüfter manuell fixiert auf 100% Volllast
+
+## 2. KERNEL-MODIFIKATIONEN & RING-0-IMPFUNG
+- Kern-Isolierung: Kerne 0-5 (CCD0) und 8-13 (CCD1) exklusiv für Rechenlast reserviert
+- Treiber-Isolierung: Kerne 12-15 isoliert für NVIDIA-Treiber und PCIe-Bus-Datentransfer
+- Energieprofil: Alle 16 CPU-Kerne starr auf Linux-Governor "performance" verriegelt
+- CPU MSR-Register 0xc0010200 & 0xc0010201: Hardware-Counter (Zyklen/Cache) für rdpmc freigeschaltet
+- CPU MSR-Register 0x100 & 0x200: Prefetcher-Logik im Ring 0 auf Jitter-Abfangmodus programmiert
+
+## 3. GPU ROOT-VERRIEGELUNG (NVIDIA-SMI)
+- Persistenz-Modus: Aktiviert (Driver permanently loaded in Kernel)
+- VRAM-Takt: Starr fixiert auf 14801 MHz via nvidia-smi -ac
+- GPU-Kernausschlag: Starr fixiert auf 2722 MHz (Peak bis zu 2730 MHz) via nvidia-smi -ac
+- Sicherheitsventil: 10,0 Sekunden Zwangspause (sleep) nach jeder Iteration zur thermischen Entlastung
+
+## 4. SYSTEMZUSTAND NACH 500M-LAUF
+- Das System operiert durch das 95/5-Hybrid-Offloading ohne Jitter und ohne thermischen Verzug.
+- Maximale CPU-Bus-Differenz (CCD0 zu CCD1) beträgt 1,3°C bis 1,4°C.
+- GPU-Kerntemperatur verbleibt im stationären Zustand bei arktischen 29°C bis 31°C.
+- Speicherverwaltung arbeitet absolut linear ohne Akkumulation von transienten Restregistern.
+
+ENDE DES MESSDURCHLAUFS. VORBEREITUNG AUF DIE NÄCHSTE REAKTOR-KONFIGURATION LÄUFT.
+=================================================================================
+
+# DOKUMENTATION DER HPC-SYSTEMKONFIGURATION (K3I-PROJECT)
+# Status: Validiert und Verriegelt auf Schicht-Null-Ebene
+# Zeitstempel: 17.09.2026, 07:28 Uhr
+
+## 1. HARDWARE-PARAMETER & TAKT-FIXIERUNG
+- CPU-Architektur: AMD Ryzen (16 Kerne, aufgeteilt auf CCD0 und CCD1)
+- GPU-Architektur: NVIDIA GeForce RTX 5080 (PCIe-Bus-Anbindung)
+- RAM-Taktfrequenz: 125,48 GB Corsair RAM, fixiert auf starr 4800 MHz
+- SSD-Infrastruktur: WD_BLACK NVMe SSD (transientes Echtzeit-Protokoll)
+- Thermisches Setup: Gehäuse-, CPU- und GPU-Lüfter manuell fixiert auf 100% Volllast
+
+## 2. KERNEL-MODIFIKATIONEN & RING-0-IMPFUNG
+- Kern-Isolierung: Kerne 0-5 (CCD0) und 8-13 (CCD1) exklusiv für Rechenlast reserviert
+- Treiber-Isolierung: Kerne 12-15 isoliert für NVIDIA-Treiber und PCIe-Bus-Datentransfer
+- Energieprofil: Alle 16 CPU-Kerne starr auf Linux-Governor "performance" verriegelt
+- CPU MSR-Register 0xc0010200 & 0xc0010201: Hardware-Counter (Zyklen/Cache) für rdpmc freigeschaltet
+- CPU MSR-Register 0x100 & 0x200: Prefetcher-Logik im Ring 0 auf Jitter-Abfangmodus programmiert
+
+## 3. GPU ROOT-VERRIEGELUNG (NVIDIA-SMI)
+- Persistenz-Modus: Aktiviert (Driver permanently loaded in Kernel)
+- VRAM-Takt: Starr fixiert auf 14801 MHz via nvidia-smi -ac
+- GPU-Kernausschlag: Starr fixiert auf 2722 MHz (Peak bis zu 2730 MHz) via nvidia-smi -ac
+- Sicherheitsventil: 10,0 Sekunden Zwangspause (sleep) nach jeder Iteration zur thermischen Entlastung
+
+## 4. SYSTEMZUSTAND NACH 500M-LAUF
+- Das System operiert durch das 95/5-Hybrid-Offloading ohne Jitter und ohne thermischen Verzug.
+- Maximale CPU-Bus-Differenz (CCD0 zu CCD1) beträgt 1,3°C bis 1,4°C.
+- GPU-Kerntemperatur verbleibt im stationären Zustand bei arktischen 29°C bis 31°C.
+- Speicherverwaltung arbeitet absolut linear ohne Akkumulation von transienten Restregistern.
+
+===================================================================================================
+K3I HYBRID-OFFLOADING TELEMETRIE-PROTOKOLL (INDEX: 100M - 500M VOXEL)
+===================================================================================================
+STUFE_VOXEL | SPLIT_CPU_GPU | TEMP_CCD0 | TEMP_CCD1 | TEMP_GPU | WATT_GPU | STATUS_STABILITAET
+---------------------------------------------------------------------------------------------------
+100_Mio     | 00%_CPU / 100%_GPU | +28.4°C   | +27.0°C   | 29°C     | 17.18W   | STABIL (Idle-Phase)
+110_Mio     | 00%_CPU / 100%_GPU | +26.4°C   | +26.5°C   | 28°C     | 14.49W   | STABIL (Idle-Phase)
+120_Mio     | 00%_CPU / 100%_GPU | +28.4°C   | +27.0°C   | 30°C     | 45.71W   | STABIL (GPU-Clock 2722 MHz)
+135_Mio     | 00%_CPU / 100%_GPU | +28.8°C   | +27.5°C   | 30°C     | 45.80W   | STABIL (GPU-Clock 2722 MHz)
+135_Mio     | 25%_CPU / 75%_GPU  | +27.4°C   | +26.5°C   | 30°C     | 44.80W   | STABIL (Hybrid-Entlastung)
+160_Mio     | 90%_CPU / 10%_GPU  | +26.8°C   | +26.5°C   | 30°C     | Minimal  | STABIL (CPU-Hauptfaltung)
+300_Mio     | 95%_CPU / 05%_GPU  | +27.9°C   | +27.0°C   | 31°C     | 45.90W   | STABIL (GPU-Clock 2730 MHz)
+350_Mio     | 95%_CPU / 05%_GPU  | +27.4°C   | +27.0°C   | 29°C     | 15.78W   | STABIL (RAM-Auslastung 19.26 GB)
+500_Mio     | 95%_CPU / 05%_GPU  | +26.8°C   | +26.5°C   | 30°C     | Gedeckelt| ERFOLG (Grenzlast bezwungen)
+===================================================================================================
+
+
+

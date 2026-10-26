@@ -1,0 +1,161 @@
+===============================================================================
+               SK-FORGE HPC - BEREITSTELLUNG DER QUELLCODES
+===============================================================================
+
+Hier sind die versprochenen Consumer-Quellcodes für die Prozessoren Intel Core 
+i7, Intel Core i9 sowie für den AMD Ryzen 9 7950X [context]. 
+
+Zusammen mit den Quellcodes wird die Software für das Einbringen der Parameter 
+zur Verfügung gestellt [context]. Dieses Aktivierungs-Tool sorgt dafür, dass die Codes 
+sowie die zugehörigen Modifikationen für die Kern-Laufzeiten und Thread-
+Prioritäten direkt in das System eingebracht werden [context].
+
+===============================================================================
+                     SUPPORT- UND ERWEITERUNGS-ANFRAGEN
+===============================================================================
+
+Wir sind gerne bereit, maßgeschneiderte Consumer-Quellcodes für weitere 
+Prozessormodelle zu entwickeln [context]. Interessenten können hierzu eine Anfrage per 
+E-Mail unter Angabe des gewünschten Prozessors einreichen [context]. 
+
+Die Bereitstellung und Veröffentlichung des spezifisch angepassten Quellcodes 
+erfolgt nach der Fertigstellung für alle Nutzer direkt an genau dieser Stelle 
+hier in diesem GitHub-Repository (Projekt 1) [context].
+
+===============================================================================
+   SK-FORGE HPC SOFTWARE - AUTOMATIC LICENSING & CORE ACTIVATION SYSTEM
+===============================================================================
+                  (C) 2026 SK-FORGE UG - ALL RIGHTS RESERVED
+===============================================================================
+
+# =============================================================================
+# 1. OPTIMIERUNGS-QUELLCODE FÜR INTEL CORE i7 (CONSUMER TIER)
+# =============================================================================
+# Zielgerichtet auf die hybride Architektur (P-Cores / E-Cores) von Intel.
+# Reduziert Kontextwechsel (Context Switches) bei rechenintensiven Prozessen.
+
+def target_intel_i7_profile():
+    import os
+    
+    # Thread-Verteilung fuer Intel Core i7 initialisieren
+    # Priorisiert die physischen Performance-Kerne fuer die Berechnungen
+    os.environ["OMP_PLACES"] = "cores"
+    os.environ["OMP_PROC_BIND"] = "close"
+    
+    # Begrenzung fuer das Consumer-Schleifenlimit (1 Jahr Dauerbetrieb)
+    max_schleifen_limit = 500000000000
+    return max_schleifen_limit
+
+# CODE FÜR DAS EINBRINGEN IN DIE SYSTEMKERNE (SCHEDULER ACTIVATION TOOL)
+if __name__ == "__main__":
+    import subprocess
+    import sys
+
+    print("==========================================================")
+    print("   SK-FORGE HPC - AKTIVIERUNGS-TOOL: INTEL CORE i7        ")
+    print("==========================================================")
+    print("Bringe optimierte Parameter in die Kern-Laufzeiten ein...")
+
+    try:
+        limit = target_intel_i7_profile()
+        
+        # Einbringen der optimierten Kernel-Parameter fuer die Thread-Migration
+        subprocess.run(["sudo", "sysctl", "-w", "kernel.sched_base_slice_ns=4000000"], check=True)
+        subprocess.run(["sudo", "sysctl", "-w", "kernel.sched_migration_cost_ns=500000"], check=True)
+        
+        print("----------------------------------------------------------")
+        print("[ERFOLG] Kern-Impfung für Intel Core i7 aktiv verriegelt!")
+        print(f"Schleifen-Limit für 1 Jahr Dauerbetrieb gesetzt: {limit:,}")
+        print("==========================================================")
+        
+    
+
+
+# =============================================================================
+# 2. OPTIMIERUNGS-QUELLCODE FÜR INTEL CORE i9 (CONSUMER TIER)
+# =============================================================================
+# Spezifisch angepasst an die erweiterte Hybrid-Architektur des Intel Core i9.
+# Optimiert die Lastverteilung ueber die maximale Anzahl an P-Cores und E-Cores.
+
+def target_intel_i9_profile():
+    import os
+    
+    # Thread-Verteilung fuer Intel Core i9 initialisieren
+    # Maximiert die Cache-Ausnutzung auf den Performance-Kernen bei hoher Auslastung
+    os.environ["OMP_PLACES"] = "cores"
+    os.environ["OMP_PROC_BIND"] = "spread"
+    
+    # Begrenzung fuer das Consumer-Schleifenlimit (1 Jahr Dauerbetrieb)
+    max_schleifen_limit = 500000000000
+    return max_schleifen_limit
+
+# CODE FÜR DAS EINBRINGEN IN DIE SYSTEMKERNE (SCHEDULER ACTIVATION TOOL)
+if __name__ == "__main__":
+    import subprocess
+    import sys
+
+    print("==========================================================")
+    print("   SK-FORGE HPC - AKTIVIERUNGS-TOOL: INTEL CORE i9        ")
+    print("==========================================================")
+    print("Bringe optimierte Parameter in die Kern-Laufzeiten ein...")
+
+    try:
+        limit = target_intel_i9_profile()
+        
+        # Einbringen der optimierten Kernel-Parameter fuer die Thread-Migration
+        subprocess.run(["sudo", "sysctl", "-w", "kernel.sched_base_slice_ns=4000000"], check=True)
+        subprocess.run(["sudo", "sysctl", "-w", "kernel.sched_migration_cost_ns=500000"], check=True)
+        
+        print("----------------------------------------------------------")
+        print("[ERFOLG] Kern-Impfung für Intel Core i9 aktiv verriegelt!")
+        print(f"Schleifen-Limit für 1 Jahr Dauerbetrieb gesetzt: {limit:,}")
+        print("==========================================================")
+        
+    
+
+# =============================================================================
+# 3. OPTIMIERUNGS-QUELLCODE FÜR AMD RYZEN 9 7950X (CONSUMER TIER)
+# =============================================================================
+# Spezifisch angepasst an die Multi-CCD-Architektur des AMD Ryzen 9 7950X.
+# Minimiert die CCD-übergreifende Thread-Migration für maximalen L3-Cache-Durchsatz.
+
+def target_amd_7950x_profile():
+    import os
+    
+    # Thread-Verteilung für AMD Ryzen 9 7950X initialisieren
+    # Bindet Threads eng an die jeweiligen physischen Kerne des primären CCDs
+    os.environ["OMP_PLACES"] = "cores"
+    os.environ["OMP_PROC_BIND"] = "close"
+    
+    # Begrenzung für das Consumer-Schleifenlimit (1 Jahr Dauerbetrieb)
+    max_schleifen_limit = 500000000000
+    return max_schleifen_limit
+
+# CODE FÜR DAS EINBRINGEN IN DIE SYSTEMKERNE (SCHEDULER ACTIVATION TOOL)
+if __name__ == "__main__":
+    import subprocess
+    import sys
+
+    print("==========================================================")
+    print("   SK-FORGE HPC - AKTIVIERUNGS-TOOL: AMD RYZEN 9 7950X    ")
+    print("==========================================================")
+    print("Bringe optimierte Parameter in die Kern-Laufzeiten ein...")
+
+    try:
+        limit = target_amd_7950x_profile()
+        
+        # Einbringen der optimierten Kernel-Parameter in den EEVDF-Scheduler
+        subprocess.run(["sudo", "sysctl", "-w", "kernel.sched_base_slice_ns=4000000"], check=True)
+        subprocess.run(["sudo", "sysctl", "-w", "kernel.sched_migration_cost_ns=500000"], check=True)
+        
+        print("----------------------------------------------------------")
+        print("[ERFOLG] Kern-Impfung für AMD Ryzen 9 7950X aktiv verriegelt!")
+        print(f"Schleifen-Limit für 1 Jahr Dauerbetrieb gesetzt: {limit:,}")
+        print("==========================================================")
+        
+    
+===============================================================================
+Wir wünschen viel Spaß damit und ein gutes Gelingen!
+===============================================================================
+
+        

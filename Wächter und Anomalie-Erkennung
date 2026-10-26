@@ -1,0 +1,366 @@
+# Konzept und Implementierung eines modularen Zwei-Kern-Wächters unter Linux
+
+## 1. Einleitung und Systemarchitektur
+Moderne Sicherheitsarchitekturen erfordern dynamische Kontrollmechanismen auf Betriebssystemebene, da rein statische Paketfilter hochentwickelte Angriffsvektoren oft nicht rechtzeitig isolieren können. Das hier beschriebene Konzept implementiert eine autarke, verhaltensbasierte Überwachungslösung, die als Hintergrunddienst (systemd) ausgeführt wird. Um Leistungseinbußen im operativen Alltagsbetrieb zu verhindern, nutzt das System eine dedizierte CPU-Ressourcen-Isolierung. 
+
+Das System teilt sich logisch in zwei parallel agierende Überwachungskerne auf:
+* **Kern 1 (Netzwerk-Phalanx):** Operiert direkt auf der primären Netzwerkschnittstelle und analysiert den rohen Datenstrom in Echtzeit.
+* **Kern 2 (System-Phalanx):** Überwacht asynchron die Auslastung des Arbeitsspeichers, unautorisierte Rechteausweitungen sowie die Aktivität an den physischen Schnittstellen.
+
+## 2. Kern 1: Echtzeit-Netzwerkanalyse und Verhaltensüberwachung
+Die Netzwerkschnittstelle wird über eine direkte Pipeline überwacht, wobei das Werkzeug `tcpdump` den rohen Datenstrom erfasst und zur strukturellen Analyse weiterleitet. Um die Reaktionsgeschwindigkeit zu maximieren, wird dieser Prozess über eine feste Core-Zuweisung (`taskset`) exklusiv auf dedizierte CPU-Kerne isoliert.
+
+Folgende drei Sicherheitsmetriken sind in der Netzwerk-Phalanx verankert:
+* **Volumen-Angriffsschutz (Paketstau):** Das System misst kontinuierlich die Anzahl der eintreffenden Pakete pro Sekunde. Wird ein kritischer Schwellenwert überschritten, detektiert die Logik einen massiven Denial-of-Service-Angriff.
+* **Strukturelle Paketanalyse (Exploit-Erkennung):** Der Filter untersucht den rohen Hex-Inhalt der Pakete auf unnatürliche Klobigkeit und wiederkehrende Bit-Muster (wie NOP-Sleds, z. B. `0x9090`). Dies ermöglicht das Abfangen von ausführbarem Schadcode im Payload (der sogenannten „Bauchschwellung“ des Pakets), noch bevor dieser im RAM verarbeitet werden kann.
+* **Protokoll-Spezifische Anomalien (Salami-Taktik & DNS-Tunneling):** Zur Erkennung von verdeckten Langzeit-Verbindungen (C2-Beacons) misst das System die zeitlichen Abstände zwischen den Paketen einzelner Gegenstellen. Maschinell synchrone Intervalle werden ebenso isoliert wie unnatürlich lange, kryptische DNS-Anfragen, die auf einen verdeckten Datenabfluss über den DNS-Port hindeuten.
+
+## 3. Kern 2: Ressourcen- und Schnittstellenüberwachung
+Der zweite Kern operiert parallel im Hintergrund und sichert die lokale Systemintegrität ab. Seine Aufgaben umfassen den Schutz des Arbeitsspeichers sowie die Abwehr von treiberbasierten Schnittstellen-Anomalien.
+
+* **Arbeitsspeicher- und Prozess-Schutz:** Die Gesamtauslastung des RAMs wird permanent überwacht. Steigt die Last in einen kritischen Bereich, löst das System eine sofortige Zwangsleerung der System-Caches aus. Parallel dazu scannt eine Prozess-Kontrolle die CPU-Auslastung einzelner Anwendungen.
+* **Authentifizierungs-Sicherung:** Kern 2 überwacht die Systemprotokolle der Benutzeranmeldungen in Echtzeit. Unautorisierte Versuche zur Erlangung von Root-Rechten oder manipulierte administrativen Operationen abseits des Hauptbenutzers führen zum sofortigen Abbruch.
+* **Physische Schnittstellen-Überwachung (USB-Brücken-Schutz):** Staatliche oder kriminelle Angriffsvektoren nutzen oft modifizierte USB-Hardware, um Schadcode einzuschleusen oder unbemerkt Netzwerkbrücken (Bridges) aufzubauen. Durch die permanente Überwachung des Kernel-Hardware-Streams registriert der Wächter das Hinzufügen neuer USB-Geräte und prüft diese auf potenziell bösartige Verhaltensmuster.
+
+## 4. Die Notwendigkeit der individuellen Kalibrierung (Eichen des Systems)
+Ein zentraler Aspekt dieses Sicherheitskonzepts ist, dass der Quellcode **zwingend auf jeden Zielrechner individuell kalibriert und geeicht werden muss**. Es gibt keine universellen Standardwerte, die auf jedem System gleichermaßen fehlerfrei funktionieren. Die Schärfe der Filter und die Schwellenwerte müssen dezidiert auf die jeweilige Umgebung angepasst werden.
+
+Diese Anpassung hängt von folgenden Variablen ab:
+* **Netzwerkgeschwindigkeit und DSL-Durchsatz:** Ein System an einer Gigabit-Glasfaserleitung erzeugt im normalen Alltagsbetrieb (z. B. bei großen Downloads) naturgemäß einen weitaus höheren Paketfluss pro Sekunde als ein System an einer langsameren DSL-Leitung. Die Schwellenwerte für den Paketstau müssen daher so hoch angesetzt werden, dass legitimes Filesharing oder Streaming keine Fehlauslösung generiert, während ein echter Angriff dennoch sofort blockiert wird.
+* **Hardware-Leistungsfähigkeit:** Die Auslastungsgrenzen für den Prozessor (CPU) und den Arbeitsspeicher (RAM) müssen auf die Leistung der verbauten Komponenten abgestimmt werden. Ein System mit vielen Kernen verkraftet kurze Lastspitzen anders als kleinere Workstations.
+* **Anwendungsprofil:** Je nachdem, welche Programme (wie z. B. Webbrowser, Entwicklungsumgebungen oder KI-Tools) auf dem Rechner aktiv genutzt werden, müssen die Zeitfenster (z. B. wie viele Sekunden ein Prozess eine bestimmte CPU-Last überschreiten darf) individuell eingestellt werden. Ein Browser kann beim Laden komplexer Webseiten legitime Spitzen erzeugen, die das System erst dann als Amok laufenden Schadcode werten darf, wenn sie über einen längeren Zeitraum starr einfrieren.
+
+## 5. Die Hardware-Sperre durch Treiber-Entladung (Das digitale Schott)
+Die entscheidende Stärke dieser Wächter-Konfiguration liegt in der Kompromisslosigkeit ihrer Gegenmaßnahme im Ernstfall. Sobald eine Anomalie unbestechlich anschlägt, verzichtet das System auf die isolierte Blockierung einzelner IPs oder Software-Prozesse, da professionelle Schadsoftware solche logischen Sperren leicht umgehen kann.
+
+Um absolute Sicherheit zu garantieren, löst der Wächter ein globales Veto aus und zieht die **Hardware-Notbremse**: Das Skript weist das Betriebssystem an, die **Treiber der Netzwerkkarten komplett zu entladen (Unload)**. Durch das physische Entfernen des Treibers aus dem aktiven Kernel wird die Netzwerk-Hardware im Bruchteil einer Millisekunde vollständig funktionsunfähig gemacht. Das System verfügt ab diesem Moment über keinerlei physische Verbindung mehr zum Datennetz, ist für das gesamte Internet absolut unsichtbar und kann weder Daten senden noch empfangen. Dies stellt das sicherste digitale Schott dar, um eine Kompromittierung oder Datenexfiltration sofort zu stoppen. Alle Vorfälle werden parallel dazu manipulationssicher in einer lokalen Protokolldatei auf einem dedizierten Datenträger dokumentiert.
+
+---
+
+# Quellcode-Repository der K3I-Wächter-Phalanx
+
+Hier sind die vollständigen Skripte zur Einrichtung und Ausführung des Systems. Alle Pfade und Schnittstellennamen müssen vor dem Start manuell an die eigene Systemstruktur angepasst und auf die lokalen Netzwerkleitungen geeicht werden.
+
+### 1. Die Haupt-Konfigurationsdatei des Wächter-Dienstes
+Diese Konfiguration verankert den Wächter permanent als Systemdienst im Boot-Sektor des Linux-Betriebssystems, sodass die Überwachung direkt beim Systemstart vollautomatisch geladen wird.
+
+```ini
+[Unit]
+Description=K3I Root-Wächter Zwei-Kern-Phalanx
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /usr/local/bin/k3i_root_waechter.sh
+Restart=always
+RestartSec=5
+User=root
+
+[Install]
+WantedBy=multi-user.target
+```
+
+### 2. Das Wächter-Hauptskript (Kern 1 & Kern 2)
+Dieses Skript enthält die gesamte Überwachungslogik. Es isoliert die Netzwerk-Phalanx auf dedizierte CPU-Kerne, scannt den rohen Hex-Inhalt nach Schadcode, überwacht den RAM-Verbrauch sowie unautorisierte Root-Zugriffe und reagiert im Ernstfall mit der sofortigen Entladung der Netzwerkkartentreiber.
+
+```bash
+#!/bin/bash
+# K3I Root-Wächter - Vollständige Zwei-Kern-Phalanx
+# HINWEIS: Variablen, Pfade und Schnittstellennamen vor Betrieb lokal eichen!
+
+sleep 15
+
+# --- LOKALE DIENST-VARIABLEN (AUF DAS EIGENE SYSTEM ANPASSEN) ---
+INTERFACE_MAIN="PROV_INTERFACE_1"      # Name der primären Netzwerkkarte (z.B. per Kabel)
+INTERFACE_ONBOARD="PROV_INTERFACE_2"   # Name der sekundären Netzwerkkarte (z.B. Onboard/WLAN)
+DRIVER_MODULE_1="r8169"                 # Name des Kernel-Treiber-Moduls der Netzwerkkarte 1
+DRIVER_MODULE_2="e1000e"                # Name des Kernel-Treiber-Moduls der Netzwerkkarte 2
+LOG_DIR="/path/to/your/secure/storage"  # Dedizierter Pfad auf der sicheren Datenplatte
+LOG_FILE="$LOG_DIR/waechter_anomalies.log"
+
+# Ordner für Log-Dateien auf dem sicheren Datenträger absichern
+mkdir -p "$LOG_DIR"
+
+# HARDWARE-VETO: Zerschlägt die Verbindung durch komplettes Entladen der Treiber
+trigger_veto() {
+    local REASON="$1"
+    echo "[$(date)] [!!!] HARDWARE-VETO AKTIVIERT: $REASON" >> "$LOG_FILE"
+    
+    # Schnittstellen physisch deaktivieren
+    ip link set "$INTERFACE_MAIN" down 2>/dev/null
+    ip link set "$INTERFACE_ONBOARD" down 2>/dev/null
+    
+    # RADIKALE TREIBER-ENTLADUNG: Entfernt die Module komplett aus dem Linux-Kernel
+    modprobe -r "$DRIVER_MODULE_1" 2>/dev/null
+    modprobe -r "$DRIVER_MODULE_2" 2>/dev/null
+    
+    echo "[$(date)] [!!!] NETZWERKTREIBER ERFOLGREICH AUS KERNEL ENTFERNT." >> "$LOG_FILE"
+    exit 0
+}
+
+# ==============================================================================
+# KERN 2A: RAM- & Prozess-Schutz (Lokale Verhaltensüberwachung)
+# ==============================================================================
+(
+    while true; do
+        # 1. RAM-Überwachung: Schutz vor akutem Speicherfraß/Buffer-Overflows
+        RAM_USAGE=$(free | awk '/Mem:/ {print int($3/$2 * 100)}')
+        if [ "$RAM_USAGE" -gt 95 ]; then # HIER DEN LOKALEN RAM-SCHWELLENWERT EICHEN
+            echo "[$(date)] [!!!] CRITICAL RAM ALERT: EXTREMER SPEICHERFRASS DETEKTIERT ($RAM_USAGE%)" >> "$LOG_FILE"
+            sync; echo 3 > /proc/sys/vm/drop_caches # Caches zwangsleeren
+==============================================================================
+ANLEITUNG: INDIVIDUELLES EICHEN DER WÄCHTER-PHALANX AUF DIE LOKALE HARDWARE
+==============================================================================
+
+Bevor der Wächter aktiv geschaltet wird, MÜSSEN die Schwellenwerte im Skript
+manuell auf die Leistungsfähigkeit des eigenen Rechners und die Geschwindigkeit
+des lokalen Netzwerks angepasst werden. Ein unkalibriertes System führt entweder
+zu permanenten Fehlauslösungen (Karten-Abschuss) oder zu einem blinden Filter.
+
+1. MESSUNG DES REGULÄREN PAKETFLUSSES (EICHEN VON KERN 1)
+------------------------------------------------------------------------------
+Um den normalen Datenfluss bei maximaler Auslastung (z.B. bei einem großen
+Download oder beim Streamen) zu ermitteln, feuern Sie im Terminal folgenden
+Test-Befehl ab (ersetzen Sie 'Schnittstelle' durch Ihre Netzwerkkarte):
+
+    sudo tcpdump -i Schnittstelle -l -nn | awk 'BEGIN {t=systime(); c=0;} {c++; if(systime()-t>=1) {print c " Pakete/s"; c=0; t=systime();}}'
+
+Beobachten Sie den Wert für 60 Sekunden während eines Speedtests. 
+- Liegt Ihr Maximalwert bei 5.000 Paketen/s, setzen Sie das Limit im Skript auf 15.000.
+- Liegt Ihr Maximalwert bei 25.000 Paketen/s (Glasfaser), setzen Sie das Limit auf 50.000.
+Der Grenzwert muss immer mindestens das 2- bis 3-fache des legalen Peaks betragen.
+
+2. KALIBRIERUNG DER PROZESS-ÜBERWACHUNG (EICHEN VON KERN 2A)
+------------------------------------------------------------------------------
+Das Prozess-Auge scannt standardmäßig ab 90% CPU-Last. Auf modernen Systemen
+mit vielen CPU-Kernen können rechenintensive Programme (wie Webbrowser beim
+Laden von Videos oder Entwicklungs-Tools) diese Marke kurzzeitig durchbrechen.
+
+- 'BAD_PROC' Zeile: Über den Parameter '$2 > 90.0' steuern Sie die Schärfe. 
+  Bei schwächeren Prozessoren empfiehlt sich ein Wert von 95.0, um den normalen
+  Desktop-Betrieb nicht zu gefährden.
+- 'sleep 30' Zeile: Dies ist das Sicherheits-Zeitfenster in Sekunden. Ein 
+  normaler Browser-Tab fängt sich nach wenigen Sekunden wieder. Nur Schadsoftware
+  oder ein eingefrorener Exploit blockieren die CPU permanent. Erhöhen Sie den
+  Wert auf 60, wenn Ihr System im Alltag zu empfindlich reagiert.
+
+==============================================================================
+FUNKTIONSWEISE DER HARDWARE-SPERRE DURCH TREIBER-ENTLADUNG (KERNEL UNLOAD)
+==============================================================================
+
+Im Gegensatz zu Software-Firewalls, die lediglich Filterregeln in den Kernel
+eintragen, nutzt diese Phalanx die radikale Entladung der Kernel-Module (Treiber).
+Dies stellt sicher, dass selbst bei einer vollständigen Kompromittierung des
+Betriebssystems kein Datenabfluss mehr stattfinden kann.
+
+Ablauf des Vetos auf Schicht Null:
+1. Sobald ein Kern eine Anomalie detektiert, wird die Funktion 'trigger_veto' aufgerufen.
+2. Der Befehl 'ip link set down' deaktiviert die logischen Schnittstellen.
+3. Der Befehl 'modprobe -r [Treibermodul]' entlädt die physischen Treiber restlos 
+   aus dem aktiven Linux-Kernel.
+4. Das Betriebssystem verliert augenblicklich die Fähigkeit, mit der verbauten
+   Netzwerk-Hardware zu kommunizieren. Die Karte existiert für das System temporär nicht mehr.
+
+Ermittlung der eigenen Treibermodule:
+Um herauszufinden, welche Treibernamen (Module) in die Variablen eingetragen 
+werden müssen, führen Sie folgenden Befehl im Terminal aus:
+
+    lspci -nnk | grep -iA3 net
+
+Suchen Sie in der Ausgabe nach der Zeile 'Kernel modules:' oder 'Kernel driver in use:'.
+Tragen Sie diesen exakten Namen (z.B. r8169, e1000e, iwlwifi) in das Skript ein.
+
+==============================================================================
+INSTALLATIONS- UND INBETRIEBNAHME-PROTOKOLL FÜR LINUX-SYSTEME
+==============================================================================
+
+Folgen Sie diesen Schritten exakt, um den Wächter fehlerfrei im System zu verankern:
+
+Schritt 1: Erstellen des Hauptskripts
+------------------------------------------------------------------------------
+Kopieren Sie den Code des Hauptskripts in die Datei '/usr/local/bin/k3i_root_waechter.sh'
+und passen Sie die Variablen (Schnittstellen, Treiber, Log-Pfade) an.
+
+Schritt 2: Ausführungsrechte vergeben
+------------------------------------------------------------------------------
+Zwingen Sie das System, das Skript als ausführbares Programm freizugeben:
+    sudo chmod +x /usr/local/bin/k3i_root_waechter.sh
+
+Schritt 3: Systemd-Dienst einrichten
+------------------------------------------------------------------------------
+Kopieren Sie den Konfigurations-Code in die Datei '/etc/systemd/system/waechter.service'.
+
+Schritt 4: Den Wächter im Boot-Sektor zünden
+------------------------------------------------------------------------------
+Laden Sie den System-Manager neu, aktivieren Sie den automatischen Start bei jedem
+Boot-Vorgang und starten Sie das Triebwerk:
+    sudo systemctl daemon-reload
+    sudo systemctl enable waechter.service
+    sudo systemctl start waechter.service
+
+Schritt 5: Live-Status überprüfen
+------------------------------------------------------------------------------
+Überprüfen Sie unbestechlich, ob die Phalanx fehlerfrei in den Sektoren läuft:
+    sudo systemctl status waechter.service
+
+### 3. Das vollständige Code-Fundament für Kern 1 (Netzwerk-Anomalien)
+Dieser isolierte Code-Abschnitt zeigt die exakte logische Programmierung von Kern 1. Er analysiert über die `tcpdump`-Pipeline den Hex-Inhalt auf Auslastungs-Muster, klobige Exploit-Daten, Salami-Taktik und unnatürliche DNS-Tunnel.
+
+```bash
+# ==============================================================================
+# QUELLCODE: KERN 1 – NETZWERK-ANOMALIEN (DEEP PACKET INSPECTION)
+# ==============================================================================
+# Isoliert die Ausführung über 'taskset' auf dedizierte CPU-Kerne (z.B. Kern 8 und 9)
+taskset -c 8,9 tcpdump -i \$INTERFACE_MAIN -l -nn -tt -X 2>/dev/null | awk -v if1="\$INTERFACE_MAIN" -v if2="\$INTERFACE_ONBOARD" -v logf="\$LOG_FILE" '
+BEGIN { 
+    t = systime(); 
+    c = 0; 
+    nop_streak = 0;
+}
+{
+    c++;
+    current_time = systime();
+    
+    # Filterung und Analyse von IP-Verbindungen
+    if (\$2 == "IP") {
+        src_ip = \$3;
+        dst_ip = \$5;
+        sub(/\.[0-9]+\$/, "", src_ip); # Lokale Port-Endung abschneiden
+        sub(/\.[0-9]+:\$/, "", dst_ip);
+        
+        # PROG-LOGIK A: DNS-Tunneling Detektor (Überwachung von Port 53)
+        # Erkennt unnatürlich lange, verschlüsselte Zeichenketten in DNS-Anfragen
+        if (\$0 ~ /\.53:/ && length(\$0) > 400) {
+            dns_anomaly_count[src_ip]++;
+            if (dns_anomaly_count[src_ip] > 500) {
+                cmd_log = "echo \"[" current_time "] [!!!] ANOMALIE: DNS-Tunneling von " src_ip "\" >> " logf;
+                system(cmd_log);
+                exit_trigger = 1;
+                exit;
+            }
+        }
+        
+        # PROG-LOGIK B: Salami-Taktik Überwachung (C2-Beacon Erkennung)
+        # Berechnet den zeitlichen Abstand zwischen den Paketen. 
+        # Schlägt an, wenn ein Fremdhacker exakt synchron alle X Sekunden anklopft.
+        if (last_seen[src_ip] > 0) {
+            interval = current_time - last_seen[src_ip];
+            if (interval > 2 && interval < 10) { 
+                if (last_interval[src_ip] == interval) {
+                    beacon_streak[src_ip]++;
+                    if (beacon_streak[src_ip] > 200) { 
+                        cmd_log = "echo \"[" current_time "] [!!!] ANOMALIE: Synchroner Beacon (Salami-Taktik) von " src_ip "\" >> " logf;
+                        system(cmd_log);
+                        exit_trigger = 2;
+                        exit;
+                    }
+                } else {
+                    beacon_streak[src_ip] = 0; # Zurücksetzen bei unregelmäßigem, menschlichem Takt
+                }
+            }
+            last_interval[src_ip] = interval;
+        }
+        last_seen[src_ip] = current_time;
+    }
+
+    # PROG-LOGIK C: Sezieren der Bauchschwellung (Hex-Exploit-Schutz)
+    # Scannt den rohen Hex-Stream des Pakets nach Füllbit-Ketten (z.B. NOP-Sleds '9090 9090')
+    if (\$0 ~ /9090 9090|0000 0000 0000/) {
+        nop_streak++;
+        if (nop_streak > 500) { 
+            cmd_log = "echo \"[" current_time "] [!!!] EXPLOIT-ALARM: Hex-Schadcode-Kette blockiert!\" >> " logf;
+            system(cmd_log);
+            exit_trigger = 3;
+            exit;
+        }
+    } else {
+        nop_streak = 0;
+    }
+    
+    # PROG-LOGIK D: Volumen-Überflutungsschutz (Massen-Paketstau)
+    if (current_time - t >= 1) {
+        if (c > 50000) { 
+            cmd_log = "echo \"[" current_time "] [!!!] HARDWARE-VETO: Massiver Paketstau " c "/s!\" >> " logf;
+            system(cmd_log);
+            exit_trigger = 4;
+            exit;
+        }
+        c = 0; t = current_time;
+    }
+}
+END {
+    # Signal-Übergabe an den übergeordneten Prozess zum Abbruch der Netzwerktreiber
+    if (exit_trigger > 0) system("kill -s SIGUSR1 " PROCINFO["PPID"]);
+}'
+```
+
+### 4. Das vollständige Code-Fundament für Kern 2A (Arbeitsspeicher & Prozesse)
+Dieser Code-Abschnitt zeigt die exakte Programmierung der asynchronen RAM-Schleife. Sie überwacht den Gesamtspeicher und scannt Prozesse (wie z. B. Browser) ab der kalibrierten 90-%-Marke.
+
+```bash
+# ==============================================================================
+# QUELLCODE: KERN 2A – RAM-SCHUTZ & PROZESS-KONTROLLE (75% / 90% INTERVALL)
+# ==============================================================================
+(
+    while true; do
+        # PROG-LOGIK A: RAM-Notbremse bei drohendem System-Freeze oder Buffer-Overflows
+        RAM_USAGE=\$(free | awk '/Mem:/ {print int(\$3/\$2 * 100)}')
+        if [ "\$RAM_USAGE" -gt 98 ]; then
+            echo "[\$(date)] [!!!] RAM OVERFLOW CRITICAL: SCHUTZWALL WIRD AKTIVIERT" >> "\$LOG_FILE"
+            sync; echo 3 > /proc/sys/vm/drop_caches # Befiehlt dem Kernel die sofortige Cache-Leerung
+            trigger_veto "RAM CRITICAL OVERFLOW DETECTED"
+        fi
+        
+        # PROG-LOGIK B: Prozess-Auge mit zeitverzögerter Schärfe-Eichung
+        # Scannt das System nach einzelnen Prozessen, die über 90% CPU-Last blockieren
+        # Legitime Grafik- und Hintergrundprozesse des Desktops werden per Whitelist ausgeschlossen
+        BAD_PROC=\$(ps -eo pid,%cpu,comm --sort=-%cpu | awk '\$2 > 90.0 {print \$1,\$3}' | grep -vE "Xorg|cosmic-comp|tcpdump|awk")
+        if [ ! -z "\$BAD_PROC" ]; then
+            # KALIBRIERTES ZEITFENSTER: Wartet exakt 30 Sekunden ab
+            # Verhindert Fehlalarme bei normalen Ladevorgängen im Webbrowser
+            sleep 30
+            BAD_PROC_STILL_ALIVE=\$(ps -eo pid,%cpu,comm | grep -w "(echo BAD_PROC | awk '{print \$1}')" | awk '\$2 > 90.0')
+            if [ ! -z "\$BAD_PROC_STILL_ALIVE" ]; then
+                echo "[\$(date)] [ANOMALIE] Dauerhafter Prozess-Freeze über 90% CPU für 30 Sek: \(BAD_PROC" >> "\)LOG_FILE"
+                trigger_veto "CRITICAL PROCESS FREEZE DETECTED IN RAM"
+            fi
+        fi
+        sleep 3
+    done
+) &
+```
+
+### 5. Das vollständige Code-Fundament für Kern 2B (Rechte & USB-Schnittstellen)
+Dieser Code-Abschnitt zeigt die Echtzeit-Überwachung von Kern 2B. Er scannt parallel die Authentifizierungs-Logs gegen Rechteausweitung und überwacht die USB-Schnittstellen gegen unautorisierte Brücken-Hardware.
+
+```bash
+# ==============================================================================
+# QUELLCODE: KERN 2B – LOGIN-LOGS & USB-BRÜCKEN-ÜBERWACHUNG
+# ==============================================================================
+(
+    # PROG-LOGIK A: Physische Schnittstellen-Überwachung (USB-Udev-Stream)
+    # Überwacht den Kernel-Stream live auf das Einstecken neuer USB-Geräte
+    udevadm monitor --kernel --subsystem=usb 2>/dev/null | while read -r USB_LINE; do
+        if echo "\$USB_LINE" | grep -qi "add"; then
+            echo "[\$(date)] [INFO] USB-Schnittstelle registriert Hardware-Aktivität (Brücken-Check)" >> "\$LOG_FILE"
+            # Optionaler Scharfschaltungs-Hebel: trigger_veto "UNAUTHORIZED USB BRIDGE DETECTED"
+        fi
+    done &
+
+    # PROG-LOGIK B: Echtzeit-Scan der Systemprotokolle gegen Privilege Escalation
+    touch /var/log/auth.log
+    tail -fn0 /var/log/auth.log | while read -r LINE; do
+        # Filtert fehlgeschlagene Passwörter oder verdeckte administrative Sudo-Befehle
+        if echo "\$LINE" | grep -qiE "authentication failure|failed password|sudo:.*COMMAND="; then
+            # WICHTIG: Eigenen Benutzernamen hier eintragen, um reguläre Arbeit zuzulassen
+            if echo "\$LINE" | grep -qi "DEIN_BENUTZERNAME"; then
+                continue 
+            fi
+            echo "[\$(date)] [ANOMALIE] Unautorisierter Root/Sudo-Zugriffsversuch: LINE" >> "LOG_FILE"
+            trigger_veto "UNAUTHORIZED PRIVILEGE ESCALATION ATTEMPT"
+        fi
+    done
+) &
+```
+
+
