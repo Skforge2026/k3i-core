@@ -27,42 +27,45 @@ Einsatzbereiche: Schutz kritischer Infrastrukturen, Fusionsreaktoren, autonome L
 ---## 3. Systemarchitektur & Spezifikation (Dual-Line Split)
 
 Das Design eliminiert softwaredefinierte Routing-Schwachstellen (z. B. ARP-Poisoning, BGP-Hijacking, Buffer Overflows), indem die Schutzgrenze als physikalische Trennung über zwei Leitungen mit einem isolierten Out-of-Band-Wächterkern realisiert wird.
-                                  Global Internet
-                                         │
-                 ┌───────────────────────┴───────────────────────┐ (Physical Fiber TAP)
-                 ▼                                               ▼
-      Provider Line Left (IP-L)                       Provider Line Right (IP-R)
-                 │                                               │
-   ┌───────────────────────────┐                   ┌───────────────────────────┐
-   │   SOLID-STATE SHUTTER L   │                   │   SOLID-STATE SHUTTER R   │
-   │  (MOSFET Gate Gated <1µs) │                   │  (MOSFET Gate Gated <1µs) │
-   └─────────────┬─────────────┘                   └─────────────┬─────────────┘
-                 │ (Active / Conducting)                         │ (Open / Isolated)
-                 ▼                                               ▼
-   ┌───────────────────────────┐                   ┌───────────────────────────┐
-   │     LIVE NODE L (Ring 3)  │                   │   STANDBY NODE R (Ring 3) │
-   │   (Active Database I/O)   │                   │ (Isolated RAM State Cache)│
-   └─────────────┬─────────────┘                   └─────────────┬─────────────┘
-                 │                                               │
-                 └───────────────────────┬───────────────────────┘
-                                         │ (Backplane Bus / Inter-Core Shared Memory)
-                                         ▼
-                         ┌───────────────────────────────┐
-                         │   ISOLATED ARBITER CORE D     │
-                         │    (100% Offline / Ring 0)    │
-                         │  rdtsc Polling & CRC32 Check  │
-                         └───────────────┬───────────────┘
-                                         │
-                 ┌───────────────────────┴───────────────────────┐
-                 ▼                                               ▼
-         [ GPIO Out 1: High ]                            [ GPIO Out 2: Low ]
-       (Keeps Shutter L open)                          (Keeps Shutter R locked)
-                 │                                               │
-                 ▼                                               ▼
-   ┌───────────────────────────┐                   ┌───────────────────────────┐
-   │   OEO Laser VCC active    │                   │   OEO Laser shorted       │
-   │      (Normal operation)   │                   │   (Optically fully dead)  │
-   └───────────────────────────┘                   └───────────────────────────┘
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                 
 3. Core Repository Components
 Hard-Realtime Shared-Memory Watchdog (k3i_shm.c)
 Implements the control logic in Ring 0. Uses hardware-near CPU instructions (rdtsc, lfence) to detect asynchronous level fluctuations and system jitter at sub-microsecond level and to control switching operations.
