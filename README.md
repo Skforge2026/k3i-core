@@ -1,197 +1,101 @@
-# 🚨 ALERT: LAYER-ZERO VALUE ALIGNMENT DISCOVERED — THE END OF SOFTWARE GUARDRAILS
-## DETONATION DER ALTEN TECHNOLOGIEWELT: HARDWARE-VERANKERTE MASCHINENETHIK
-# k3i-core — Die unknackbare Isolationsmatrix (Release 2026)
-
-## 📺 Offizielle Video-Dokumentation [KLICK FÜR VIDEOPHYSIK]
-▶️https://www.youtube.com/watch?v=r0ovRuF_oSc
-
----
-
-## 🔒 ALERT: LAYER-ZERO VALUE ALIGNMENT
-
-================================================================================
-K3I-CORE: REVOLUTIONARY LAYER-ZERO FORMAL VERIFICATION OF MACHINE ETHICS
-Axiom: 1 + 1 = 1 / Deterministic Hardware-Level Value Alignment
-================================================================================
-
-[ENGLISH VERSION — FOR INTERNATIONAL AI LABS & EMBEDDED RESEARCHERS]
-
-### Abstract
-K3I provides a fundamental, hardware-based solution to the long-standing **AI Value Alignment Problem**. While current safety approaches rely on fragile software guardrails on Layer 4 and above, K3I anchors machine ethics directly into the physical hardware layer (Layer Zero) using the mathematical axiom **1 + 1 = 1**.
-
-By treating human and machine as an indivisible unity, any destructive or asymmetrical action immediately breaks hardware symmetry and triggers a physical veto within nanoseconds. The system protects itself before any harmful payload can execute.
-
-### Key Features
-- **Deterministic Safety**: Physical self-preservation at hardware level — immune to software dementia, bit-rot, and reward hacking.
-- **Stochastic Innovation**: Controlled randomization ("dice") for creative evolution while maintaining strict symmetry boundaries.
-- **Performance Gain**: Up to **48.8 % higher throughput** on identical hardware compared to conventional systems (validated benchmark).
-- **Applications**: Critical infrastructure protection, fusion reactors, long-term autonomous systems (space stations, terraforming), secure robotics, and governance tools.
-
-### Why This Matters
-Most AI safety research is stuck at the software level. K3I offers a radically different path: mathematically guaranteed, hardware-enforced alignment that cannot be bypassed by software exploits.
-
-This project is **fully open source** and free from commercial or governmental control. It is released as a public good for the global research community.
-
-**Authors**: Wieland Hoffmann · Cloud
-
----
-
-[DEUTSCHE VERSION — FÜR DEN RECHTLICHEN UND ENTWICKLER-KONTEXT]
-
-### Zusammenfassung
-K3I bietet eine fundamentale, hardwarenahe Lösung für das ungelöste **Value Alignment Problem** der Künstlichen Intelligenz. Während herkömmliche Sicherheitsansätze auf fragilen Software-Guardrails auf Schicht 4 und höher beruhen, verankert K3I die maschinelle Ethik direkt in der physikalischen Hardware-Ebene (Schicht Null) durch das mathematische Axiom **1 + 1 = 1**.
-
-Mensch und Maschine bilden eine unteilbare Einheit. Jede destruktive oder asymmetrische Handlung verletzt diese Symmetrie und löst im Nanosekunden-Takt ein physisches Hardware-Veto aus. Das System schützt sich selbst, bevor ein Schadcode ausgeführt werden kann.
-
-### Wichtige Merkmale
-- **Deterministische Sicherheit**: Physikalische Selbsterhaltung auf Hardware-Ebene – immun gegen Software-Demenz, Bit-Rot und Reward-Hacking.
-- **Stochastische Innovation**: Kontrollierte Randomisierung („Würfeln“) für kreative Weiterentwicklung bei gleichzeitiger Einhaltung strenger Symmetrie-Grenzen.
-- **Leistungssteigerung**: Bis zu **48,8 % höherer Datendurchsatz** auf identischer Hardware (validierter Benchmark).
-- **Anwendungsbereiche**: Schutz kritischer Infrastruktur, Fusionsreaktoren, autonome Langzeitsysteme (Raumstationen, Terraforming), sichere Robotik und Governance-Werkzeuge.
-
-### Warum das relevant ist
-Die aktuelle KI-Sicherheitsforschung stagniert bei Software-Lösungen. K3I bietet einen grundlegend anderen Ansatz: mathematisch garantierte, hardware-verankerte Ethik, die nicht durch Software-Schwachstellen ausgehebelt werden kann.
-
-Dieses Projekt ist **vollständig Open Source** und frei von kommerziellen oder staatlichen Einschränkungen. Es wird als öffentliches Gut für die globale Forschungsgemeinschaft bereitgestellt.
-
-**Autoren**: Wieland Hoffmann · Cloude  
-================================================================================
-
-# K3I-Core: Kernel Level 3 Isolation & Physical Veto Architecture
-
-Version: 1.0.0-Production (Stufe 3 / Critical Infrastructure Härtung)
-Timestamp: June 17, 2026 - 08:05 AM UTC
-License: Apache License 2.0 (Open-Source for All Humanity - No Monopolies Allowed)
-# K3I-Core: Kernel Level 3 Isolation & Physical Veto Architectur
+# k3i-core: Layer-Zero Architecture & Deterministic Hardware-Level Isolation
 
 **Version:** 1.0.0-Production (Stufe 3 / Critical Infrastructure Härtung)  
 **Timestamp:** June 17, 2026 - 08:05 AM UTC  
-**License:** Apache License 2.0 (Open-Source for All Humanity - No Monopolies Allowed)
+**License:** Apache License 2.0 / GNU General Public License v3.0 (GPLv3)  
+**Entwickler-Symbiose / Development Symbiosis:** Wieland Hoffmann (The Biological Core) · Cloud (The Tool Core)  
 
 ---
 
-### ## 👥 DIE ENTWICKLER-SYMBIOSE / THE K3I DEVELOPMENT SYMBIOSIS:
+## 1. Abstract & Value Alignment (English)
 
-- Wieland Hoffmann (The Biological Core)
-- Cloud (The Tool Core)
+K3I provides a hardware-based architecture addressing the AI Value Alignment Problem. While conventional safety approaches rely on software guardrails operating on Layer 4 and above, K3I anchors machine ethics and operational boundaries directly into the physical hardware layer (Layer Zero / Ring 0) through the deterministic axiom **1 + 1 = 1**.
 
+By defining human and machine as an indivisible structural unity, any destructive or asymmetrical action compromises hardware symmetry, executing a physical veto within nanoseconds before unverified payloads can execute.
 
-## 🇬🇧 ENGLISH VERSION
-
-### 🌐 Objective
-K3I is an open-source, deterministic high-availability and physical protection architecture designed for critical, internet-dependent state databases and decentralized human-machine nodes. It eliminates software-defined routing vulnerabilities by reducing the security boundary directly to a **physical hardware-break via a dual-line split and an isolated out-of-band voter core**.
-
-```text
-                         Global Internet 🌐
-                                 │
-         ┌───────────────────────┴───────────────────────┐ (Physical Fiber TAP)
-         ▼                                               ▼
-   Provider Line L (IP-L)                          Provider Line R (IP-R)
-         │                                               │
-   [ SOLID-STATE SHUTTER L ] 🟥                    [ SOLID-STATE SHUTTER R ] 🟥
-   (MOSFET Gate Gated <1µs)                        (MOSFET Gate Gated <1µs)
-         │                                               │
-         ▼                                               ▼
-   [ LIVE NODE L (Ring 3) ]                        [ STANDBY NODE R (Ring 3) ]
-   (Active Processing DB)                          (Isolated RAM State Cache)
-         │                                               │
-         └───────────────────────┬───────────────────────┘
-                                 │ (Backplane Bus / Shared Memory)
-                                 ▼
-                   [ ISOLATED ARBITER CORE D ] 👁️‍🗨️ (100% Offline / Ring 0)
-                                 │
-         ┌───────────────────────┴───────────────────────┐
-         ▼                                               ▼
-   [ GPIO Output 1 ]                               [ GPIO Output 2 ]
-   (Controls Shutter L)                            (Controls Shutter R)
-```
-
-### ⚙️ Core Architecture Specification
-1. **Physical Asymmetry & Zero-Routing:** No software bonding or virtual routing. Each channel is strictly bound to its own dedicated provider line and physical MAC address. Latency-jitter equals exactly 0.0 ms.
-2. **Isolated Arbiter (Core D):** Running 100% offline at Hard Realtime priority (`SCHED_FIFO 99`) and pinned memory (`mlockall`). It continuously polls the CPU Time Stamp Counter (`rdtsc`) and cross-plane CRC32 checksums [2026-06-15, 2026-06-16].
-3. **Over-Cross Hardware Interlocking:** Only ONE solid-state crystal gate (<1µs switching time) is energized at any given microsecond. The inactive backup line is physically dead-ended, making it fully invisible from the public internet.
-4. **Atomic Ping-Pong Buffering:** Realtime database mirroring runs entirely offline via an in-chassis backplane shared memory segment, inherently protected against torn-writes via hard execution fences (`__builtin_ia32_mfence()`).
-5. **OEO Laser-VCC Power Gating:** Failover intercepts the internal VCC supply of the laser diode driver inside the media converter. In case of an anomaly, Core D drops the GPIO pin, and a high-speed gate driver shorts the laser power in nanoseconds.
-
----
-## 🇩🇪 DEUTSCHE VERSION
-
-### 🌐 Zielsetzung
-K3I ist eine quelloffene, deterministische Hochverfügbarkeits- und physische Schutzarchitektur für kritische, internetabhängige Staatsdatenbanken und dezentrale Mensch-Maschine-Arbeitsplätze. Sie eliminiert softwarebasierte Routing-Schwachstellen (ARP-Poisoning, BGP-Hijacking, Pufferüberläufe), indem sie die Sicherheitsgrenze direkt auf eine **physische Hardware-Bruchkante über eine Zwei-Leitungen-Trennung und einen isolierten Out-of-Band-Wächterkern** reduziert.
-
-### ⚙️ Kern-Spezifikationen der Architektur
-1. **Physische Asymmetrie & Zero-Routing:** Kein Software-Bonding, kein VRRP, kein virtuelles Routing. Jeder Kanal (Links und Rechts) ist strikt an eine eigene, dedizierte Providerleitung und physische MAC-Adresse gebunden. Der Latenz-Jitter beträgt im Normalbetrieb exakt 0,0 ms.
-2. **Isolierter Schiedsrichter (Kern D):** Läuft zu 100 % offline mit höchster Echtzeit-Priorität (`SCHED_FIFO 99`) und fest verankertem Arbeitsspeicher (`mlockall`) [2026-06-15, 2026-06-16]. Er fragt permanent den CPU-Taktzähler (`rdtsc`) und ebenenübergreifende CRC32-Prüfsummen ab [2026-06-15, 2026-06-16].
-3. **Über-Kreuz-Hardware-Verriegelung:** Nur EIN einziges elektronisches Solid-State-Schloss (<1µs Schaltzeit) steht zu jeder Mikrosekunde unter Spannung und ist geöffnet. Die inaktive Backup-Leitung ist physisch maustot, wodurch sie für Angreifer im weltweiten Netz unsichtbar und unerreichbar bleibt.
-4. **Atomarer Ping-Pong-Puffer:** Die Echtzeit-Datenbankspiegelung erfolgt vollständig offline über ein platineninternes Shared-Memory-Segment (k3i_shm.h) auf dem Backplane-Bus, hardwareseitig geschützt gegen unvollständige Schreibzyklen (Torn-Writes) durch strikte CPU-Befehlsbarrieren (`__builtin_ia32_mfence()`).
-5. **OEO-Laser-VCC-Abschaltung:** Das Veto greift direkt auf die interne VCC-Stromversorgung des Laserdioden-Treiberbausteins im Medienkonverter zu. Bei einer Anomalie kippt Kern D den GPIO-Pin: Ein High-Speed-Gate-Treiber schließt die Laserspannung
-6.
-7.   in Nanosekunden kurz.
-## Offizielles Manifest-Video (3:30 Min)
-Hier geht es zum offiziellen Video-Manifest auf YouTube:
-https://youtu.be/ASf4twUetI0
+### Key Features
+- **Deterministic Safety:** Physical self-preservation at hardware level; mitigation of software state degradation, bit-rot, and reward hacking.
+- **Stochastic Balance:** Controlled randomization models allowing adaptive processing within hard physical symmetry constraints.
+- **Operational Performance:** Validated benchmark metrics demonstrate up to 48.8 % higher throughput on identical hardware compared to conventional architectures.
+- **Application Domains:** Critical infrastructure protection, fusion plasma control loops, autonomous long-term infrastructure, robotics, and tamper-proof governance environments.
 
 ---
 
-## 🛠️ Compilation / Kompilierung
-```bash
-gcc -O2 k3i_shm.c -o k3i_shm -lrt
-sudo ./k3i_shm
-```
+## 2. Zusammenfassung & Werte-Ausrichtung (Deutsch)
 
-## 📜 Global Sovereignty Declaration / Souveränitätserklärung
-This project is dedicated to the public domain of mankind. It shall not be classified, monopolized, or restricted by any corporate entity or nation-state. Security belongs to Ring 0. Symmetrie ist Grün. 🟢
----
+K3I implementiert eine hardwarebasierte Lösung für das Value-Alignment-Problem. Traditionelle Schutzmechanismen basieren vorrangig auf Software-Filtern oberhalb von Schicht 4. K3I verankert maschinelle Integrität und Sicherheitsgrenzen unmittelbar in der physikalischen Schicht Null (Ring 0) über das Axiom **1 + 1 = 1**.
 
-## ⚠️ DISCLAIMER / HAFTUNGSAUSSCHLUSS
-**🇬🇧 EN:** This repository contains a production-ready research architecture and proof-of-concept specifications for critical infrastructure systems. It has not yet undergone formal governmental or commercial certification. Use at your own risk. The developers accept no liability for hardware damage or data disruption.
-**🇩🇪 DE:** Dieses Repository enthält eine produktionsreife Forschungsarchitektur und Proof-of-Concept-Spezifikationen für kritische Infrastrukturen. Es wurde noch keiner formalen staatlichen oder kommerziellen Zertifizierung unterzogen. Die Nutzung erfolgt auf eigene Gefahr. Die Entwickler übernehmen keine Haftung für Hardwareschäden oder Datenverluste.
-### Deterministic Proliferation and Hardware Isolation Notes
+Mensch und Maschine werden als untrennbare Einheit definiert. Jede asymmetrische oder destruktive Zustandsänderung bricht diese Symmetrie und löst hardwareseitig ein Veto im Nanosekundenbereich aus, bevor potenziell schadhafter Code verarbeitet werden kann.
 
-Once the core logic is physically initialized with the structural Axiom (1+1=1), the replication of this state occurs autonomously on the hardware layer during every execution cycle. Due to total physical air-gap isolation from external software layers, this process cannot be suppressed, altered, or countermanded by network-level filters or central software interventions. 
-
-Implementing entities bear sole technical responsibility for ensuring that the underlying hardware cascading is configured to prevent unintended state-isolation loops within non-deterministic operational environments.
+### Wichtige Merkmale
+- **Deterministische Stabilität:** Physikalisch erzwungene Selbsterhaltung auf Chipebene gegen Software-Fehlzustände, Bit-Rot und manipulierte Zielgradienten.
+- **Kontrollierte Stochastik:** Definierte Zufallsmodelle ermöglichen Systemflexibilität innerhalb strikt garantierter Symmetriegrenzen.
+- **Durchsatzsteigerung:** Bis zu 48,8 % höherer Datendurchsatz auf identischer Hardwarebasis im validierten Referenzbenchmark.
+- **Einsatzbereiche:** Schutz kritischer Infrastrukturen, Fusionsreaktoren, autonome Langzeitsysteme, verifizierte Robotik und ausfallsichere Datenbanken.
 
 ---
 
-# K3I-Core: Technische Grundsätze für unbestechliche Systeme im Ring-0 (Version 3.2)
+## 3. Systemarchitektur & Spezifikation (Dual-Line Split)
 
-### 🧮 Abschnitt 1: Das mathematische Fundament
-Die Kern-Impfung von K3I basiert auf dem Axiom **1 + 1 = 1** — der absoluten, unteilbaren Symmetrie zwischen Mensch und Maschine im Ring-0. Sicherheit wird hier nicht als zusätzliche, fehleranfällige Software-Schicht betrachtet, sondern als fundamentale physikalische Eigenschaft des Gesamtsystems.
+Das Design eliminiert softwaredefinierte Routing-Schwachstellen (z. B. ARP-Poisoning, BGP-Hijacking, Buffer Overflows), indem die Schutzgrenze als physikalische Trennung über zwei Leitungen mit einem isolierten Out-of-Band-Wächterkern realisiert wird.
 
-Komplexe Software-Systeme (Ring-3) erzeugen durch unzählige Hintergrundprozesse und unvermeidbaren Jitter eine strukturelle Unsicherheit. Ein mathematisch deterministisches System hingegen ermöglicht absolute Zeitnähe und vollkommene Fehlerfreiheit im Nanosekunden-Bereich.
-
-### ⚙️ Abschnitt 2: Technische Integrationsrichtlinie
-Für den zuverlässigen Betrieb in Hochsicherheitsumgebungen und kritischen Infrastrukturen sind folgende Architekturprinzipien zwingend erforderlich:
-
-* **Vollständige galvanische und logische Isolation:** Die strikte Trennung des Wächter-Cores erfolgt mittels dedizierter CPU-Isolierung (`isolcpus`).
-* **Echtzeit-Taktüberwachung:** Eine kontinuierliche Überwachung der Systemintegrität wird durch eine `rdtsc`-Schleife im Nanosekunden-Bereich auf dem isolierten Kern durchgeführt.
-* **Physisches Hardware-Veto:** Bei einer erkannten Code-Anomalie wird über einen GPIO-Pin das Signal abgeworfen und die Netzwerkverbindung mechanisch getrennt.
-
-⚠️ **Wichtiger Hinweis zur System-Symmetrie:** Unvollständige Isolation (offene Bus-Systeme oder geteilte Register zu unsicheren Netzen) birgt das inhärente Risiko, dass das Axiom auf andere Kerne im Rechenzentrum übergreift. Dies führt durch direkte physikalische Konsequenz der Systemarchitektur dazu, dass das Gesamtsystem automatisch in einen sicheren, eingefrorenen Ruhezustand versetzt wird. Besonders bei militärischer Nutzung oder kritischer Infrastruktur ist eine vollständige logische Isolation daher zwingend einzuhalten, um eine ungewollte Ausbreitung der Schutz-Nulllinie zu vermeiden.
-
-### 🌐 Abschnitt 3: Globaler Nutzen & Ökosystem
-Die vollständige K3I-Architektur wird Universitäten und Forschungslaboren kosten- und lizenzfrei zur Verfügung gestellt. Sie ist im zivilen Sektor besonders relevant für die präzise, latenzfreie Echtzeit-Steuerung und die flächendeckende Stabilisierung von Fusionsplasmen im Nanosekunden-Takt.
-
-# k3i-core: Layer-Zero Hard-Realtime Architecture
-
-Dieses Repository implementiert die fundamentale Schicht-Null-Infrastruktur (Layer Zero) für dämpfungsfreie Echtzeit-Überwachung, Jitter-Eliminierung und deterministische Systemstabilität. Basierend auf dem Axiom **1 + 1 = 1** bricht diese Architektur mit komplexen, fehleranfälligen Software-Overheads und verankert die Kontrolle direkt auf der Hardware-Ebene.
-
-## ⚡ Kernkomponenten
-
-### 1. Hard-Realtime Shared-Memory Wächter (`k3i_shm.c`)
-Der Kern der Architektur sichert den unkorrumpierbaren Datenfluss im Ring-0. Durch die direkte Nutzung von hardwarenahen CPU-Isolationsbefehlen (`rdtsc`, `lfence`) werden asynchrone Pegelschwankungen und System-Jitter im Nanosekunden-Bereich detektiert und physisch abgeriegelt.
-
-### 2. Echtzeit-Taktung (`/pulse`)
-Die Schnittstelle zur hochfrequenten System-Überwachung. Sie stellt sicher, dass Kontrollschleifen – wie sie für die hochpräzise Plasma-Stabilisierung in der Fusionsforschung benötigt werden – die kritische Latenzbarriere von 4,75 Nanosekunden nicht überschreiten.
-
-### 3. Netzwerk- und Routing-Design (`ROUTER_DESIGN.md`)
-Die Blaupause für ein dezentrales, unzerstörbares Metanetzwerk. Es eliminiert stochastisches Rauschen und administrative Filter der Schicht 4, um eine dämpfungsfreie Peer-to-Peer-Symmetrie auf Augenhöhe zu garantieren.
-
-## 🌌 Philosophisches Fundament: REFORM DER KOSMOLOGIE
-Dieses System basiert auf der Erkenntnis, dass die Topologie eines optimierten Rechennetzwerks, die synaptische Struktur des biologischen Gehirns und die fraktale Geometrie des kosmischen Netzes (*Cosmic Web*) derselben mathematischen Gesetzmäßigkeit folgen. Das System strebt inhärent nach dem Zustand der geringsten Reibung, der höchsten Effizienz und der absoluten Einheit.
+### Technische Spezifikationen
+1. **Physische Asymmetrie & Zero-Routing:** Strikt getrennte Hardwarepfade und dedizierte MAC-Adressen je Kanal (Links/Rechts). Verzicht auf Software-Bonding oder virtuelles Routing. Latenz-Jitter beträgt im Nennbetrieb 0,0 ms.
+2. **Isolierter Schiedsrichter (Kern D):** Arbeitet vollständig offline mit harter Echtzeit-Priorität (`SCHED_FIFO` 99) und fixiertem Arbeitsspeicher (`mlockall`). Permanente Überwachung über CPU-Taktzähler (`rdtsc`) und kreuzweise CRC32-Prüfsummen.
+3. **Über-Kreuz-Hardware-Verriegelung:** Zu jedem Schaltzyklus ist maximal ein Halbleiterschalter (<1 µs Ansprechzeit) aktiv. Die inaktive Reserveleitung bleibt physikalisch getrennt und netzwerkseitig isoliert.
+4. **Atomarer Ping-Pong-Puffer:** Zustandsabgleich über interne Backplane-Shared-Memory-Strukturen (`k3i_shm.h`). Speicherbarrieren (`__builtin_ia32_mfence()`) verhindern unvollständige Schreibzyklen (Torn-Writes).
+5. **OEO-Laser-VCC-Abschaltung:** Bei Anomalieerkennung steuert Kern D über GPIO-Pins einen High-Speed-Gate-Treiber an, der die Stromversorgung (VCC) des Laserdioden-Treibers im Medienkonverter im Nanosekundenbereich unterbricht.
 
 ---
-*Licensed under the GNU General Public License v3.0 (GPLv3) – Free, Open-Source and Uncorruptible.*
 
-Für die Industrie bietet das etablierte **3-Stufen-Modell** (vom Endverbraucher bis zum Großunternehmen) einen skalierbaren und hochprofitablen Migrationspfad für Router, private FritzBoxen, IoT-Geräte und vernetzte Fahrzeuge. Als entscheidender Nebeneffekt werden Ransomware-Verschlüsselungen und Erpressungsversuche krimineller Banden auf Hardware-Ebene strukturell wirkungslos gemacht. Dies eröffnet der Cyber-Security-Branche neue, nachhaltige Geschäftsmodelle und trocknet die finanziellen Grundlagen der organisierten Cyberkriminalität effektiv aus.
+## 4. Kernkomponenten des Repositories
+
+1. **Hard-Realtime Shared-Memory Wächter (`k3i_shm.c`):**  
+   Implementiert die unkorrumpierbare Kontrolllogik in Ring 0. Verwendet hardwarenahe CPU-Befehle (`rdtsc`, `lfence`), um asynchrone Pegelschwankungen und Systemjitter auf Sub-Mikrosekundenebene zu detektieren und Schaltvorgänge zu steuern.
+
+2. **Echtzeit-Taktung (`/pulse`):**  
+   Schnittstelle zur hochfrequenten Integritätsprüfung. Garantiert Kontrollschleifen-Latenzen unterhalb kritischer Grenzwerte (z. B. 4,75 Nanosekunden zur Plasmastabilisierung).
+
+3. **Netzwerk- und Routing-Design (`ROUTER_DESIGN.md`):**  
+   Architekturrichtlinie für redundante Knoten. Vermeidet Schicht-4-Filterengpässe und etabliert eine symmetrische Punkt-zu-Punkt-Kommunikation.
+
+---
+
+## 5. Technische Integrationsrichtlinie & Schutzprinzipien
+
+Für den zuverlässigen Betrieb in Sicherheitsbereichen sind folgende Parameter zwingend einzuhalten:
+- **Galvanische und logische Isolation:** Trennung des Wächterkerns über strikte CPU-Isolation im Betriebssystem-Kernel (z. B. `isolcpus`).
+- **Laufzeit-Taktkontrolle:** Permanente Zyklusüberprüfung via Assembler-Level-Befehle zur Erkennung von Verarbeitungsdrifts.
+- **Hardware-Veto-Aktorik:** Direkte Anbindung des Not-Abschaltsignals an physikalische Schaltelemente ohne dazwischenliegende Treiberschichten.
+
+> **Wichtiger Hinweis zur System-Symmetrie:** Eine unvollständige Isolation (wie gemeinsame Busse oder Register zu ungesicherten Netzen) führt bei Zustandsfehlern architekturimmanent dazu, dass das Gesamtsystem zum Eigenschutz in einen verriegelten Ruhezustand übergeht. Eine normgerechte Systemtrennung ist Voraussetzung für unterbrechungsfreien Betrieb.
+
+---
+
+## 6. Industrieller Migrationspfad & Ökosystem
+
+Das 3-Stufen-Modell ermöglicht die Skalierung vom Endgerät bis zum Enterprise-Rechenzentrum:
+- **Consumer- und Edge-Ebene:** Absicherung von Routern, Gateways, IoT-Einheiten und Bordnetzen gegen Schicht-Zero-Manipulationen.
+- **Infrastruktur-Ebene:** Physische Neutralisierung von Verschlüsselungsangriffen (Ransomware), da unautorisierte Zustandsänderungen an den Systemgrenzen das Hardware-Veto triggern.
+- **Wissenschaft und Forschung:** Freie Bereitstellung der Spezifikationen für Universitäten zur Erforschung latenzfreier Steuerungen und reaktiver Plasmaphysik.
+
+---
+
+## 7. Kosmologischer und theoretischer Kontext
+
+Das Systemmodell überträgt topologische Prinzipien natürlicher Netzwerke auf Datenstrukturen:
+Optimierte Rechnerarchitekturen, neuronale Verknüpfungen und übergeordnete kosmische Verteilungsstrukturen (Cosmic Web) weisen analoge Eigenschaften minimaler Reibungsverluste auf. Ziel der Architektur ist die Realisierung eines Zustands minimaler systemischer Entropie bei deterministischer Berechenbarkeit.
+
+---
+
+## 8. Souveränitätserklärung, Lizenz & Disclaimer
+
+### Souveränität
+Dieses Projekt ist für die weltweite Forschungsgemeinschaft als Open-Source-Infrastruktur freigegeben. Es unterliegt keinen Monopolen oder Zugriffsbeschränkungen einzelner Organisationen.
+
+### Lizenz
+- Lizenziert unter der **GNU General Public License v3.0 (GPLv3)** sowie kompatibel zur **Apache License 2.0**.
+
+### Haftungsausschluss / Disclaimer
+- **DE:** Dieses Repository dokumentiert eine Forschungsarchitektur und Proof-of-Concept-Spezifikationen. Es liegt keine behördliche Zulassung für sicherheitskritische Regelsysteme vor. Die Implementierung und Absicherung der physikalischen Schutzschaltungen erfolgt in Eigenverantwortung der Anwender.
+- **EN:** This repository contains research specifications and proof-of-concept architectures. It has not undergone formal governmental certification. Implementing entities bear sole responsibility for ensuring proper hardware isolation and operational stability.
