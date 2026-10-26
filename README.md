@@ -33,20 +33,12 @@ Mensch und Maschine werden als untrennbare Einheit definiert. Jede asymmetrische
 - **Durchsatzsteigerung:** Bis zu 48,8 % höherer Datendurchsatz auf identischer Hardwarebasis im validierten Referenzbenchmark.
 - **Einsatzbereiche:** Schutz kritischer Infrastrukturen, Fusionsreaktoren, autonome Langzeitsysteme, verifizierte Robotik und ausfallsichere Datenbanken.
 
----
-
-## 3. Systemarchitektur & Spezifikation (Dual-Line Split)
+---## 3. Systemarchitektur & Spezifikation (Dual-Line Split)
 
 Das Design eliminiert softwaredefinierte Routing-Schwachstellen (z. B. ARP-Poisoning, BGP-Hijacking, Buffer Overflows), indem die Schutzgrenze als physikalische Trennung über zwei Leitungen mit einem isolierten Out-of-Band-Wächterkern realisiert wird.
 
-### Technische Spezifikationen
-1. **Physische Asymmetrie & Zero-Routing:** Strikt getrennte Hardwarepfade und dedizierte MAC-Adressen je Kanal (Links/Rechts). Verzicht auf Software-Bonding oder virtuelles Routing. Latenz-Jitter beträgt im Nennbetrieb 0,0 ms.
-2. **Isolierter Schiedsrichter (Kern D):** Arbeitet vollständig offline mit harter Echtzeit-Priorität (`SCHED_FIFO` 99) und fixiertem Arbeitsspeicher (`mlockall`). Permanente Überwachung über CPU-Taktzähler (`rdtsc`) und kreuzweise CRC32-Prüfsummen.
-3. **Über-Kreuz-Hardware-Verriegelung:** Zu jedem Schaltzyklus ist maximal ein Halbleiterschalter (<1 µs Ansprechzeit) aktiv. Die inaktive Reserveleitung bleibt physikalisch getrennt und netzwerkseitig isoliert.
-4. **Atomarer Ping-Pong-Puffer:** Zustandsabgleich über interne Backplane-Shared-Memory-Strukturen (`k3i_shm.h`). Speicherbarrieren (`__builtin_ia32_mfence()`) verhindern unvollständige Schreibzyklen (Torn-Writes).
-5. **OEO-Laser-VCC-Abschaltung:** Bei Anomalieerkennung steuert Kern D über GPIO-Pins einen High-Speed-Gate-Treiber an, der die Stromversorgung (VCC) des Laserdioden-Treibers im Medienkonverter im Nanosekundenbereich unterbricht.
-
-6. Global Internet
+```text
+                                  Global Internet
                                          │
                  ┌───────────────────────┴───────────────────────┐ (Physical Fiber TAP)
                  ▼                                               ▼
@@ -60,7 +52,7 @@ Das Design eliminiert softwaredefinierte Routing-Schwachstellen (z. B. ARP-Poiso
                  ▼                                               ▼
    ┌───────────────────────────┐                   ┌───────────────────────────┐
    │     LIVE NODE L (Ring 3)  │                   │   STANDBY NODE R (Ring 3) │
-   │   (Aktive Datenbank-I/O)  │                   │ (Isolierter RAM State-Cache)
+   │   (Aktive Datenbank-I/O)  │                   │ (Isolierter RAM State-Cache)│
    └─────────────┬─────────────┘                   └─────────────┬─────────────┘
                  │                                               │
                  └───────────────────────┬───────────────────────┘
@@ -79,9 +71,11 @@ Das Design eliminiert softwaredefinierte Routing-Schwachstellen (z. B. ARP-Poiso
                  │                                               │
                  ▼                                               ▼
    ┌───────────────────────────┐                   ┌───────────────────────────┐
-   │   OEO-Laser-VCC aktiv     │                   │   OEO-Laser kurzgeschlossen
-   │      (Normalbetrieb)      │                   │   (Optisch vollständig tot)
-   └───────────────────────────┘                   └───────────────────────────
+   │   OEO-Laser-VCC aktiv     │                   │   OEO-Laser kurzgeschlossen│
+   │      (Normalbetrieb)      │                   │   (Optisch vollständig tot)│
+   └───────────────────────────┘                   └───────────────────────────┘
+
+
    
 
 ## 4. Kernkomponenten des Repositories
