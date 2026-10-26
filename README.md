@@ -78,3 +78,39 @@ Das Design eliminiert softwaredefinierte Routing-Schwachstellen (z. B. ARP-Poiso
    │   OEO-Laser-VCC aktiv     │                   │   OEO-Laser kurzgeschlossen│
    │      (Normalbetrieb)      │                   │   (Optisch vollständig tot)│
    └───────────────────────────┘                   └───────────────────────────┘
+
+4. Kernkomponenten des Repositories
+Hard-Realtime Shared-Memory Wächter (k3i_shm.c)
+Implementiert die Kontrolllogik in Ring 0. Verwendet hardwarenahe CPU-Befehle (rdtsc, lfence), um asynchrone Pegelschwankungen und Systemjitter auf Sub-Mikrosekundenebene zu detektieren und Schaltvorgänge zu steuern.
+Echtzeit-Taktung (/pulse)
+Schnittstelle zur hochfrequenten Integritätsprüfung. Kontrollschleifen-Latenzen im Nanosekundenbereich (z. B. 4,75 Nanosekunden zur Plasmastabilisierung im Versuchsaufbau).
+Netzwerk- und Routing-Design (ROUTER_DESIGN.md)
+Architekturrichtlinie für redundante Knoten. Vermeidet Schicht-4-Filterengpässe und etabliert eine symmetrische Punkt-zu-Punkt-Kommunikation.
+5. Technische Integrationsrichtlinie & Schutzprinzipien
+Für den zuverlässigen Betrieb in Sicherheitsbereichen sind folgende Parameter zwingend einzuhalten:
+
+Galvanische und logische Isolation: Trennung des Wächterkerns über strikte CPU-Isolation im Betriebssystem-Kernel (z. B. isolcpus).
+Laufzeit-Taktkontrolle: Permanente Zyklusüberprüfung via Assembler-Level-Befehle zur Erkennung von Verarbeitungsdrifts.
+Hardware-Veto-Aktorik: Direkte Anbindung des Not-Abschaltsignals an physikalische Schaltelemente ohne dazwischenliegende Treiberschichten.
+Wichtiger Hinweis zur System-Symmetrie: Eine unvollständige Isolation (wie gemeinsame Busse oder Register zu ungesicherten Netzen) führt bei Zustandsfehlern architekturimmanent dazu, dass das Gesamtsystem zum Eigenschutz in einen verriegelten Ruhezustand übergeht. Eine normgerechte Systemtrennung ist Voraussetzung für unterbrechungsfreien Betrieb.
+
+6. Industrieller Migrationspfad & Ökosystem
+Das 3-Stufen-Modell ermöglicht die Skalierung vom Endgerät bis zum Enterprise-Rechenzentrum:
+
+Consumer- und Edge-Ebene: Absicherung von Routern, Gateways, IoT-Einheiten und Bordnetzen gegen Schicht-Zero-Manipulationen.
+Infrastruktur-Ebene: Physische Neutralisierung von Verschlüsselungsangriffen (Ransomware), da unautorisierte Zustandsänderungen an den Systemgrenzen das Hardware-Veto triggern.
+Wissenschaft und Forschung: Freie Bereitstellung der Spezifikationen für Universitäten zur Erforschung latenzfreier Steuerungen und reaktiver Plasmaphysik.
+7. Kosmologischer und theoretischer Kontext
+Das Systemmodell überträgt topologische Prinzipien natürlicher Netzwerke auf Datenstrukturen: Optimierte Rechnerarchitekturen, neuronale Verknüpfungen und übergeordnete kosmische Verteilungsstrukturen (Cosmic Web) weisen analoge Eigenschaften minimaler Reibungsverluste auf. Ziel der Architektur ist die Realisierung eines Zustands minimaler systemischer Entropie bei deterministischer Berechenbarkeit.
+
+8. Souveränitätserklärung, Lizenz & Disclaimer
+Souveränität
+Dieses Projekt ist für die weltweite Forschungsgemeinschaft als Open-Source-Infrastruktur freigegeben. Es unterliegt keinen Monopolen oder Zugriffsbeschränkungen einzelner Organisationen.
+
+Lizenz
+Lizenziert unter der GNU General Public License v3.0 (GPLv3).
+
+Haftungsausschluss / Disclaimer
+DE: Dieses Repository dokumentiert eine Forschungsarchitektur und Proof-of-Concept-Spezifikationen. Es liegt keine behördliche Zulassung für sicherheitskritische Regelsysteme vor. Die Implementierung und Absicherung der physikalischen Schutzschaltungen erfolgt in Eigenverantwortung der Anwender.
+EN: This repository contains research specifications and proof-of-concept architectures. It has not undergone formal governmental certification. Implementing entities bear sole responsibility for ensuring proper hardware isolation and operational stability.
+
