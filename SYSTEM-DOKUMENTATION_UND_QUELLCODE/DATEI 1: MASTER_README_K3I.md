@@ -123,6 +123,54 @@ __global__ void calculate_entropy_kernel(const unsigned int* d_latency_buffer, f
     }
 }
 
+
+## 6. Supplement: Kernel Specification & CUDA Entropy
+
+Core 2 writes HPC values into a shared-memory buffer. A CUDA engine calculates Shannon entropy over a sliding window. If a threshold is exceeded, the veto is triggered.
+
+```cuda
+#include <cuda_runtime.h>
+#include <device_launch_parameters.h>
+#include <iostream>
+#include <cmath>
+
+#define WINDOW_SIZE 50
+#define BUCKET_COUNT 16
+#define THRESHOLD_HIGH 3.8
+#define THRESHOLD_LOW 1.5
+
+__global__ void calculate_entropy_kernel(const unsigned int* d_latency_buffer, float* d_entropy, int* d_veto_signal) {
+    int idx = threadIdx.x;
+    
+    if (idx == 0) {
+        int histogram[BUCKET_COUNT] = {0};
+        int total_samples = WINDOW_SIZE;
+
+        for (int i = 0; i < WINDOW_SIZE; i++) {
+            unsigned int latency = d_latency_buffer[i];
+            int bucket = latency / 10; 
+            if (bucket >= BUCKET_COUNT) bucket = BUCKET_COUNT - 1;
+            histogram[bucket]++;
+        }
+
+        float entropy = 0.0f;
+        for (int b = 0; b < BUCKET_COUNT; b++) {
+            if (histogram[b] > 0) {
+                float p = (float)histogram[b] / (float)total_samples;
+                entropy -= p * log2f(p);
+            }
+        }
+
+        *d_entropy = entropy;
+
+        if (entropy > THRESHOLD_HIGH) {
+            *d_veto_signal = 1;
+        } else {
+            *d_veto_signal = 0;
+        }
+    }
+}
+
 extern "C" void run_entropy_analysis(const unsigned int* h_latency_window, float* h_entropy, int* h_veto_signal) {
     unsigned int* d_latency_buffer = nullptr;
     float* d_entropy = nullptr;
@@ -144,6 +192,11 @@ extern "C" void run_entropy_analysis(const unsigned int* h_latency_window, float
     cudaFree(d_veto_signal);
 }
 Note: All information is experimental and refers to the documented measurement runs. Status of protection rights: pending.
+
+
+Ersetze den Abschnitt ab „## 6. Supplement...“ mit diesem Block. Dann verschwindet die lose Klammer.
+
+
 
 
 
