@@ -1,3 +1,15 @@
+# Ring-0 Wächter-Modul (experimentell)
+
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Experimentelles Kernel-Modul, Schutzrechte pending
+
+Das Modul bindet einen Kernel-Thread an einen isolierten Kern und misst den TSC-Jitter. Bei Überschreitung des Schwellenwerts werden definierte GPIO-Pins gesetzt. Die GPIO-Adressen und Pin-Belegungen sind hardware-spezifisch und müssen an die Zielplattform angepasst werden.
+
+Die Jitter-Schwelle ist ein Platzhalter und muss auf dem jeweiligen System kalibriert werden. Das Modul dient als experimenteller Ansatz für eine hardware-nahe Reaktion und ist nicht als allgemeine Lösung gedacht.
+
+An der Portabilität und der Konfigurierbarkeit wird weitergearbeitet.
+
+
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/init.h>
