@@ -1,38 +1,79 @@
 # Physische DSL-Abschaltung über MOSFET-Treibermodul und Relais-Sicherung
 
-## 1. Das Konzept des physischen Digitalschotts
-Hochentwickelte kriminelle oder staatliche Schadsoftware ist im Ernstfall in der Lage, logische Software-Sperren oder Firewalls innerhalb des Betriebssystems zu umgehen oder zu manipulieren. Um eine absolute Sicherheit vor Datenexfiltration oder fortlaufenden Angriffen zu garantieren, implementiert dieses System ein unknackbares Hardware-Veto, das direkt am physischen Eintrittspunkt des Internets (vor dem Router) ansetzt.
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Experimenteller Prototyp, Schutzrechte pending
 
-Der entscheidende Vorteil dieser Konstruktion liegt im Erhalt der lokalen Netzinfrastruktur: Bei einer Auslösung des Wächters wird ausschließlich die externe DSL-Leitung physisch unterbrochen. Das gesamte interne Haus- und Labornetzwerk bleibt physisch vollständig intakt. Lokale Server, Steuerrechner und Drucker können im isolierten Kreis ohne Unterbrechung weiterarbeiten, während das Netzwerk für Angreifer von außen augenblicklich unsichtbar wird.
+---
+
+## 1. Das Konzept des physischen Digitalschotts
+
+Das System implementiert ein hardwareseitiges Veto direkt am physischen Eintrittspunkt der DSL-Leitung (vor dem Router). Bei Auslösung wird ausschließlich die externe DSL-Leitung physisch unterbrochen. Das interne Haus- oder Labornetzwerk bleibt intakt.
 
 ## 2. Technische Funktionsweise und galvanische Trennung
-Die Hardware-Schaltung ist so konzipiert, dass eine vollständige galvanische Trennung zwischen dem Computer-Steuerkreis und dem realen DSL-Spannungskreis gewährleistet ist. Es existiert keine gemeinsame Masse, was das Gesamtsystem immun gegen elektrische Störungen oder Überspannungen macht.
 
-* Steuerung über die Datenkarte: Der Wächter-Dienst sendet im Normalbetrieb ein konstantes Steuersignal (HIGH, z. B. 5 V) über Pin 2 und Pin 25 einer SUB-D25-Buchse an den Steuereingang des MOSFET-Treibermoduls.
-* Das MOSFET-Treibermodul: Das optoelektronisch isolierte Modul schaltet bei anliegendem Steuersignal die separate Relaisspannungsversorgung (z. B. 12 V DC) auf die Spulen der beiden Relais K1 und K2 durch.
-* Der DSL-Signalweg: Die Relais K1 und K2 sind als Schließer (NO - Normally Open) verdrahtet. Solange Spannung anliegt, sind die Relais geschlossen, und die kritischen Adern 3 und 4 der RJ45-Buchsen (DSL IN vom Anbieter zu DSL OUT zum Router) sind sauber miteinander verbunden. Das Internet steht bereit.
+Die Schaltung ist so konzipiert, dass eine galvanische Trennung zwischen dem Computer-Steuerkreis und dem DSL-Spannungskreis besteht. Es existiert keine gemeinsame Masse.
 
-## 3. Der doppelte Counter-Schlag im Ernstfall
-Sobald die Software-Phalanx eine kritische Anomalie isoliert, wird eine automatisierte zweistufige Verteidigungskette in Gang gesetzt:
+- **Steuerung über die Datenkarte:** Der Wächter sendet im Normalbetrieb ein Steuersignal (HIGH, z. B. 5 V) über Pin 2 und Pin 25 einer SUB-D25-Buchse an den Steuereingang des MOSFET-Treibermoduls.
+- **Das MOSFET-Treibermodul:** Das optoelektronisch isolierte Modul schaltet bei anliegendem Steuersignal die separate Relaisspannungsversorgung (z. B. 12 V DC) auf die Spulen der Relais K1 und K2 durch.
+- **Der DSL-Signalweg:** Die Relais K1 und K2 sind als Schließer (NO) verdrahtet. Solange Spannung anliegt, sind die kritischen Adern 3 und 4 der RJ45-Buchsen verbunden.
 
-* Schritt 1: Das physische Schloss öffnet sich. Das Steuersignal an Pin 2 der Datenkarte wird augenblicklich auf LOW gesetzt (0 V). Das MOSFET-Modul verliert die Spannung, die Relais K1 und K2 fallen ab und trennen die DSL-Adern 3 und 4 im Bruchteil einer Millisekunde. Das System ist sofort lokal isoliert.
-* Schritt 2: Erzwungener Router-Neustart (IP-Reset). Parallel zur Trennung steuert der Wächter über ein drittes Relais (oder einen Steuerbefehl) den Stromzyklus des Routers an und zwingt diesen zu einem vollständigen Neustart. Während die DSL-Leitung noch blockiert ist, fährt der Router komplett runter und wieder hoch.
+## 3. Ablauf im Ernstfall
 
-## 4. Die automatisierte 5-Minuten-Wiederöffnung nach IP-Wechsel
-Durch den erzwungenen Neustart fordert der Router beim Internet-Anbieter eine brandneue, unbefleckte IP-Adresse an. Da der Angreifer nur die alte IP-Adresse im Visier hatte, läuft jeder weitere Angriffsversuch ab diesem Moment vollständig ins Leere.
+Bei einer erkannten Anomalie:
 
-Unter diesen spezifischen Bedingungen ist eine automatisierte Wiederöffnung der Schiene sicher realisierbar:Für Netzwerksignale muss zwingend eine rein optische Trennung verwendet werden, während bei DSL wiederum die optische Trennung das Signal komplett versaut und nur die hier dokumentierte, radikale galvanische Relais-Trennung fehlerfrei läuft.*
+1. Das Steuersignal an Pin 2 wird auf LOW gesetzt. Das MOSFET-Modul verliert die Spannung, die Relais fallen ab und trennen die DSL-Adern 3 und 4.
+2. Optional kann parallel ein Router-Neustart angestoßen werden.
+
+## 4. Wiederöffnung
+
+Nach einem Router-Neustart und einer festgelegten Wartezeit (z. B. 5 Minuten) kann das Steuersignal wieder auf HIGH gesetzt werden. Die Relais schließen und die Verbindung wird wiederhergestellt.
+
+**Fail-Safe:** Bei Stromausfall fallen die Relais ab und die Leitung bleibt getrennt.
+
+**Wichtiger Hinweis:** Diese galvanische Relaisschaltung ist für DSL-Leitungen vorgesehen. Bei normalen Netzwerkkabeln (LAN/Ethernet) kann sie Signalstörungen verursachen und ist dort nicht geeignet.
 
 ![Physisches DSL-Vetoschloss](veto_schloss.png)
-* Der Wächter überwacht im Hintergrund den Status des Routers nach dem Reset.
-* Sobald das Router-Triebwerk wieder vollständig hochgefahren und empfangsbereit ist, startet eine feste Zeitschleife von exakt 5 Minuten.
-* Nach Ablauf dieser 5-minütigen Sicherheitsphase schaltet der Wächter das Signal an der Datenkarte vollautomatisch wieder auf HIGH. Die Relais K1 und K2 schließen sich, und der Internetzugang wird auf der neuen IP-Adresse sicher und unblockiert wiederhergestellt.
 
-Sicherheits-Feature bei Stromausfall: Sollte das Gesamtsystem oder die Energieversorgung des Labors komplett ausfallen, verliert die Relaisschaltung automatisch ihre Spannung. Die Kontakte öffnen sich selbsttätig (Fail-Safe), und das Internet wird sofort sicher vom Hausnetz isoliert.
+*Die physische Konstruktionszeichnung befindet sich als Datei „veto_schloss.png“ im Hauptverzeichnis des Projekts.*
 
-***WICHTIGER PHYSIKALISCHER HARDWARE-HINWEIS:***
-*Diese galvanische Relaisschaltung funktioniert AUSSCHLIESSLICH bei DSL-Leitungen! Bei normalen Netzwerkkabeln (LAN) ist diese Schaltung absolut unbrauchbar, da die mechanischen Kontakte massive elektromagnetische Interferenzen und Signalzerstörung verursachen. 
+**Hinweis:** Die Schaltzeiten der MOSFETs liegen laut Herstellerdaten im Bereich von 0,5–0,8 ms. End-to-End-Messungen (Trigger + Kabel + Schaltzeit) werden noch erstellt. Die Ergebnisse beziehen sich auf den dokumentierten Prototyp.
 
-*Hinweis: Die physische Konstruktionszeichnung befindet sich direkt als Datei "veto_schloss.png" im Hauptverzeichnis des Projekts.*
+# Physical DSL Shutdown via MOSFET Driver Module and Relay Protection
 
-vetoschloss.png (ich bin einfach zu dämlich, das bild hier reinzuladen ;-) ).
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Experimental prototype, protection rights pending
+
+---
+
+## 1. Concept of the Physical Digital Bulkhead
+
+The system implements a hardware-side veto directly at the physical entry point of the DSL line (in front of the router). Upon triggering, only the external DSL line is physically interrupted. The internal home or laboratory network remains intact.
+
+## 2. Technical Operation and Galvanic Isolation
+
+The circuit is designed so that galvanic isolation exists between the computer control circuit and the DSL voltage circuit. There is no common ground.
+
+- **Control via the data card:** In normal operation the watchdog sends a control signal (HIGH, e.g. 5 V) via pin 2 and pin 25 of a SUB-D25 socket to the control input of the MOSFET driver module.
+- **The MOSFET driver module:** The optoelectronically isolated module switches the separate relay voltage supply (e.g. 12 V DC) to the coils of relays K1 and K2 when the control signal is present.
+- **The DSL signal path:** Relays K1 and K2 are wired as normally open (NO) contacts. As long as voltage is applied, the critical wires 3 and 4 of the RJ45 sockets are connected.
+
+## 3. Sequence in the Event of an Incident
+
+When an anomaly is detected:
+
+1. The control signal on pin 2 is set to LOW. The MOSFET module loses voltage, the relays drop out and separate DSL wires 3 and 4.
+2. Optionally, a router restart can be triggered in parallel.
+
+## 4. Reopening
+
+After a router restart and a defined waiting time (e.g. 5 minutes), the control signal can be set back to HIGH. The relays close and the connection is restored.
+
+**Fail-Safe:** In the event of a power failure the relays drop out and the line remains disconnected.
+
+**Important note:** This galvanic relay circuit is intended for DSL lines. With normal network cables (LAN/Ethernet) it can cause signal interference and is not suitable there.
+
+![Physical DSL Veto Lock](veto_schloss.png)
+
+*The physical construction drawing is located as the file “veto_schloss.png” in the main directory of the project.*
+
+**Note:** The switching times of the MOSFETs are in the range of 0.5–0.8 ms according to manufacturer data. End-to-end measurements (trigger + cable + switching time) are still being created. The results refer to the documented prototype.
