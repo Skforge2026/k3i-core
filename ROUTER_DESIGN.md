@@ -1,63 +1,62 @@
-# K3I-Router-Reference-Design: Hardware-Enforced Layer-Zero Protection (V1.0)
+# K3I-Router-Reference-Design: Hardware-nahe Layer-Zero-Schutzarchitektur (Konzept)
 
-**Ziel:** Ein kostengünstiges, nachrüstbares Sicherheits-Design für Consumer-Router (z. B. FRITZ!Box-ähnliche Geräte), das echte physikalische Isolation im Ring-0 ermöglicht.
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Konzeptbeschreibung, Schutzrechte pending
 
----
+## Ziel
 
-### 🧮 1. Architektur-Übersicht
-Moderne Heimrouter verfügen meist über Multi-Core-Prozessoren (z. B. Quad-Core ARM/MIPS). K3I bricht die übliche dynamische Lastverteilung auf:
+Ein nachrüstbares Design für Consumer-Router, bei dem ein isolierter Kern eine hardware-nahe Trennung auslösen kann.
 
-* **Kerne 0, 1 & 3 (Normalbetrieb):** Verarbeiten den regulären Netzwerkverkehr, das Routing, das Web-Interface, WLAN, DHCP und die Telefonie (Ring-3/4).
-* **Kern 2 (Isolierter K3I-Wächter):** Wird über den Kernel-Parameter `isolcpus=2` vollständig vom restlichen System isoliert. Hier läuft ausschließlich die deterministische `rdtsc`-Überwachungsschleife im Ring-0, unbeeinflusst von der Software-Last.
+## 1. Architektur-Übersicht
 
----
+- Kerne 0, 1 und 3: regulärer Netzwerkverkehr, Routing, Web-Interface, WLAN
+- Kern 2: isoliert (`isolcpus=2`), führt die Überwachungsschleife aus
 
-### ⚙️ 2. Physischer Hardware-Veto-Mechanismus
-Der entscheidende Unterschied zu reiner Software-Sicherheit liegt in der direkten Koppelung an das Substrat:
+## 2. Hardware-Veto-Mechanismus
 
-Die vier differenziellen Paare der betroffenen LAN/DSL-Schnittstelle werden augenblicklich und vollständig elektronisch blockiert.2. Stufe 2 (Mechanisch): Parallel dazu erhält das bistabile Umschaltrelais (Panasonic DS4E-M-DC5V) nach exakt 5 bis 10 Millisekunden den mechanischen Umschalt-Impuls. Es trennt alle 8 Adern physisch auf und schafft eine unüberwindbare Luftbrücke, während das System ohne spürbare Downtime auf die unbefleckte Backup-Leitung umstellt.
+- Stufe 1: Elektronische Blockade über HF-Schalter (z. B. ADG904)
+- Stufe 2: Mechanische Trennung über Relais (z. B. Panasonic DS4E-M-DC5V)
 
-```mermaid
-graph TD
-    subgraph Provider ["LAYER ZERO: PROVIDER INFRASCHLEIFE"]
-        LAN_In([Physisches Ethernet-Signal / RJ45])
-    end
+Die genaue Schaltzeit hängt von der verwendeten Hardware und der Kabellänge ab.
 
-    subgraph Veto_Schloss ["K3I VETO-SCHLOSS / ROUTER MATRIX"]
-        Gatter{ODER-Logik 74LVC32A}
-        
-        subgraph Stufe_1 ["STUFE 1: ELEKTRONISCH (<10ns)"]
-            HF_Schalter[Analog Devices ADG904 HF-Schalter]
-        end
-        
-        subgraph Stufe_2 ["STUFE 2: GALVANISCH (5-10ms)"]
-            Relais[Panasonic DS4E-M-DC5V Relais]
-        end
-    end
+## 3. Signalfluss (vereinfacht)
 
-    subgraph Host_System ["i9 HAUPTRECHNER / KERNEL CONTROLLER"]
-        Wächter(((Isolierter Wächter-Core / rdtsc)))
-        PHY[(Netzwerk-Controller / enp4s0)]
-    end
+Provider-Eingang → HF-Schalter → Relais → interner Netzwerk-Controller
 
-    %% Signalwege
-    LAN_In -->|Differenzielle Paare DA/DB/DC/DD| HF_Schalter
-    
-    Wächter -->|Symmetrie-Überwachung 1+1=1| Gatter
-    Gatter -->|Sofort-Veto-Signal| HF_Schalter
-    
-    HF_Schalter -->|Verzögerungsfreie Blockade| Relais
-    Relais -->|Mechanische Luftbrücke| PHY
+Der isolierte Wächter kann bei erkannten Anomalien das Veto-Signal setzen.
 
-    %% Nativer GitHub-Mermaid Design-Stil
-    style Provider fill:#e1f5fe,stroke:#01579b,stroke-width:2px
-    style Veto_Schloss fill:#fce4ec,stroke:#880e4f,stroke-width:2px
-    style Stufe_1 fill:#ffebee,stroke:#b71c1c,stroke-width:1px
-    style Stufe_2 fill:#fff8e1,stroke:#f57f17,stroke-width:1px
-    style Host_System fill:#f5f5f5,stroke:#424242,stroke-width:2px
-    style Gatter fill:#fff9c4,stroke:#f57f17,stroke-width:2px
-    style HF_Schalter fill:#ffffff,stroke:#b71c1c,stroke-width:2px
-    style Relais fill:#ffffff,stroke:#f57f17,stroke-width:2px
-    style Wächter fill:#ffecb3,stroke:#ff8f00,stroke-width:2px
-    style PHY fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
-    style LAN_In fill:#ffffff,stroke:#01579b,stroke-width:2px
+**Hinweis:** Die beschriebenen Mechanismen sind konzeptionell. Absolute Unüberwindbarkeit oder garantierte Schaltzeiten unter allen Bedingungen werden nicht beansprucht. Elektrische Sicherheitsvorschriften sind einzuhalten.
+Englisch:
+
+markdown
+# K3I-Router-Reference-Design: Hardware-near Layer-Zero Protection Architecture (Concept)
+
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Concept description, protection rights pending
+
+## Objective
+
+A retrofittable design for consumer routers in which an isolated core can trigger a hardware-near disconnection.
+
+## 1. Architecture Overview
+
+- Cores 0, 1 and 3: regular network traffic, routing, web interface, WLAN
+- Core 2: isolated (`isolcpus=2`), runs the monitoring loop
+
+## 2. Hardware Veto Mechanism
+
+- Stage 1: electronic blocking via HF switch (e.g. ADG904)
+- Stage 2: mechanical disconnection via relay (e.g. Panasonic DS4E-M-DC5V)
+
+The exact switching time depends on the hardware used and the cable length.
+
+## 3. Signal Flow (simplified)
+
+Provider input → HF switch → relay → internal network controller
+
+The isolated watchdog can set the veto signal on detected anomalies.
+
+**Note:** The described mechanisms are conceptual. Absolute invulnerability or guaranteed switching times under all conditions are not claimed. Electrical safety regulations must be observed.
+
+
+
