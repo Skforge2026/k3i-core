@@ -1,84 +1,112 @@
 # K3I-SYSTEM-SPECIFICATION: PROJEKT_EINS_FINALIZE
 
-[SYSTEM_STATE: CORE_PRODUCTION]
-[TARGET: HARDWARE_SPECIFICATION_COMPLETE]
-[REDUNDANCY: TWO_CORE_ISOLATION_ONLY]
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Experimentelle Spezifikation, Schutzrechte pending
 
-=============================================================================
-1. REINE HARDWARE-SCHALTUNG UND VERDRAHTUNG (TREIBERLOS)
-=============================================================================
-Die Signalpfade auf der Leiterplatine (PCB) sind so ausgelegt, dass kein 
-Betriebssystem-Kernel (weder Windows, Linux noch macOS) Zugriff auf den 
-Schaltzustand der Netzwerkkarte hat. Die physische Trennung erfolgt rein 
-elektrisch.
+---
 
-* PORT-SCHALTUNG: Die SFP+-Transceiver-Leitungen für Tx (Senden) und Rx 
-  (Empfangen) werden direkt über eine Reihe von High-Speed-MOSFET-Schaltern 
-  (N-Kanal-Leistungstransistoren) geschleift.
-* DEFAULT-ZUSTAND: Wenn keine Anomalie anliegt, hält Kern 2 das Gate der 
-  MOSFETs auf High-Potential (+3.3V). Die Schranken sind geöffnet, der 
-  Datenstrom fließt ungehindert.
-* TRIGGER-ZUSTAND: Sobald Kern 1 ein Raus-Signal auf die Kupferleitung abgibt, 
-  zieht die Schaltung die Gate-Spannung der MOSFETs auf Masse (0V). Die 
-  Transistoren sperren sofort. Die physische Kupfer- und Glasfaserverbindung 
-  ist unterbrochen.
+## 1. Reine Hardware-Schaltung und Verdrahtung (treiberlos)
 
-=============================================================================
-2. SPEZIFIKATION DER HARDWARE-TIMER-SCHLEIFE (ANTI-FLAPPING-MATRIX)
-=============================================================================
-Um den automatischen Re-Connect ohne Software-Interaktion durchzusetzen und 
-die SFP+-Module vor Verschleiß zu schützen, ist der NE555-Chip mit einem 
-RS-Flip-Flop-Gatter gekoppelt.
+Die Signalpfade auf der Leiterplatine sind so ausgelegt, dass kein Betriebssystem-Kernel direkten Zugriff auf den Schaltzustand der Netzwerkkarte hat. Die physische Trennung erfolgt elektrisch.
 
-* KASKADEN-TIMER: Der NE555-Präzisions-Chip ist als monostabile Kippstufe 
-  verdrahtet. Ein temperaturstabiler NP0-Keramikkondensator (C = 4.7 µF) und 
-  ein Metallschichtwiderstand (R = 12 MΩ) definieren die Zeitkonstante starr:
-  Tau = 1.1 * R * C = 1.1 * 12.000.000 * 0.0000047 = 62,04 Sekunden.
-  
-* LOCKDOWN-GATTER: Ein analoger Zähler (74HC393) registriert die Impulse der 
-  Raus-Leitung. Erreicht der Zähler innerhalb eines gleitenden 60-Minuten-
-  Fensters den Wert 3 (drei aufeinanderfolgende Quarantäne-Zyklen), kippt das 
-  RS-Flip-Flop permanent auf Masse.
-  
-* BLOCKADE: Das MOSFET-Relais bleibt dauerhaft verriegelt. Der Datenstrom ist 
-  permanent unterbrochen. Der Angreifer ist isoliert.
+- **Port-Schaltung:** Die SFP+-Transceiver-Leitungen für Tx und Rx werden über High-Speed-MOSFET-Schalter geschleift.
+- **Default-Zustand:** Kern 2 hält das Gate der MOSFETs auf High-Potential (+3,3 V). Die Schranken sind geöffnet.
+- **Trigger-Zustand:** Bei einem Raus-Signal zieht die Schaltung die Gate-Spannung auf Masse (0 V). Die Transistoren sperren.
 
-=============================================================================
-3. DER PHYSISCHE INTERFACE-RIEGEL (STEUER-OBERFLÄCHE AM GEHÄUSE)
-=============================================================================
-Da keine Software-Eingabe existiert, erfolgt die Interaktion mit dem System 
-ausschließlich über die physische Slotblende am PC-Gehäuse.
+## 2. Spezifikation der Hardware-Timer-Schleife (Anti-Flapping)
 
-* DER RESET-TASTER: Ein mechanischer Schließer-Taster ist direkt an die 
-  Reset-Leitung des RS-Flip-Flops gelötet und bündig in die Edelstahl-
-  Slotblende der PCIe-Karte integriert.
-  
-* FUNKTION: Drückt der Heimanwender den Taster, wird das Flip-Flop mechanisch 
-  entladen und auf den Initialwert zurückgesetzt. Die Gate-Spannung an den 
-  MOSFETs springt wieder auf +3.3V. Die SFP+-Ports sind augenblicklich wieder 
-  online. 
+Um automatischen Re-Connect ohne Software-Interaktion zu ermöglichen und die SFP+-Module zu schützen, ist ein NE555-Chip mit einem RS-Flip-Flop gekoppelt.
 
-* NUTZER-INTERFACE:
-  [ Slotblende der K3I-Zwei-Kern-Karte ]
-  +-------------------------------------------------------------+
+- **Kaskaden-Timer:** NE555 als monostabile Kippstufe. Zeitkonstante ca. 62 Sekunden (Beispielrechnung mit R = 12 MΩ, C = 4,7 µF).
+- **Lockdown-Gatter:** Ein Zähler (z. B. 74HC393) registriert Impulse. Bei drei Quarantäne-Zyklen innerhalb eines Fensters kippt das RS-Flip-Flop permanent.
+- **Blockade:** Die MOSFET-Schaltung bleibt verriegelt, bis ein manueller Reset erfolgt.
 
-  |  [O] SFP+ Port 1 (Glasfaser 10GbE)                          |
-  |  [O] SFP+ Port 2 (Glasfaser 10GbE)                          |
-  |                                                             |
-  |  ( ) LED-Rot: ANOMALIE-LOCKDOWN                             |
-  |  [■] Mechanischer Taster: HARDWARE-RESET                     |
-  +-------------------------------------------------------------+
+## 3. Der physische Interface-Riegel (Steuer-Oberfläche)
 
-=============================================================================
-4. FINALES KAUFMÄNNISCHES ERTRAGS-MODELL (SERIENFERTIGUNG 1.000 EINHEITEN)
-=============================================================================
-* Bauteil-Gesamtkosten (BOM) pro Karte: ....................... 18,00 EUR
-* Logistik, Prüfung, Verpackung-Puffer: .......................  5,00 EUR
-* Globale Zertifizierungs-Umlage (CE/FCC): ....................  2,00 EUR
-* K3I-Industrieschranke (Abgabe an Stiftung): ................  0,50 EUR
------------------------------------------------------------------------------
-Selbstkostenpreis frei Lager: ................................. 25,50 EUR
+Die Interaktion erfolgt über die physische Slotblende am PC-Gehäuse.
 
-* Empfohlener Endkundenpreis (UVP): .......................... 120,00 EUR
-* Reiner Bruttogewinn pro Board: .............................. 94,50 EUR
-* Bruttomarge für das Projekt: ................................ 78,75 %
+- **Reset-Taster:** Mechanischer Schließer direkt an die Reset-Leitung des RS-Flip-Flops.
+- **Funktion:** Drücken setzt das Flip-Flop zurück. Die Gate-Spannung springt wieder auf +3,3 V und die Ports werden freigegeben.
+
+**Nutzer-Interface (Beispiel):**
+
+```text
+[ Slotblende der K3I-Zwei-Kern-Karte ]
++-------------------------------------------------------------+
+|  [O] SFP+ Port 1 (Glasfaser 10GbE)                          |
+|  [O] SFP+ Port 2 (Glasfaser 10GbE)                          |
+|                                                             |
+|  ( ) LED-Rot: ANOMALIE-LOCKDOWN                             |
+|  [■] Mechanischer Taster: HARDWARE-RESET                    |
++-------------------------------------------------------------+
+
+4. Kaufmännisches Ertrags-Modell (Beispiel Serienfertigung 1.000 Einheiten)
+Bauteil-Gesamtkosten (BOM) pro Karte: 18,00 EUR
+Logistik, Prüfung, Verpackung: 5,00 EUR
+Zertifizierungs-Umlage (CE/FCC): 2,00 EUR
+Industrieschranke: 0,50 EUR
+Selbstkostenpreis frei Lager: 25,50 EUR
+Empfohlener Endkundenpreis (UVP): 120,00 EUR
+Reiner Bruttogewinn pro Board: 94,50 EUR
+Bruttomarge: ca. 78,75 %
+
+# K3I SYSTEM SPECIFICATION: PROJECT ONE FINALIZE
+
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Experimental specification, protection rights pending
+
+---
+
+## 1. Pure Hardware Circuit and Wiring (Driverless)
+
+The signal paths on the PCB are designed so that no operating system kernel has direct access to the switching state of the network card. The physical separation is electrical.
+
+- **Port Switching:** The SFP+ transceiver lines for Tx and Rx are looped through high-speed MOSFET switches.
+- **Default State:** Core 2 holds the gate of the MOSFETs at high potential (+3.3 V). The barriers are open.
+- **Trigger State:** On a dropout signal the circuit pulls the gate voltage to ground (0 V). The transistors block.
+
+## 2. Specification of the Hardware Timer Loop (Anti-Flapping)
+
+To enable automatic re-connect without software interaction and to protect the SFP+ modules, an NE555 chip is coupled with an RS flip-flop.
+
+- **Cascade Timer:** NE555 as monostable multivibrator. Time constant approx. 62 seconds (example calculation with R = 12 MΩ, C = 4.7 µF).
+- **Lockdown Gate:** A counter (e.g., 74HC393) registers pulses. After three quarantine cycles within a window the RS flip-flop latches permanently.
+- **Blockade:** The MOSFET circuit remains locked until a manual reset.
+
+## 3. The Physical Interface Lock (Control Surface)
+
+Interaction takes place via the physical slot bracket on the PC case.
+
+- **Reset Button:** Mechanical normally-open switch directly connected to the reset line of the RS flip-flop.
+- **Function:** Pressing resets the flip-flop. The gate voltage returns to +3.3 V and the ports are released.
+
+**User Interface (Example):**
+
+```text
+[ Slot bracket of the K3I two-core card ]
++-------------------------------------------------------------+
+|  [O] SFP+ Port 1 (Fiber 10GbE)                              |
+|  [O] SFP+ Port 2 (Fiber 10GbE)                              |
+|                                                             |
+|  ( ) LED-Red: ANOMALY-LOCKDOWN                              |
+|  [■] Mechanical Button: HARDWARE-RESET                      |
++-------------------------------------------------------------+
+4. Commercial Yield Model (Example Series Production of 1,000 Units)
+Total component costs (BOM) per card: 18.00 EUR
+Logistics, testing, packaging: 5.00 EUR
+Certification surcharge (CE/FCC): 2.00 EUR
+Industrial barrier: 0.50 EUR
+Cost price ex warehouse: 25.50 EUR
+Recommended retail price (RRP): 120.00 EUR
+Gross profit per board: 94.50 EUR
+Gross margin: approx. 78.75 %
+Note: The figures are reference values and examples from the specification. Actual costs and switching times depend on the concrete implementation. Protection rights pending.
+
+
+
+
+
+
+
+
+
