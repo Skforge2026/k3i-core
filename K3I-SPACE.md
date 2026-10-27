@@ -1,39 +1,47 @@
-# K3I-SPACE: Layer-Zero Orbital Safeguard & Satellite Isolation (V1.0-Beta)
+# K3I-SPACE: Layer-Zero Orbital Safeguard & Satellite Isolation (Konzept)
 
----
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Konzeptbeschreibung, Schutzrechte pending
 
-## DEUTSCH
+## Ziel
 
-**Ziel:** Physischer Schutz von On-Board-Computern (OBC) in CubeSats und Kommunikationssatelliten vor Uplink-Exploits, DoS-Angriffen und Single-Event-Upsets durch kosmische Strahlung.
+Physischer Schutz von On-Board-Computern in CubeSats und Kommunikationssatelliten vor Uplink-Angriffen und strahlungsinduzierten Störungen.
 
-### 🛠️ Technische Umsetzung: Hardware-Veto im Vakuum
-Statt Software-Filtern (Ring-3) überwacht ein strahlungsgehärteter Hardware-Wächter direkt hinter dem RF-Frontend (Antennen-Schnittstelle) die Signalflanken und den Systemtakt.
+## Technische Umsetzung
 
-* **Physische HF-Trennung:** Zwischen Transceiver und Haupt-OBC sitzt eine symmetrische Anordnung strahlungsresistenter GaAs-HF-Schalter. Diese können die Verbindungsleitung im Nanosekunden-Bereich physikalisch unterbrechen.
-* **Jitter- und Anomalie-Detektion:** Der isolierte Wächter detektiert sowohl gezielte Uplink-Angriffe (Command Flooding) als auch strahlungsinduzierte Bit-Flips (Single Event Upsets) im Taktbereich.
-* **Hardware-Veto (Fail-Closed):** Bei erkannter Anomalie kappt der Wächter die Steuerspannung der HF-Schalter. Die Verbindung zum Hauptprozessor wird physikalisch getrennt. Der Angreifer läuft ins Leere.
+Ein strahlungsgehärteter Hardware-Wächter sitzt hinter dem RF-Frontend und überwacht Signalflanken und Systemtakt.
 
-### 🔄 Auto-Recovery & Orbital Ping-Pong-Architektur
-* **Isolierter Reset:** Nach der Trennung löst der Wächter über festverdrahtete Logik einen harten Hardware-Reset des betroffenen Prozessors aus und entlädt den Arbeitsspeicher vollständig.
-* **Unterbrechungsfreier Betrieb:** Das System arbeitet mit zwei physikalisch getrennten, redundanten On-Board-Computern (A + B). Wird Prozessor A isoliert, übernimmt Prozessor B nahtlos Lageregelung, Telemetrie und Nutzlastbetrieb.
+- **HF-Trennung:** Zwischen Transceiver und OBC können strahlungsresistente HF-Schalter die Verbindung unterbrechen.
+- **Anomalie-Erkennung:** Der Wächter kann Uplink-Muster und Taktstörungen erkennen.
+- **Reaktion:** Bei erkannter Anomalie wird die Steuerspannung der HF-Schalter abgeschaltet und die Verbindung getrennt.
 
-*Dieses Design gewährleistet maximale Autonomie und Resilienz im Orbit, wo ein manueller Eingriff unmöglich ist.*
+## Auto-Recovery
 
----
+- Nach der Trennung kann ein Hardware-Reset des betroffenen Prozessors ausgelöst und der flüchtige Speicher entladen werden.
+- Zwei physikalisch getrennte On-Board-Computer können vorgesehen werden, sodass bei Isolation eines Prozessors der zweite die Funktion übernimmt.
 
-## ENGLISH
+**Hinweis:** Die beschriebenen Mechanismen sind konzeptionell. Schaltzeiten, Strahlungshärte und die Wirksamkeit unter orbitalen Bedingungen müssen auf der jeweiligen Hardware gemessen werden. Absolute Neutralisierung von Angreifern oder garantierte Unterbrechungsfreiheit wird nicht beansprucht.
 
-**Objective:** Physical hardware protection of On-Board Computers (OBC) in CubeSats and communication satellites against uplink exploits, DoS attacks, and radiation-induced Single Event Upsets.
+# K3I-SPACE: Layer-Zero Orbital Safeguard & Satellite Isolation (Concept)
 
-### 🛠️ Technical Implementation: Hardware Veto in Vacuum
-Instead of relying on software-level filtering (Ring-3), a radiation-hardened hardware watchdog monitors signal edges and system clock states directly behind the RF frontend (antenna interface).
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Concept description, protection rights pending
 
-* **Physical RF Decoupling:** A symmetrical configuration of radiation-resistant GaAs RF switches is integrated between the transceiver and the main OBC, capable of physically severing the line within nanoseconds.
-* **Jitter and Anomaly Detection:** The isolated watchdog detects targeted uplink attacks (command flooding) as well as radiation-induced bit-flips (Single Event Upsets) within the clock domain.
-* **Hardware Veto (Fail-Closed):** Upon detecting an anomaly, the watchdog cuts the control voltage of the RF switches. The connection to the main processor is physically disconnected, leaving the attacker neutralized.
+## Objective
 
-### 🔄 Auto-Recovery & Orbital Ping-Pong Architecture
-* **Isolated Reset:** Following physical isolation, the watchdog triggers a hard hardware reset of the affected processor via hardwired logic, fully purging the volatile memory.
-* **Uninterrupted Operation:** The architecture utilizes two physically isolated, redundant On-Board Computers (A + B). If Processor A is isolated, Processor B seamlessly assumes attitude control, telemetry, and payload operations.
+Physical protection of on-board computers in CubeSats and communication satellites against uplink attacks and radiation-induced disturbances.
 
-*This design ensures maximum autonomy and resilience in orbit, where manual intervention is impossible.*
+## Technical Implementation
+
+A radiation-hardened hardware watchdog is placed behind the RF frontend and monitors signal edges and system clock.
+
+- **RF decoupling:** Between transceiver and OBC, radiation-resistant RF switches can interrupt the connection.
+- **Anomaly detection:** The watchdog can detect uplink patterns and clock disturbances.
+- **Response:** On a detected anomaly the control voltage of the RF switches is cut and the connection is disconnected.
+
+## Auto-Recovery
+
+- After disconnection a hardware reset of the affected processor can be triggered and volatile memory can be discharged.
+- Two physically separated on-board computers can be provided so that if one processor is isolated the second assumes the function.
+
+**Note:** The described mechanisms are conceptual. Switching times, radiation hardness and effectiveness under orbital conditions must be measured on the respective hardware. Absolute neutralization of attackers or guaranteed uninterrupted operation is not claimed.
