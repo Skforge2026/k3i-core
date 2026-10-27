@@ -245,7 +245,7 @@ Phoenix Contact (PLC-OSC series): Industrial optocoupler for DIN-rail mounting. 
 Galvanic cutoff elements (physical air gap):
 Pickering Interfaces (Series 100 / 111 Ultra-High-Density): Precious-metal contacts in vacuum glass tube. Contact opening time: 0.10 ms to 0.50 ms.
 The results refer to the tested configuration and the documented measurement runs.
-
+.
 
 
 
