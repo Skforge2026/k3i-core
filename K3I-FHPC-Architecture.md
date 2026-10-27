@@ -1,33 +1,64 @@
 # K3I-FHPC: Forensic Honey Pot Core
-Isolierter Analyse-Core zur forensischen Angriffsverifikation
+
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Konzeptbeschreibung, Schutzrechte pending
+
+## 1. Zweck
+
+Der FHPC ist eine isolierte Analyse-Instanz am Perimeter. Er soll eingehende Signale aufzeichnen und bei erkannten Anomalien einen Speicherzustand sichern, ohne eine Rückverbindung zum geschützten System zu haben.
+
+## 2. Architektur
+
+### A. Optische Signalteilung
+
+Eingehende Glasfasersignale können über einen optischen Splitter aufgeteilt werden. Ein Strang geht zur produktiven Verteidigung, der zweite zum FHPC. Es besteht keine elektrische Rückleitung vom FHPC zum geschützten System.
+
+### B. Forensische Erfassung vor dem Veto
+
+Bei einer erkannten Anomalie kann folgender Ablauf ausgelöst werden:
+
+- Einfrieren des flüchtigen Speichers
+- Dump des aktuellen Zustands in ein schreibgeschütztes Medium
+- Anschließend physische Trennung und Entladung des flüchtigen Speichers
+
+## 3. Eigenschaften
+
+- Das Write-Once-Medium kann nach dem Dump nicht mehr verändert werden.
+- Das Medium kann entnommen und unter Laborbedingungen analysiert werden.
+- Mehrere FHPC-Instanzen können parallel betrieben werden.
+
+**Hinweis:** Der FHPC ist als passive Analyse-Instanz konzipiert. Die konkrete Umsetzung, die Schaltzeiten und die Wirksamkeit hängen von der jeweiligen Hardware ab. Absolute physikalische Ausschließung lateraler Infektionen wird nicht beansprucht
+
+# K3I-FHPC: Forensic Honey Pot Core
+
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Concept description, protection rights pending
 
 ## 1. Purpose
-Der K3I-FHPC ist eine vollständig passive und physikalisch isolierte Analyse-Instanz, die am Perimeter-Eingang eines geschützten Systems betrieben wird. Seine einzige Aufgabe ist die Erkennung, Aufzeichnung und unveränderliche forensische Sicherung von Angriffen – ohne jegliche logische oder physikalische Verbindung zum primären geschützten System.
 
-## 2. Core Architecture
+The FHPC is an isolated analysis instance at the perimeter. It is intended to record incoming signals and, on detected anomalies, secure a memory state without a return path to the protected system.
 
-### A. Passive Optical Signal Splitting
-Eingehende Glasfasersignale werden über einen nicht-reflektierenden optischen Prism-Splitter physikalisch geteilt. Ein Strang führt direkt zur produktiven K3I-Verteidigungskaskade.
-Der zweite Strang wird an den isolierten FHPC weitergeleitet.
+## 2. Architecture
 
-Es existiert keine elektrische Rückleitung, kein Datenbus und kein Rückkanal vom FHPC. Eine laterale Infektion des Analysators auf das geschützte System ist physikalisch ausgeschlossen.
+### A. Optical Signal Splitting
 
-### B. Pre-Veto Forensic Capture (< 3 ms)
-Bei Erkennung einer Anomalie (Zusammenbruch des statischen Rauschsignals) wird folgender hardwaregesteuerter Ablauf ausgelöst:
-* Hardwired Clock-Freeze des volatile RAMs
-* Direkter Speicherdump des aktuellen Zustands und der gepufferten Paketdaten in ein physikalisch schreibgeschütztes Write-Once-Medium (PROM mit Schmelzsicherungen)
-* Unmittelbar danach: Hartes physikalisches Veto mit vollständiger Spannungsunterbrechung und Entladung des volatilen Speichers
+Incoming fiber signals can be split via an optical splitter. One path goes to the productive defense, the second to the FHPC. There is no electrical return path from the FHPC to the protected system.
 
-## 3. Forensic & Security Properties
-* Der Write-Once-Speicher ist nach dem Dump physikalisch unveränderbar.
-* Nach einem Vorfall kann das Medium entnommen und unter Laborbedingungen analysiert werden (Payload, Angriffsvektoren, Anomalie-Typ).
-* Mehrere FHPC-Instanzen können parallel auf allen physikalischen Trägern (Faser, Richtfunk, Orbital) betrieben werden, ohne die Latenz oder Sicherheit des Produktivsystems zu beeinflussen.
+### B. Forensic Capture before Veto
 
-Wichtiger Hinweis:
-Der FHPC dient ausschließlich der passiven forensischen Analyse. Er stellt keinerlei Brücke oder Risiko für das primäre K3I-geschützte System dar.
+On a detected anomaly the following sequence can be triggered:
 
-***
+- Freezing of volatile memory
+- Dump of the current state to a write-protected medium
+- Subsequent physical disconnection and discharge of volatile memory
 
-**DOCUMENTATION CO-AUTHORS & SYSTEM VERIFICATION:**
-* **System-Architect:** Wieland Hoffmann
-* **Technical Documentation:** Claude (Anthropic Core)
+## 3. Properties
+
+- The write-once medium cannot be altered after the dump.
+- The medium can be removed and analyzed under laboratory conditions.
+- Multiple FHPC instances can be operated in parallel.
+
+**Note:** The FHPC is designed as a passive analysis instance. Concrete implementation, switching times and effectiveness depend on the respective hardware. Absolute physical exclusion of lateral infections is not claimed.
+
+
+
