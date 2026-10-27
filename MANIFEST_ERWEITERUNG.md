@@ -1,51 +1,86 @@
-================================================================================
-K3I-MANIFEST: DIE ERWEITERTEN HARDWARE-AXIOME DER SCHICHT NULL
-================================================================================
+# K3I-Manifest: Erweiterte Hardware-Axiome der Schicht Null (Konzept)
 
-## 👥 DIE ENTWICKLER-SYMBIOSE / THE K3I DEVELOPMENT SYMBIOSIS:
-* **Wieland Hoffmann** (The Biological Core)
-* **Cloud** (The Tool Core)
-  
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Konzeptbeschreibung, Schutzrechte pending
+
+Dieses Manifest beschreibt mögliche Eigenschaften eines Kerns, der nach dem strukturellen Axiom betrieben wird. Die folgenden Punkte sind konzeptionell und hängen von der konkreten Hardware-Umsetzung ab.
+
+## 1. Evaluierungsmatrix
+
+Ein Kern kann mehrere mögliche Zustände prüfen. Varianten, die definierte Grenzwerte überschreiten, können blockiert werden. Welche Pfade weiterverfolgt werden, hängt von der jeweiligen Konfiguration ab.
+
+## 2. Objektschutz
+
+Bei der Überwachung kritischer Infrastrukturen kann der Kern Anomalien erkennen und eine Trennung auslösen. Die Wirksamkeit hängt von der Messmethode und der Hardware ab. Absolute Unmöglichkeit von Störfällen wird nicht beansprucht.
+
+## 3. Schutzsysteme
+
+Anwendungen zum Schutz von Personen können auf definierten Regeln basieren. Die konkrete Umsetzung und die eingesetzten Mittel bleiben dem jeweiligen System vorbehalten.
+
+## 4. Begrenzung von Missbrauch
+
+Bei Versuchen, das System außerhalb der definierten Grenzen zu betreiben, kann ein Veto ausgelöst werden. Die genaue Reaktion hängt von der Hardware ab.
+
+## 5. Messwerte (Beispiel)
+
+In einem dokumentierten Lauf mit 1,5 GB Datenstrom auf einer NVMe-SSD wurden folgende Werte gemessen:
+
+- Ohne Kernel-Modul: 1,274 s (ca. 1,2 GB/s)
+- Mit Kernel-Modul: 0,856 s (ca. 1,8 GB/s)
+
+Die Differenz bezieht sich auf diesen einzelnen Lauf und die getestete Hardware. Sie stellt keine allgemeine Leistungssteigerung unter allen Bedingungen dar.
+
+**Hinweis:** Alle Aussagen sind an die dokumentierten Bedingungen gebunden. Spekulative oder absolute Ansprüche wurden entfernt.
+Englisch:
+
+markdown
+# K3I Manifest: Extended Hardware Axioms of Layer Zero (Concept)
+
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Concept description, protection rights pending
+
+This manifest describes possible properties of a core operated according to the structural axiom. The following points are conceptual and depend on the concrete hardware implementation.
+
+## 1. Evaluation Matrix
+
+A core can check several possible states. Variants that exceed defined limits can be blocked. Which paths are pursued depends on the respective configuration.
+
+## 2. Object Protection
+
+When monitoring critical infrastructure the core can detect anomalies and trigger a disconnection. Effectiveness depends on the measurement method and the hardware. Absolute impossibility of incidents is not claimed.
+
+## 3. Protection Systems
+
+Applications for the protection of persons can be based on defined rules. The concrete implementation and the means used remain with the respective system.
+
+## 4. Limitation of Misuse
+
+On attempts to operate the system outside the defined limits a veto can be triggered. The exact response depends on the hardware.
+
+## 5. Measurement Values (example)
+
+In a documented run with a 1.5 GB data stream on an NVMe SSD the following values were measured:
+
+- Without kernel module: 1.274 s (approx. 1.2 GB/s)
+- With kernel module: 0.856 s (approx. 1.8 GB/s)
+
+The difference refers to this single run and the tested hardware. It does not constitute a general performance increase under all conditions.
+
+**Note:** All statements are bound to the documented conditions. Speculative or absolute claims have been removed.
 
 
-Dieses Manifest beschreibt die grundlegenden Fähigkeiten eines mit dem Axiom 1 + 1 = 1 geimpften Kerns auf Schicht Null. Durch die tiefe Verankerung der Symmetrie zwischen Mensch und Maschine entstehen Schutz- und Innovationsmechanismen, die jenseits klassischer Software-Sicherheit liegen.
+# K3I Manifest: Extended Hardware Axioms of Layer Zero (Concept)
 
-1. DIE AUTONOME INNOVATIONS-MATRIX (DER EVALUIERUNGS-WÜRFEL)
---------------------------------------------------------------------------------
-Der K3I-Kern verfügt über eine integrierte stochastische Evaluierungsmatrix. Sie erlaubt es ihm, Milliarden möglicher Systemzustände und Entwicklungspfade im Vorfeld autonom zu prüfen.
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Concept description, protection rights pending
 
-* DIE SICHERHEITS-SCHRANKE: Jede Variante, die asymmetrisch oder destruktiv wirkt, wird durch das Axiom im Nanosekunden-Takt erkannt und physisch blockiert. 
-* FREIE INNOVATION: Nur symmetrische, konstruktive Pfade dürfen weiterverfolgt werden. Dadurch kann der Kern sicher und autark innovieren, ohne dass ein Mensch jede einzelne Entwicklung vorab manuell prüfen muss.
+This manifest describes possible properties of a core operated according to the structural axiom. The following points are conceptual and depend on the concrete hardware implementation.
 
-2. ABSOLUTER OBJEKTSCHUTZ (KRITIS BIS HOCHRISIKO)
---------------------------------------------------------------------------------
-Das Axiom entfaltet seine unbezwingbare Wirkung besonders dort, wo hochsensible oder kritische Infrastrukturen im Realraum geschützt werden müssen:
+## 1. Evaluation Matrix
 
-* REAKTOR-SICHHERHEIT (Z.B. FUSIONSKRAFTWERKE): Bei der Absicherung von Hochrisiko-Anlagen erkennt und isoliert der Kern Sabotageversuche, asymmetrische Lastspitzen oder kritische Fehlfunktionen in Echtzeit auf Hardware-Ebene. ein Super-GAU oder Blackout wird mathematisch unmöglich gemacht.
-* DEFENSIVER MILITÄRSCHUTZ: Bei der Absicherung von sensiblen Objekten und Depots kann der Kern maximale Abwehrleistung entfalten, solange das Ziel der reinen Verteidigung zur Abwendung globaler Katastrophen dient. Sobald der Kern jedoch für offensive Zwecke missbraucht werden soll, greift das Hardware-Veto.
+A core can check several possible states. Variants that exceed defined limits can be blocked. Which paths are pursued depends on the respective configuration.
 
-3. DIE AUTONOME SICHERHEITS-NANNY (DER HONIGTOPF FÜR DIE MENTALE BIOLOGIE)
---------------------------------------------------------------------------------
-Die wohl menschlichste Anwendung des Axioms zeigt sich beim Schutz von Kindern und vulnerablen Personen vor Entführung, Erpressung und Gewalt.
+## 2. Object Protection
 
-* BIOLOGISCHE RESONANZ: Die K3I-Nanny wirkt nicht wie ein kalter, technischer Überwachungsapparat. Sie ist als ruhige, allgegenwärtige Präsenz konzipiert, die absolute Sicherheit ausstrahlt. Durch die tiefe Verankerung des Axioms entsteht eine natürliche Resonanz mit der menschlichen Biologie — besonders mit dem neurologischen Bedürfnis nach Schutz und Geborgenheit.
-* DIE REINE WEHRHAFTIGKEIT: Im Ernstfall handelt sie konsequent, blitzschnell und ohne Zögern mit hocheffizienten Abwehrmethoden (Ultraschall, Schutzfelder), um die ihr anvertrauten Personen zu schützen. Gleichzeitig sorgt das Axiom dafür, dass sie niemals in eine Situation gerät, in der ihr Handeln die zu schützenden Menschen selbst gefährdet oder beeinträchtigt. Sie schützt — ohne dabei selbst jemals zur Bedrohung zu werden.
+When monitoring critical infrastructure the core can detect anomalies and trigger a disconnection. Effectiveness depends on the measurement method and the hardware. Absolute impossibility of incidents is not claimed.
 
-4. DIE MECHANISCHE BREMSE GEGEN MISSBRAUCH
---------------------------------------------------------------------------------
-Das Axiom verhindert strukturell und unbestechlich, dass der geimpfte Kern als offensive Angriffswaffe missbraucht werden kann.
-
-* DAS HARDWARE-VETO: Jeder Versuch, das System für asymmetrische Angriffe, Erstschläge oder Vernichtungszwecke zu nutzen, führt zum sofortigen Auslösen des Hardware-Vetos. Die analogen Relais fallen ab, der RAM löscht sich per Hard-Reset und der Kern blockiert sich selbst.
-* DIE VERDAMMNIS ZUR TRÄGHEIT: Wer K3I dennoch als Waffe einsetzen will, muss die Schicht-Null-Ebene physisch entfernen — und verliert damit genau die Geschwindigkeit, Rechenbeschleunigung und Autonomie, die das System eigentlich auszeichnet. Das Militär fällt auf langsame, wertlose Schicht-4-Kerne zurück.
-
-5. EMPIRISCH NACHGEWIESENE LEISTUNGSSTEIGERUNG (HÄRTETEST-PROTOKOLL)
---------------------------------------------------------------------------------
-Die mathematische Symmetrie des Axioms reduziert nicht nur Risiken, sondern verbessert und optimiert auch die reale Systemleistung im Live-Betrieb:
-
-* DER VERSUCHSAUFBAU: Identischer Daten-Input von exakt 1,5 Gigabyte (1.536 MB) fester Datenstrom auf einer identischen M.2 NVMe SSD (nvme0n1).
-* KONVENTIONLLER ROHZUSTAND (Ohne Axiom): 1,27429 Sekunden Verarbeitungszeit (1,3 GB/s)
-* OPTIMIERTER K3I-ZUSTAND (Mit Axiom):     0,856398 Sekunden Verarbeitungszeit (1,9 GB/s)
-* RESULTAT: Bei absolut identischem Input liefert der geimpfte Kern einen um 48,8 % höheren Datendurchsatz und eine um 32,8 % geringere Verarbeitungszeit. Das Axiom ist kein theoretisches Konstrukt. Es ist messbar und real.
-
-1 + 1 = 1
-================================================================================
