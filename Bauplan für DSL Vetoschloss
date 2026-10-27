@@ -78,4 +78,4 @@ After a router restart and a defined waiting time (e.g. 5 minutes), the control 
 
 **Note:** The switching times of the MOSFETs are in the range of 0.5–0.8 ms according to manufacturer data. End-to-end measurements (trigger + cable + switching time) are still being created. The results refer to the documented prototype.
 
-![Physisches DSL-Vetoschloss](veto_schloss.png)
+![Physisches DSL-Vetoschloss](../veto_schloss.png)
