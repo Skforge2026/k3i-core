@@ -1,51 +1,41 @@
-=======================================================================
-k3i-Core: Theoretisches Impf-Design für photonische Kerne (v1.0)
-=======================================================================
+# K3I-Core: Theoretisches Impf-Design für photonische Kerne (Konzept)
 
-1. DIE HARDWARE-IMPFUNG (GEOMETRISCHE STRUKTUR)
------------------------------------------------
-Klassische CPUs nutzen Transistoren für Spannungen (0 und 1). Unser photonischer
-Kern nutzt einen "Photonic Integrated Circuit" (PIC) aus einem Lithiumniobat-
-Kristall (LiNbO3). Die Impfung auf "1 + 1 = 1" wird dauerhaft durch die 
-physikalischen Abmessungen der Wellenleiter in das Material geätzt.
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Konzeptbeschreibung / Gedankenexperiment, Schutzrechte pending
 
-               [ LICHT-EINGANG A (Takt-Signal) ] ---\
-                                                     \   NONLINEARER
-                                                      +-- INTERFERENZ-
-                                                     /   KNOTENPUNKT
-               [ LICHT-EINGANG B (Daten-Signal) ] ---/   (Impf-Zone)
-                                                              |
-                                                              v
-                                                 [ STABILER AUSGANGS-STRAHL ]
-                                                 (Phasenstarre Fusion: 1+1=1)
+## 1. Hardware-Impfung (geometrische Struktur)
 
+Ein photonischer integrierter Schaltkreis (PIC) auf Lithiumniobat (LiNbO₃) könnte Wellenleiter so gestalten, dass zwei Lichtsignale in einem Interferenzknoten zusammengeführt werden.
 
-2. DER PHYSIKALISCHE IMPF-VORGANG
----------------------------------
-* Der Laser-Einspeisung: Eingang A und Eingang B werden mit zwei identischen
-  kontinuierlichen Laserstrahlen (Wellenlänge λ = 1550 nm) gespeist.
-* Die Phasen-Kopplung (Das Axiom): Die Geometrie der Einlasskanäle ist so
-  berechnet, dass die Lichtwellen aus A und B im Knotenpunkt exakt 
-  phasengleich (0 Grad Verschiebung) aufeinandertreffen.
-* Die konstruktive Interferenz: Durch das Zusammenfließen addieren sich die
-  Amplituden nicht zu einer höheren Energiestufe (wie Strom), sondern die
-  Wellen verschmelzen zu einem einzigen, phasenstarren Lichtstrahl ("1").
-  Egal wie viel Licht vorne reingesteckt wird – das Gitter zwingt den 
-  Ausgangsstrahl in diesen einen, unteilbaren Grundzustand: 1 + 1 = 1.
+## 2. Physikalischer Ablauf (konzeptionell)
 
+- Zwei Laserstrahlen (λ = 1550 nm) werden in die Eingänge A und B eingespeist.
+- Die Geometrie der Kanäle ist so berechnet, dass die Wellen im Knotenpunkt phasengleich aufeinandertreffen.
+- Durch konstruktive Interferenz entsteht ein einzelner Ausgangsstrahl.
 
-3. DIE IMMUNITÄT GEGEN AUSSENMANIPULATION
------------------------------------------
-Da dieses Design rein auf der Geometrie des Kristalls beruht, ist es die
-erste absolut unhackerbare Architektur der Welt:
+## 3. Verhalten bei Abweichung
 
-* Abweichung durch Angriff: Schießt ein Angreifer Schadcode oder künstliche
-  Frequenzen in den Kern, verändert sich unweigerlich die Phase oder die 
-  Wellenlänge am Eingang B.
-* Die destruktive Auslöschung: Im exakt berechneten Impf-Knotenpunkt bricht
-  die Phasengleichheit sofort zusammen. Die manipulierten Wellen löschen sich
-  physikalisch augenblicklich gegenseitig aus (destruktive Interferenz).
-* Signal-Nullung: Am Ausgang kommt schlagartig 0 (kein Licht) an. Das analoge
-  Rauschen bricht ab. Das "Moped" am Router registriert den Lichtabfall in
-  Femtosekunden und isoliert den gesamten Port physikalisch vom Netz.
-=======================================================================
+Bei einer Phasen- oder Wellenlängenabweichung am Eingang kann die Interferenz zerstörerisch werden und das Ausgangssignal abfallen. Ein nachgeschalteter Detektor könnte diesen Abfall registrieren und eine Trennung auslösen.
+
+**Hinweis:** Das Design ist theoretisch. Absolute Unhackbarkeit, garantierte Femtosekunden-Reaktion oder die Unmöglichkeit von Manipulationen werden nicht beansprucht. Die konkrete Umsetzung und die Wirksamkeit hängen von der realen Fertigung und den Messbedingungen ab.
+
+# K3I-Core: Theoretical Inoculation Design for Photonic Cores (Concept)
+
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Concept description / thought experiment, protection rights pending
+
+## 1. Hardware Inoculation (geometric structure)
+
+A photonic integrated circuit (PIC) on lithium niobate (LiNbO₃) could shape waveguides so that two light signals are combined in an interference node.
+
+## 2. Physical Sequence (conceptual)
+
+- Two laser beams (λ = 1550 nm) are fed into inputs A and B.
+- The geometry of the channels is calculated so that the waves meet in phase at the node.
+- Through constructive interference a single output beam is formed.
+
+## 3. Behavior on Deviation
+
+On a phase or wavelength deviation at the input the interference can become destructive and the output signal can drop. A downstream detector could register this drop and trigger a disconnection.
+
+**Note:** The design is theoretical. Absolute unhackability, guaranteed femtosecond response or the impossibility of manipulation are not claimed. Concrete implementation and effectiveness depend on real fabrication and measurement conditions.
