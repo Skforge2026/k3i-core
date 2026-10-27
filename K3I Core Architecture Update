@@ -1,37 +1,56 @@
 # K3I Core Architecture Update: Layer-Zero Framework & Runtime Daemon
 
-## 1. System Overview
-This documentation details the operational parameters and deployment specifications of the K3I monitoring infrastructure implemented across host nodes (ddw, mopsi-hp). The framework operates exclusively at Layer-Zero, utilizing native kernel abstractions (systemd) to enforce real-time hardware boundary constraints and volatile memory sanitization.
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Experimentelle Implementierung, Schutzrechte pending
 
----
+## 1. Überblick
 
-## 2. Structural Security & Network Invisibility
-The execution model implements strict isolation parameters to eliminate external attack vectors:
+Die Überwachung läuft als systemd-Dienst und prüft in einem festen Intervall den RAM-Zustand. Bei Überschreitung eines Schwellenwerts werden Caches geleert.
 
-* Zero-IP Footprint: The monitoring daemons operate independently of the network stack. They do not bind to local IP addresses, open listening network sockets, or participate in standard routing protocols.
-* Passive Execution: By bypassing the network transport layer, host nodes execute without creating an electromagnetic or digital signature. The system remains completely unscannt and transparent to remote network analysis tools, network analyzers, or deep packet inspection (DPI) arrays.
+## 2. Netzwerk-Verhalten
 
----
+Der Dienst bindet keine Netzwerk-Sockets und öffnet keine Listening-Ports. Er arbeitet lokal auf dem System.
 
-## 3. Universal Node Monitoring & Variable Modification
-The architecture employs a privileged, event-driven detection loop providing complete control over target nodes:
+## 3. Überwachung und Reaktion
 
-* Hardware & Register Access: Running with root-level execution privileges, the daemon maintains uninterrupted visibility into the physical hardware layer, CPU load states, volatile registers, memory allocation pools (RAM), and all interconnected hardware interfaces (USB buses, peripheral controllers).
-* Dynamic State Mutation: The control loop is capable of dynamically modifying active kernel parameters and hardware states in real time when defined thresholds are reached. It intercepts, terminates (kill -9), or alters any running process, file system event, or network interface status based on configured operational requirements.
+Der Dienst läuft mit Root-Rechten und kann den RAM-Zustand prüfen sowie Caches leeren. Die konkrete Reaktion (z. B. Prozessbeendigung oder Interface-Down) hängt von der jeweiligen Skript-Version ab.
 
----
+## 4. Aktueller Zustand (Beispiel)
 
-## 4. Current Deployment State (smart_cclear.service)
-The initial protective layer is successfully locked into the volatile storage array of the target nodes.
+- Dienst: `smart_cclear.service`
+- Intervall: 10 Sekunden
+- Schwellenwert: 75 % RAM
+- Reaktion: Cache-Leerung (`echo 3 > /proc/sys/vm/drop_caches`)
 
-[System Status Register]
-● smart_cclear.service - K3I Layer-Zero RAM Emergency Brake 75 Percent
-     Loaded: loaded (/etc/systemd/system/smart_cclear.service; enabled)
-     Active: active (running)
-   Main PID: 3723 (smart_cclear.sh)
-     CGroup: /system.slice/smart_cclear.service
-             ├─3723 /bin/bash /usr/local/bin/smart_cclear.sh
-             └─3859 sleep 10
+**Hinweis:** Die Ergebnisse beziehen sich auf die dokumentierte Konfiguration. Absolute Unsichtbarkeit oder vollständige Kontrolle über alle Prozesse wird nicht beansprucht.
+Englisch:
 
-* Resource Footprint: Memory consumption is restricted to 1.1M RAM to guarantee maximum execution performance.
-* Execution Interval: The evaluation loop runs on a hard 10-second sleep cycling frequency, continuously validating the 75% volatile storage threshold. If the limit is crossed, immediate cache synchronization and kernel cache drops (echo 3 > /proc/sys/vm/drop_caches) are executed on chip level.
+markdown
+# K3I Core Architecture Update: Layer-Zero Framework & Runtime Daemon
+
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Experimental implementation, protection rights pending
+
+## 1. Overview
+
+The monitoring runs as a systemd service and checks the RAM state at a fixed interval. On exceeding a threshold the caches are cleared.
+
+## 2. Network Behavior
+
+The service does not bind network sockets and does not open listening ports. It operates locally on the system.
+
+## 3. Monitoring and Response
+
+The service runs with root privileges and can check the RAM state and clear caches. The concrete response (e.g. process termination or interface down) depends on the respective script version.
+
+## 4. Current State (example)
+
+- Service: `smart_cclear.service`
+- Interval: 10 seconds
+- Threshold: 75 % RAM
+- Response: cache clearing (`echo 3 > /proc/sys/vm/drop_caches`)
+
+**Note:** The results refer to the documented configuration. Absolute invisibility or complete control over all processes is not claimed.
+
+
+
