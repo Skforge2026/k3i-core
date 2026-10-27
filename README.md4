@@ -1,36 +1,50 @@
-┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ K3I ARCHITEKTUR-SPEC & SYSTEM DOKUMENTATION                                                                    │
-│ K3I Layer-Zero Engine: Schicht-Null-Patent & Systemarchitektur                                                 │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│                                                                                                                │
-│ Überblick & Patent-Spezifikation                                                                               │
-│ ────────────────────────────────                                                                               │
-│ Das kürzlich eingereichte Patent (DPMA Ref: D3564184, Eingangsbestätigung liegt offiziell vor) beschreibt die  │
-│ Schicht-Null-Architektur zur Sub-Mikrosekunden-Echtzeitsteuerung und Plasmastabilisierung. Im Gegensatz zu   │
-│ bisherigen Software-Ansätzen eliminiert das System stochastischen Jitter und administrative Verzögerungen      │
-│ direkt auf Hardware-Ebene.                                                                                     │
-│                                                                                                                │
-│ Die drei Säulen der Isolation                                                                                  │
-│ ─────────────────────────────                                                                                  │
-│ • Kernisolation (Ring 0): Exklusive Verriegelung der CPU-Kerne (isolcpus, nohz_full, rcu_nocbs). Abschaltung  │
-│   des OS-Schedulers, des Timer-Ticks und der Tiefschlafphasen (max_cstate=0).                                  │
-│                                                                                                                │
-│ • Kanalisolation: Physische und logische Entkopplung der Netzwerk-Schnittstellen (Punkt-zu-Punkt-Wächter-      │
-│   kanal), um Interface-Flapping und Routing-Konflikte zu verhindern.                                           │
-│                                                                                                                │
-│ • Unreinisolation (Rechner- & Zero-OS-Isolation): Vollständige Entfernung des Betriebssystems vom Zielrechner. │
-│   Das Axiom und der Quellcode werden im Prototypen direkt im flüchtigen RAM-Tresor verankert.                  │
-│                                                                                                                │
-│ Status des Prototyps & Ausblick                                                                                │
-│ ───────────────────────────────                                                                                │
-│ • Hardware: Spezialgehäuse und Hauptkomponenten sind gefertigt und montiert.                                   │
-│                                                                                                                │
-│ • Liefersituation: Die Fertigstellung verzögert sich aktuell durch die angespannte Marktlage und              │
-│   Lieferzeiten der High-End-Speicherbausteine (RAM).                                                           │
-│                                                                                                                │
-│ • Nächste Schritte: Unmittelbar nach Eintreffen und Installation des Speichers startet der Prototyp. Daraufhin │
-│   werden die 3D-Julia-Experimente zur Stabilisierung des Plasmafeldes und zur Elektronenablenkung            │
-│   durchgeführt und auf GitHub dokumentiert.                                                                    │
-│                                                                                                                │
-│ [STATUS]: Patent eingereicht (Bestätigung liegt vor) | Prototyp im Aufbau | 3D-Julia-Versuche vorbereitet.   │
-└────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+# K3I Architektur-Spec & Systemdokumentation
+
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Patent eingereicht, Prototyp im Aufbau
+
+## Überblick & Patent-Spezifikation
+
+Das eingereichte Patent (DPMA Ref: D3564184) beschreibt eine Schicht-Null-Architektur zur Echtzeitsteuerung und Plasmastabilisierung. Der Ansatz zielt darauf, Jitter und administrative Verzögerungen auf Hardware-Ebene zu reduzieren.
+
+## Die drei Säulen der Isolation
+
+- **Kernisolation (Ring 0):** Verriegelung der CPU-Kerne (`isolcpus`, `nohz_full`, `rcu_nocbs`). Abschaltung des OS-Schedulers, des Timer-Ticks und der Tiefschlafphasen.
+- **Kanalisolation:** Entkopplung der Netzwerk-Schnittstellen über einen Punkt-zu-Punkt-Wächterkanal.
+- **Rechnerisolation:** Betriebssystem und Arbeitsdateien werden vom Zielrechner entfernt. Der Prototyp lädt die notwendigen Komponenten in den RAM.
+
+## Status des Prototyps
+
+- Hardware: Spezialgehäuse und Hauptkomponenten sind gefertigt und montiert.
+- Liefersituation: Die Fertigstellung verzögert sich durch Lieferzeiten der High-End-Speicherbausteine.
+- Nächste Schritte: Nach Installation des Speichers starten die 3D-Julia-Experimente zur Plasmastabilisierung. Die Ergebnisse werden auf GitHub dokumentiert.
+
+**Status:** Patent eingereicht (Bestätigung liegt vor) | Prototyp im Aufbau | 3D-Julia-Versuche vorbereitet.
+Englisch:
+
+markdown
+# K3I Architecture Spec & System Documentation
+
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Patent filed, prototype under construction
+
+## Overview & Patent Specification
+
+The filed patent (DPMA Ref: D3564184) describes a Layer-Zero architecture for real-time control and plasma stabilization. The approach aims to reduce jitter and administrative delays at the hardware level.
+
+## The Three Pillars of Isolation
+
+- **Core isolation (Ring 0):** Locking of the CPU cores (`isolcpus`, `nohz_full`, `rcu_nocbs`). Disabling of the OS scheduler, timer ticks and deep sleep phases.
+- **Channel isolation:** Decoupling of the network interfaces via a point-to-point watchdog channel.
+- **Computer isolation:** Operating system and working files are removed from the target computer. The prototype loads the necessary components into RAM.
+
+## Prototype Status
+
+- Hardware: Special enclosure and main components are manufactured and mounted.
+- Supply situation: Completion is delayed by delivery times of the high-end memory modules.
+- Next steps: After installation of the memory the 3D Julia experiments for plasma stabilization start. The results will be documented on GitHub.
+
+**Status:** Patent filed (confirmation available) | Prototype under construction | 3D Julia experiments prepared.
+
+
+
