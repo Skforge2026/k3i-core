@@ -1,34 +1,17 @@
-K3I Browser & Cyber-Interface – Projekt 1 erfolgreich abgeschlossen
-Autoren: Wieland Hoffmann und Gemini
-Stand: 14.10.2026
+# K3I Browser & Cyber-Interface – Project 1
 
-Folgende Funktionen und Fehlerbehebungen wurden im Projektordner implementiert:
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** 14 October 2026  
+**Status:** Experimental implementation, protection rights pending
 
-1. Hauptbrowser (gemini_hoffmann_browser.py):
-   - Das WebKit2-Triebwerk wurde vollständig stabilisiert.
-   - Der kritische Absturz beim Laden von verschlüsselten Seiten (TypeError in on_load_changed) wurde behoben. Die Domain-Ermittlung greift jetzt fehlerfrei über einen sauberen String-Index zu.
+## Implemented Functions
 
-2. Variable Speicherverwaltung (Cache-Limit):
-   - Das System verfügt über eine integrierte, variable Speichersteuerung.
-   - Der Speicher kann bis zu 80 % des gesamten RAM dynamisch in den Settings erweitert werden , um maximale Performance bei großen Datenmengen zu gewährleisten.
+1. **Main browser (`gemini_hoffmann_browser.py`)**  
+   - WebKit2 engine stabilized  
+   - Crash when loading encrypted pages fixed (domain determination via string index)
 
-3. Dynamischer Download-Manager (k3i_downloads.py):
-   - Die Download-Logik läuft stabil im Hintergrund und fängt Klicks über ein unblockiertes JavaScript-Mittelklick-Relais ab. 
-   - Erfolgreich getestet mit großen Datenströmen (Nvidia- und System76-ISOs im Gigabyte-Bereich). Das Herunterladen erfolgt geräuschlos ohne Systemblockaden.
-
-4. Live-Statusanzeige (Rammstein-Leiste):
-   - Ein permanentes Statusfeld mit der Anzeige [Anmeldung / IDLE] wurde integriert, damit der aktuelle Datenstrom sofort sichtbar ist.
-   - Die RAM-Verbrauchsanzeige fragt über eine systemnahe Kernel-Schleife (subprocess/pgrep) den tatsächlichen Live-Verbrauch aller WebKit-Prozesse ab und aktualisiert sich im Sekundentakt.
-
-5. Kachel- und Passwort-Modul (k3i_kacheln.py):
-   - Als eigenständiges Quarantäne-Modul entwickelt, um den Hauptcode nicht zu gefährden.
-   - Bietet eine manuelle, dreispaltige Eingabemaske für Webseite, Benutzername und Passwort.
-   - Zugangsdaten werden mit einem unbestechlichen Zeitstempel versehen.
-   - Ein manueller Lösch-Button tilgt alle Eingaben bei Bedarf sofort rückstandslos aus dem Arbeitsspeicher und den JSON-Registern.
-   - Auf der Startoberfläche wird automatisch eine interaktive Kachel generiert, die die Zieladresse auf Knopfdruck anwählt.
-
-Das System läuft im Leerlauf extrem ressourcenschonend bei ca. 65 MB Grundlast und ist voll einsatzbereit..Der Browser ist für jeden lizensfrei und für low. jeder kann ihn so konfigurieren, wie er will.
-Bei Fragen stehen wir mit Rat und Tat zur Verfügung. Sollte der Browser Fehler beinhalten, wären wir für Hinweise dankbar.
+2. **Variable memory management**  
+   - Cache limit can be set in the settings up to 80 % of available RAM
 
 import sys, os, gi
 gi.require_version("Gtk", "3.0")
