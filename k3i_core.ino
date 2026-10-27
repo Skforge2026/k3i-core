@@ -1,5 +1,5 @@
 /*
- * Projekt K3I - Hardware Guardian Core (Kern 2)
+ * Projekt K3I - Hardware Guardian Core (Kern 2) Grok/Wieland Hoffmann/Gemini
  * File: k3i_core.ino
  * Update: Juni 2026
  * 
