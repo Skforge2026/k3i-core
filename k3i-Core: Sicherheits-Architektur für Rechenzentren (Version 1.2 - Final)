@@ -1,117 +1,77 @@
-=======================================================================
-k3i-Core: Sicherheits-Architektur für Rechenzentren (Version 1.2 - Final)
-=======================================================================
+# K3I-Core: Sicherheits-Architektur für Rechenzentren (Konzept)
 
-1. KERN-PARADIGMEN
-------------------
-* Paradigma 1: Maximaler Schutz der internen Server-Strukturen des 
-  Rechenzentrums vor illegalen Angriffen (staatlich oder kriminell).
-* Paradigma 2: Lückenlose Aufrechterhaltung des Internet-Betriebs 
-  durch internen Hardware-Schutz.
-* Paradigma 3: Alle k3i-Kerne müssen asynchron auf das Board gebracht 
-  werden, um Lasten ohne gegenseitige Blockaden zu verarbeiten.
-* Paradigma 4: Jeder Kern wird mit dem Axiom „1 + 1 = 1“ direkt in 
-  die Kernlogik geimpft (maximale Resilienz).
-* Paradigma 5: Jeder Schutzkaskade werden 3 asynchrone Reserve-Kerne 
-  beigestellt (unterbrechungsfreie Übernahme).
-* Paradigma 6: Redundanz auf Router-Ebene (mind. 2 Router im 
-  Hot-Standby) zur Vermeidung eines Single Point of Failure.
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Konzeptbeschreibung, Schutzrechte pending
 
+## 1. Kern-Paradigmen
 
-2. INFRASTRUKTUR-ÜBERSICHT (68 PORTS PARALLEL)
-----------------------------------------------
+- Schutz der internen Server-Strukturen vor Angriffen
+- Aufrechterhaltung des Internet-Betriebs durch Hardware-Trennung
+- Asynchrone Anordnung der Kerne
+- Redundanz auf Router-Ebene (mindestens 2 Router im Hot-Standby)
+- Reserve-Kerne pro Kaskade
 
-    [ GLOBALER NETZWERK-TRAFFIC / 68 INTERNET-PORTS INLINE ]
-                               |
-                               v
-   +-----------------------------------------------------------+
+## 2. Infrastruktur-Übersicht (konzeptionell)
 
-   |   ZWEI HARDWARE-ROUTER IM HOT-STANDBY („HOT WATER“ POOL)  |
-   +-----------------------------------------------------------+
+68 Ports parallel → zwei Hardware-Router im Hot-Standby → Multi-Splitter → physischer Sicherheits-Safe mit asynchronem Board (aktive Kerne + Reserve-Kerne + Wächter)
 
-         |                                               |
-         | (Nanosekunden-Umleitung)                      | (Kombiniertes Signal)
-         v                                               |
-   +-------------------------------------------------+   |
+## 3. Dynamischer Regelkreis
 
-   | MULTI-SPLITTER: NETZ-TRENNUNG & OPTIK-ABDUNKELN |   |
-   +-------------------------------------------------+   |
+- Jeder Kern sendet ein kombiniertes Signal an den aktiven Router.
+- Bei Anomalie fällt das Signal ab, der Router schaltet auf den Reserve-Router um.
+- Der betroffene Port wird für eine kurze Zeit getrennt.
+- Eine air-gapped Forensik-Einheit kann den Vorfall aufzeichnen.
+- Nach Prüfung wird der Port wieder freigegeben.
 
-         |                                               |
-         +----------------------+                        |
-
-         |                      |                        |
-         v (Datenstrom)         v (Messabgriff)          |
-   [ PARALLELE PORTS ]   [ FORENSIK-EINHEIT ]            |
-
-   |  (68 Kaskaden)  |   | (Air-Gapped E-Punkt)     |    |
-   +-----------------+   +--------------------------+    |
-
-         |                      |                        |
-         v                      v                        v
-   +-----------------------------------------------------------+
-
-   |          DER PHYSISCHE, KLIMATISIERTE SICHERHEITS-SAFE    |
-   |   (Lückenlose Absicherung gegen Vor-Ort-Inline-Sabotage)  |
-   |                                                           |
-   |   [ Jede Kaskade: Autarker Prozessor + Separates Stromnetz] |
-   |                                                           |
-   |   +---------------------------------------------------+   |
-   |   | ASYNCHRONES HARDWARE-BOARD (Axiom: 1 + 1 = 1)     |   |
-   |   |                                                   |   |
-   |   |  - 4 Aktive k3i-Kerne (Strukturanomalie-Prüfung)  |   |
-   |   |  - 3 Reserve-Kerne (Asynchroner Sofort-Einsatz)   |   |
-   |   |  - 1 Wächter-Kern (Überwacht kombiniertes Signal) |<--+
-   |   +---------------------------------------------------+   |
-   +-----------------------------------------------------------+
-                               |
-                               | (Bei Signal-Abfall in 5 ms: Moped schlägt zu)
-                               v
-   +-----------------------------------------------------------+
-
-   | INTERNE SERVER-STRUKTUREN DES RECHENZENTRUMS (GESCHÜTZT)  |
-   | - 0% Software-Overhead       - Normaler Strombedarf       |
-   +-----------------------------------------------------------+
-
-
-3. DYNAMISCHER REGELKREIS & FORENSIK
-------------------------------------
-* Das permanente Signal: Jeder k3i-Kern sendet ein kombiniertes Signal
-  (analoges Rauschen + hardwarebasierte digitale Prüfsumme) an den 
-  aktiven Router. Keine Software-Verbindung auf Protokollebene vorhanden.
-* Der Schutz-Abfall: Erkennt ein EM-geimpfter Kern eine strukturelle 
-  Anomalie, fällt das Signal ab. Der Router schaltet in Nanosekunden
-  auf den Hot-Standby-Reserve-Router um.
-* Optischer Kupfer-Splitter: Das industrielle "Moped" dunkelt die Optik
-  sofort ab, gefolgt von der Aktivierung des galvanischen Schalters.
-* System-Shutdown (5-10 ms): Der betroffene Port schaltet für 5 bis 10
-  Millisekunden komplett ab, um Überspannung/Überlastung abzuführen.
-* Forensik-Einheit: Ist vollständig physisch isoliert (air-gapped) und
-  zeichnet den Angriffsaufbau über den E-Punkt inhaltsfrei auf.
-* Reaktivierung: Nach kurzer asynchroner Prüfung fahren die k3i-Kerne
-  wieder hoch. Das Signal liegt wieder an, der Schalter schließt
-  und der Router schaltet den Port wieder vollständig frei.
-* Dezentraler Schutz: Ein Sabotageakt bleibt auf einen Schaltschrank 
-  beschränkt. Ein gleichzeitiges unbefugtes Öffnen von 68 Schaltschränken 
-  ist durch das inline-überwachte Sicherheitsreglement unmöglich.
-
-
-4. WIRTSCHAFTLICHER KOSTEN-VERGLEICH (PRO JAHR, SCHÄTZUNG 2026)
----------------------------------------------------------------
-* Anschaffung k3i Hardware:        75.620,00 EUR (Einmalig)
-* Anschaffung Software-Lösung:    165.000,00 EUR (Einmalig)
-
-Laufende Betriebskosten pro Jahr (Berechnung für 544 geimpfte Kerne):
+## 4. Wirtschaftlicher Vergleich (Beispielrechnung)
 
 | Posten                    | k3i Hardware | Software-Lösung |
 |---------------------------|--------------|-----------------|
-| Jährliche Lizenzen        | 54,40 €      | 25.000,00 €     |
-| Jährliche Wartung         | 0,00 €       | 45.000,00 €     |
-| Jährliche Stromkosten     | 1.288,00 €   | 12.614,00 €     |
-|---------------------------|--------------|-----------------|
-| **Gesamt pro Jahr**       | **1.342,40 €**| **82.614,00 €** |
+| Anschaffung               | 75.620 €     | 165.000 €       |
+| Jährliche Lizenzen        | 54,40 €      | 25.000 €        |
+| Jährliche Wartung         | 0 €          | 45.000 €        |
+| Jährliche Stromkosten     | 1.288 €      | 12.614 €        |
+| **Gesamt pro Jahr**       | **1.342,40 €**| **82.614 €**   |
 
-Fazit: Die k3i-Architektur bietet durch den vollständigen Wegfall eines
-externen Software-Herstellers und dessen Wartungsaufwand maximale 
-Sicherheit bei um 98,3% reduzierten jährlichen Betriebskonstrukten.
-=======================================================================
+Die Zahlen sind eine Beispielrechnung auf Basis der genannten Annahmen und keine gemessenen Betriebskosten eines existierenden Rechenzentrums.
+
+**Hinweis:** Die Architektur ist konzeptionell. Absolute Immunität, garantierte Schaltzeiten oder die Unmöglichkeit gleichzeitiger Sabotage an 68 Schränken werden nicht beansprucht.
+
+# K3I-Core: Security Architecture for Data Centers (Concept)
+
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Concept description, protection rights pending
+
+## 1. Core Paradigms
+
+- Protection of internal server structures against attacks
+- Maintenance of internet operation through hardware disconnection
+- Asynchronous arrangement of the cores
+- Redundancy at router level (at least 2 routers in hot standby)
+- Reserve cores per cascade
+
+## 2. Infrastructure Overview (conceptual)
+
+68 ports in parallel → two hardware routers in hot standby → multi-splitter → physical security safe with asynchronous board (active cores + reserve cores + watchdog)
+
+## 3. Dynamic Control Loop
+
+- Each core sends a combined signal to the active router.
+- On anomaly the signal drops, the router switches to the reserve router.
+- The affected port is disconnected for a short time.
+- An air-gapped forensics unit can record the incident.
+- After examination the port is released again.
+
+## 4. Economic Comparison (example calculation)
+
+| Item                      | k3i Hardware | Software Solution |
+|---------------------------|--------------|-------------------|
+| Acquisition               | €75,620      | €165,000          |
+| Annual licenses           | €54.40       | €25,000           |
+| Annual maintenance        | €0           | €45,000           |
+| Annual power costs        | €1,288       | €12,614           |
+| **Total per year**        | **€1,342.40**| **€82,614**       |
+
+The numbers are an example calculation based on the stated assumptions and are not measured operating costs of an existing data center.
+
+**Note:** The architecture is conceptual. Absolute immunity, guaranteed switching times or the impossibility of simultaneous sabotage on 68 cabinets are not claimed.
