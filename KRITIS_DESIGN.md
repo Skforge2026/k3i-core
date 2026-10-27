@@ -1,29 +1,88 @@
-# K3I-KRITIS: Hardware-Enforced Layer-Zero Protection for Power Plants & Critical Infrastructure (V4.0 Beta)
+# K3I-KRITIS: Hardware-nahe Layer-Zero-Schutzarchitektur für Kraftwerke & kritische Infrastruktur (Konzept)
 
-**Ziel:** Eine physisch redundante, forensisch unbestechliche Schutzarchitektur für Steuerungsnetzwerke in Kraftwerken und kritischer Infrastruktur, basierend auf dem Axiom 1 + 1 = 1.
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Konzeptbeschreibung, Schutzrechte pending
 
----
+## Ziel
 
-### 🧮 1. Deterministische Signalüberwachung (Heartbeat)
-Der über `isolcpus` vollständig isolierte Wächter-Core (Ring-0) generiert ein kontinuierliches, hochfrequentes Heartbeat-Signal (20–50 MHz Rechtecksignal mit festem Duty-Cycle). 
-* **Der Schutz:** Jede Abweichung, Jitter oder Unterbrechung dieses Signals — verursacht durch Anomalien oder KI-Angriffsversuche im Hauptprozessor — führt zum sofortigen Auslösen des Hardware-Vetos. Die hohe Frequenz garantiert eine Latenz-Erkennung im Nanosekundenbereich.
+Eine redundante, hardware-nahe Schutzarchitektur für Steuerungsnetzwerke in kritischer Infrastruktur.
 
----
+## 1. Signalüberwachung (Heartbeat)
 
-### ⚙️ 2. Die 3-Komponenten-Platinen-Matrix (Steckbare Failover-Kaskade)
-Die Architektur ist als modulares, steckbares Substrat mit vergoldeten Spezial-Pins und mechanischer Arretierung ausgeführt, um Übergangswiderstände im industriellen Dauereinsatz vollständig zu eliminieren:
+Ein isolierter Wächter-Kern erzeugt ein kontinuierliches Heartbeat-Signal. Abweichungen oder Unterbrechungen des Signals können ein Hardware-Veto auslösen. Die konkrete Frequenz und die Erkennungslatenz hängen von der Umsetzung ab.
 
-1. **Forensischer Flugschreiber (Blackbox)**
-   Ein ultraschneller FRAM-Ringspeicher erfasst die Taktzyklen im Nanosekunden-Bereich. Bei Auslösung des Vetos werden die letzten kritischen 50 Nanosekunden permanent in ein One-Time-PROM gebrannt. Ein autarker 30-ms-Kondensator-Puffer garantiert die vollständige Datensicherung auf dem Modul auch nach plötzlichem Stromabriss. Die Spuren sind für Angreifer physisch unlöschbar.
-2. **Galvanisches Hardware-Veto**
-   Das Heartbeat-Signal steuert über Optokoppler (vollständige galvanische Trennung gegen EM-Störungen) ultraschnelle Power-MOSFETs. Reißt das Signal ab, erfolgt im Pikosekunden-Bereich die physische Trennung der Netzanbindung. Das betroffene Modul opfert sich gezielt (Schmelzsicherungs-Prinzip).
-3. **Unterbrechungsfreie Kaskade (Fail-Closed)**
-   Eine rein hardwarebasierte Logik (CPLD oder diskrete Schaltung) schaltet bei Ausfall eines Moduls unterbrechungsfrei und softwarefrei auf das nächste Modul der Reserve-Bank (3–5 Slots) um. Rote Service-LEDs zeigen dem Wartungspersonal (z. B. dem Hausmeister oder IT-Admin) den notwendigen Tausch an. Versagen alle Module, geht das System in den vollständig isolierten, sicheren Zustand (Fail-Closed).
+## 2. Modulare Platinen-Matrix
 
----
+Die Architektur kann als steckbare Module ausgeführt werden:
 
-### ⚡ 3. Analoges Power-Sequencing
-Zur Vermeidung unsicherer Kaltstart-Zustände erfolgt der Hochlauf auf der Platine streng sequentiell über reine Analogtechnik:
+1. **Forensischer Speicher:** Ein schneller Speicher kann die letzten Zyklen vor dem Veto aufzeichnen und in ein Write-Once-Medium schreiben. Ein Kondensatorpuffer kann die Sicherung bei Stromabriss unterstützen.
+2. **Galvanisches Veto:** Das Heartbeat-Signal steuert über Optokoppler Power-MOSFETs, die die Verbindung trennen können.
+3. **Kaskade:** Eine hardwarebasierte Logik kann bei Ausfall eines Moduls auf ein Reserve-Modul umschalten. Bei Ausfall aller Module kann das System in einen isolierten Zustand gehen.
 
-* **Phase 1:** Das K3I-Wächter-Modul erhält zuerst Spannung und baut den stabilen Heartbeat auf (300–500 ms Vorlauf). Das Schutzschild steht, bevor der Hauptrechner aktiv ist.
-* **Phase 2:** Erst nach bestätigtem, stabilem Heartbeat gibt eine analoge Verzögerungsschaltung die Stromversorgung für den Hauptprozessor und die Arbeiter-Kerne frei. Die ungestörte, sichere Weiterfahrt ist ab der ersten Arbeits-Millisekunde garantiert.
+## 3. Sequentielles Hochfahren
+
+- Zuerst erhält das Wächter-Modul Spannung und baut das Heartbeat-Signal auf.
+- Erst nach stabilem Heartbeat wird die Versorgung des Hauptprozessors freigegeben.
+
+**Hinweis:** Die beschriebenen Mechanismen sind konzeptionell. Schaltzeiten, Speicherverhalten und die Wirksamkeit unter industriellen Bedingungen müssen auf der jeweiligen Hardware gemessen werden. Absolute Unlöschbarkeit oder garantierte unterbrechungsfreie Umschaltung wird nicht beansprucht.
+Englisch:
+
+markdown
+# K3I-KRITIS: Hardware-near Layer-Zero Protection Architecture for Power Plants & Critical Infrastructure (Concept)
+
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Concept description, protection rights pending
+
+## Objective
+
+A redundant, hardware-near protection architecture for control networks in critical infrastructure.
+
+## 1. Signal Monitoring (Heartbeat)
+
+An isolated watchdog core generates a continuous heartbeat signal. Deviations or interruptions of the signal can trigger a hardware veto. The concrete frequency and detection latency depend on the implementation.
+
+## 2. Modular Board Matrix
+
+The architecture can be implemented as pluggable modules:
+
+1. **Forensic memory:** A fast memory can record the last cycles before the veto and write them to a write-once medium. A capacitor buffer can support the save on power loss.
+2. **Galvanic veto:** The heartbeat signal controls power MOSFETs via optocouplers that can disconnect the connection.
+3. **Cascade:** Hardware-based logic can switch to a reserve module on failure of a module. On failure of all modules the system can enter an isolated state.
+
+## 3. Sequential Power-up
+
+- First the watchdog module receives power and builds the heartbeat signal.
+- Only after a stable heartbeat is the supply of the main processor released.
+
+**Note:** The described mechanisms are conceptual. Switching times, memory behavior and effectiveness under industrial conditions must be measured on the respective hardware. Absolute unerasability or guaranteed uninterrupted switchover is not claimed.
+
+# K3I-KRITIS: Hardware-near Layer-Zero Protection Architecture for Power Plants & Critical Infrastructure (Concept)
+
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Concept description, protection rights pending
+
+## Objective
+
+A redundant, hardware-near protection architecture for control networks in critical infrastructure.
+
+## 1. Signal Monitoring (Heartbeat)
+
+An isolated watchdog core generates a continuous heartbeat signal. Deviations or interruptions of the signal can trigger a hardware veto. The concrete frequency and detection latency depend on the implementation.
+
+## 2. Modular Board Matrix
+
+The architecture can be implemented as pluggable modules:
+
+1. **Forensic memory:** A fast memory can record the last cycles before the veto and write them to a write-once medium. A capacitor buffer can support the save on power loss.
+2. **Galvanic veto:** The heartbeat signal controls power MOSFETs via optocouplers that can disconnect the connection.
+3. **Cascade:** Hardware-based logic can switch to a reserve module on failure of a module. On failure of all modules the system can enter an isolated state.
+
+## 3. Sequential Power-up
+
+- First the watchdog module receives power and builds the heartbeat signal.
+- Only after a stable heartbeat is the supply of the main processor released.
+
+**Note:** The described mechanisms are conceptual. Switching times, memory behavior and effectiveness under industrial conditions must be measured on the respective hardware. Absolute unerasability or guaranteed uninterrupted switchover is not claimed.
+
+
+
