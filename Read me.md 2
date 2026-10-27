@@ -1,273 +1,167 @@
-# ⚠️ Sonntags-Prüfbericht: K3I-Infrastruktur-Härtung (26. Juli 2026) ⚠️
+# Sonntags-Prüfbericht: K3I-Infrastruktur-Härtung (26. Juli 2026)
 
----
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Experimentelle Messläufe, Schutzrechte pending
 
-## 1. K3I Manifest
+## 1. K3I Manifest (Kurzfassung)
 
-**Infrastruktur-Härtung durch verhaltensbasierte Perimeter-Logik**
+Klassische Software-Firewalls belasten die Host-Prozessoren. Der K3I-Ansatz beobachtet Verbindungsverhalten und setzt bei erkannten Anomalien die Interfaces auf `down` oder überführt Verbindungen in `TIME_WAIT`.
 
-Klassische Software-Firewalls im Cloud- und Enterprise-Umfeld
-belasten die Host-Prozessoren direkt. Sie verfügen über keine
-dedizierte Hardware-Ebene und entziehen den produktiven Anwendungen
-unter hoher Angriffslast kontinuierlich Rechenleistung. Die Folge
-sind Performance-Verluste, thermische Sättigung der Racks und
-ein deutlich erhöhter Energiebedarf.
+In den dokumentierten Messungen lag die Zeit vom Erkennen einer Anomalie bis zum logischen Abbruch bei ca. 0,85 ms. Die vollständige Isolation der Schnittstelle wurde in rund 1,65 ms abgeschlossen. Die CPU-Temperatur lag in den Tests bei ca. 40 °C.
 
-Sowohl der Hauptrechner als auch der Laptop operieren seit
-Monaten dediziert ohne jede softwarebasierte Firewall. Diese
-wurde rechtskräftig vollständig von beiden Systemen entfernt,
-da traditionelle Software-Filter keinerlei Schutz gegen unbekannte
-Zero-Day-Vektoren bieten, erhebliche CPU-Ressourcen verbrauchen,
-die Hardware aufheizen und den Datendurchsatz im Rechenzentrum
-lediglich künstlich ausbremsen.
+## 2. Comprehensive Experiment Log
 
-K3I verfolgt einen anderen Ansatz. Anstelle permanenter Inhaltsanalyse
-und Signaturvergleiche auf Kernel-Ebene liegt der Fokus auf der
-Beobachtung von Verbindungsverhalten und Symmetriemustern. Ziel
-ist eine spürbare Reduzierung der softwarebasierten Last, die durch
-klassische Paketfilter entsteht.
+**Timestamp:** Sonntag, 26. Juli 2026 – 13:25  
+**Host:** i9-Host-System (ddw-A0000001) | IP: 10.42.0.237  
+**Target:** Laptop (mopsi) | IP: 10.42.0.1  
+**Bridge:** enx00e04c1c1d68 (USB-3 Realtek RTL8153)
 
-Die zentralen Prinzipien:
+### Abschnitt A – Geschützter Zustand (Hauptrechner)
 
-- **Reaktionsgeschwindigkeit**  
-  In den durchgeführten Messungen lag die Zeit vom Erkennen einer
-  Anomalie bis zum logischen Abbruch der Verbindung bei ca. 0,85 ms.
-  Die vollständige Isolation der betroffenen Schnittstelle wurde in
-  rund 1,65 ms abgeschlossen.
+**Modul 01 – 10 isolierte Nadelstiche**  
+- 10 Angriffe im 100-ms-Takt, je 1 Null-Byte-Paket  
+- Ports 8001–8005  
+- Ergebnis: Sockets im Zustand `TIME_WAIT`, keine `ESTABLISHED`-Verbindungen
 
-- **Zustandssteuerung**  
-  Auffällige Verbindungen werden gezielt in den Zustand `TIME_WAIT`
-  überführt. Dadurch wird verhindert, dass sie dauerhaft im Zustand
-  `ESTABLISHED` verbleiben und Ressourcen binden.
+**Modul 02 – Multi-Port-Flutung (10 × 100 Pakete)**  
+- 10 Wellen mit je 100 Paketen  
+- Ergebnis: Flut vor Treibersättigung gestoppt
 
-- **Ressourcen-Schonung**  
-  Durch den Verzicht auf kontinuierliche Deep-Packet-Inspection
-  bleibt die zusätzliche CPU-Last der Überwachungskomponente sehr
-  gering. Die Hardware operierte in den Tests im niedrigen
-  Temperaturbereich (ca. 40 °C, passive Kühlung).
-
-- **Ökonomische und energetische Effizienz**  
-  Nach der Implementierung entfallen weitgehend permanente Signatur-
-  Updates und laufende Software-Serviceverträge. Die Wartungskosten
-  werden deutlich niedriger eingeschätzt als bei klassischen Enterprise-
-  Firewalls. Der Energiebedarf unter Last lag in den Versuchen spürbar
-  unter dem eines traditionell geschützten Systems.
-
-K3I versteht sich als Experiment und Arbeitsgrundlage für eine
-ressourcenschonendere Form der Perimeter-Sicherung. Der Ansatz
-set auf Verhaltensbeobachtung statt auf permanente Inhaltsanalyse
-und versucht, unbekannte oder ungewöhnliche Verbindungsmuster
-frühzeitig zu isolieren.
-
----
-
-## 2. Comprehensive Experiment Log – Meticulous Perimeter Division
-
-**Timestamp:** Sunday, 26 July 2026 – 01:25 PM  
-**Host Central:** i9-Host-System (ddw-A0000001) | IP: 10.42.0.237  
-**Target Remote:** Laptop-Terminal (mopsi) | IP: 10.42.0.1  
-**Hardware Bridge:** enx00e04c1c1d68 (USB-3 Realtek RTL8153)
-
-### Abschnitt A – Prüfung im geschützten Zustand (Hauptrechner)
-
-**Berichtmodul 01 – 10 isolierte Zero-Day-Nadelstiche**  
-- Test-Kontext: Validierung der Echtzeit-Erkennung bei Minimalst-Last  
-- Angriffs-Struktur: 10 isolierte Angriffe im 100-ms-Takt  
-- Paket-Volumen: exakt 1 Datenpaket (Null-Byte) pro Injektion  
-- Port-Rotation: symmetrische Streuung auf Ports 8001–8005  
-- Abwehr-Reaktion: Erkennung und Reaktion im niedrigen Millisekundenbereich  
-- RAM-Befund (`ss`): 10 Sockets im Zustand `TIME_WAIT`  
-  (jeweils 2 Einträge auf den Ports 8001–8005; keine etablierten Verbindungen)  
-- **Ergebnis:** Alle Nadelstiche wurden erkannt und im Totbereich arretiert.
-
-**Berichtmodul 02 – Multi-Port-Mengenflutung (10 × 100 Testpakete)**  
-- Test-Kontext: Stresstest unter massiver Port-Rotation  
-- Angriffs-Struktur: 10 koordinierte Angriffswellen  
-- Paket-Volumen: 100 Testpakete parallel pro Welle  
-- Abwehr-Reaktion: Musterekennung und gezielte Verbindungskappung  
-- **Ergebnis:** Die Flut wurde vor Treibersättigung gestoppt. Kein System-Verzug.
-
-**Berichtmodul 03 – Deep-Storage interner Datenstrom (Ur-Messung)**  
-- Physischer Durchsatz: konstante 5,3 GB/s (PCIe M.2-Sättigung)  
-- Brutto-Volumen: 188 GB Spitzenlast-Schreiben  
+**Modul 03 – Deep-Storage**  
+- Durchsatz: 5,3 GB/s (PCIe M.2)  
+- Volumen: 188 GB  
 - Paket-Laufzeiten: Min 0,349 ms | Avg 0,759 ms | Max 0,964 ms  
-- System-Temperatur: stabil bei ca. 40 °C (passive Kühlung)
+- Temperatur: ca. 40 °C
 
-### Abschnitt B – Prüfung auf dem Laptop (isolierter Gegen-Beschuss)
+### Abschnitt B – Laptop
 
-**Berichtmodul 04 – Isolierung der Laptop-Schiene (Prototyp-Messung)**  
-- Versuchs-Szenario: Gegen-Beschuss vom Hauptrechner auf den Laptop  
-- Angriffs-Menge: 100 gemischte Kaskaden (DDoS / Random / Zero-Day)  
-- Status: Sockets isoliert; Wächter-Schutz auf dem Laptop noch ausstehend,  
-  da das System dort noch auf die finale Quellcode-Einspielung wartet.  
-- Messdaten: logischer Abbruch ca. 0,85 ms | Signal-Laufzeit ca. 1,65 ms  
-- **Ergebnis:** Die Verbindungen wurden durch die Isolation abgebrochen (Exit 1).
+**Modul 04 – Gegen-Beschuss**  
+- 100 gemischte Kaskaden  
+- Logischer Abbruch ca. 0,85 ms | Signal-Laufzeit ca. 1,65 ms  
+- Wächter auf dem Laptop noch nicht vollständig aktiv
 
-### Abschnitt C – Null-Referenz im ungeschützten Zustand (Hauptrechner)
+### Abschnitt C – Ungeschützter Zustand
 
-**Berichtmodul 05 – Reale Total-Elimination durch 100er-Misch-Kaskade**  
-- Ausgangslage: Wächter abgeschaltet, Internetkarte enp4s0 online  
-- Fehler-Hergang: Der System-Architekt hatte vor dem Start des Experiments  
-  explizit vergessen, den Wächter-Schutz für diesen Perimeter einzuschalten.  
-  Dadurch lief das Mischfeuer ungedrosselt auf das ungesicherte System ein.  
-- Last-Einwirkung: über 550 Netcat-Hintergrundprozesse ungedrosselt  
-- Schadens-Befund: Treiber-Kollaps des Kernel-Stacks, enp4s0 komplett blockiert  
-- Folgeschaden: Routing gestört; persistente Geister-Route (.130) mit Metric 100
+**Modul 05 – 100er-Misch-Kaskade ohne Wächter**  
+- Über 550 Netcat-Prozesse  
+- Ergebnis: Treiber-Kollaps, enp4s0 blockiert, Routing gestört
 
-### Abschnitt D – System-Spezifikation der Test-Infrastruktur
+### Abschnitt D – System-Spezifikation
 
-**Berichtmodul 06 – Hauptrechner (ddw-A0000001)**  
-- OS: Ubuntu 22.04.4 LTS (Kernel 6.5.0-x86_64)  
-- CPU: Intel Core i9 (passiv gekühlt)  
-- RAM: 64 GB DDR5  
-- Storage: 2 TB NVMe M.2 (Schreibrate 5,3 GB/s)  
-- Netzwerkkarten: Intel PCIe (enp4s0) & Realtek Brücke (enx00e04c1c1d68)
+- Hauptrechner: Ubuntu 22.04.4 LTS, Intel Core i9, 64 GB DDR5, 2 TB NVMe, Intel PCIe + Realtek Bridge  
+- Laptop: Ubuntu 22.04.4 LTS, Intel Mobile Core, 16 GB DDR4
 
-**Berichtmodul 07 – Laptop (mopsi)**  
-- OS: Ubuntu 22.04.4 LTS (Kernel 6.5.0-x86_64)  
-- CPU: Intel Mobile Core  
-- RAM: 16 GB DDR4  
-- Netzwerkkarte: integriert (IP 10.42.0.1)
+### Abschnitt E – Sanierung
 
-### Abschnitt E – Hardware-Reconstruction & nominaler Rechtszustand
+- Geister-Route entfernt  
+- IP 10.42.0.237 wieder gesetzt  
+- Wächter unter PID 3723 wieder aktiv
 
-**Berichtmodul 08 – System-Sanierung und aktive Struktur-Verriegelung**  
-- Routing-Sanierung: Geister-Route .130 entfernt; Gateway fest auf 192.168.177.1  
-- IP-Rekonstruktion: IP 10.42.0.237 auf USB-Schiene; DNS via resolved geflusht  
-- Aktueller Schutz: Wächter-Prozess unter PID 3723 wieder aktiv im RAM
+## 3. Strukturelles Modell
 
----
+Internet → Hauptrechner (enp4s0 + Wächter) → USB-Bridge → Laptop
 
-## 3. Strukturelles Modell – Physical Perimeter & Data Flow Topology
+## 4. Rohdaten (Auszug)
 
-```text
-+--------------------------------------------------------+
+- 10 Sockets im Zustand `TIME_WAIT` auf Ports 8001–8005  
+- dmesg: enp4s0 und enx00e04c1c1d68 erkannt und hochgefahren  
+- Authentifizierungs-Log: Änderungen an `live_waechter.py` am 23. und 25. Juli
 
-|              WELTWEITES INTERNET / WAN                 |
-+--------------------------------------------------------+
-                           |
-                           | [Physisches Kabel]
-                           v
-+----------------------------------------------------------------------+
+**Hinweis:** Die Ergebnisse beziehen sich auf die dokumentierte Hardware, die getesteten Angriffsmuster und die verwendete Wächter-Version. Absolute Immunität gegen alle Angriffsvektoren wird nicht beansprucht.
 
-| HAUPTRECHNER (Zentrale – ddw)                                        |
-| OS: Ubuntu 22.04 LTS | CPU: Intel i9 | RAM: 64 GB DDR5               |
-|                                                                      |
-|  +--------------------+     +-----------------------------+          |
-|  | INTERNETKARTE      |     | VERHALTENS-WÄCHTER          |          |
-|  | enp4s0             |     | (PID 3723)                  |          |
-|  | IP: 192.168.177.126|     | Scan-Intervall: 2 ms        |          |
-|  +--------------------+     | Status: Aktiv               |          |
-|            |                +-----------------------------+          |
-|            v                           ^                             |
-|  +--------------------+                |                             |
-|  | STANDARD-GATEWAY   |<---------------+                             |
-|  | via 192.168.177.1  |  [Anomalie-Erkennung & Isolation]            |
-|  +--------------------+                                              |
-|            |                                                         |
-|            v                                                         |
-|  +--------------------+                                              |
-|  | USB-3 EXPRESSKART. |                                              |
-|  | enx00e04c1c1d68    |                                              |
-|  | IP: 10.42.0.237    |                                              |
-|  +--------------------+                                              |
-+------------|---------------------------------------------------------+
-             |
-             | [USB-3 Realtek RTL8153 Kupfer-Brücke]
-             | [Latenz ca. 0,95 ms]
-             v
-+----------------------------------------------------------------------+
+# Sunday Test Report: K3I Infrastructure Hardening (26 July 2026)
 
-| TARGET REMOTE: LAPTOP (Isolierter Prototyp-Knoten - mopsi)           |
-| OS: Ubuntu 22.04 LTS | CPU: Intel Mobile | RAM: 16 GB DDR4           |
-|                                                                      |
-|  +--------------------+     +-----------------------------+          |
-|  | NETZWERKKARTE      |     | SOCKET-STATUS               |          |
-|  |                    |     |                             |          |
-|  | IP: 10.42.0.1      |     | Sockets: Strukturell isolw. |          |
-|  +--------------------+     | Quellcode: Ausstehend       |          |
-|            |                +-----------------------------+          |
-|            +------------------------------^                          |
-|                             [Logischer Abbruch bei Beschuss]         |
-+----------------------------------------------------------------------+
-```
----
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Experimental measurement runs, protection rights pending
 
-## 4. Ursprüngliche Original-Testprotokolle (Rohdaten-Anhang)
+## 1. K3I Manifest (short)
 
-### Modul 01 – Kernel-Prozess-Register (Wächter-Validierung)
-```text
-root        3723 16.6  0.0  22488 11844 ?        Ss   12:13   0:42 /usr/bin/python3 /home/ddw/live_waechter.py
-ddw@ddw-A0000001:~$ sudo kill -9 6376 6378 6379+  Getötet                sudo python3 /home/ddw/live_waechter.py
-```
+Classic software firewalls load the host processors. The K3I approach observes connection behavior and sets interfaces to `down` or moves connections to `TIME_WAIT` on detected anomalies.
 
-### Modul 02 – Netzwerk-Schienen-Analyse (Reboot Ist-Analyse)
-```text
-lo               UNKNOWN        127.0.0.1/8 ::1/128 
-enp4s0           UP             192.168.177.126/24
-enx00e04c1c1d68  UP             fe80::3a22:33b8:766a:6a2f/64 
+In the documented measurements the time from detecting an anomaly to logical disconnection was approx. 0.85 ms. Full isolation of the interface was completed in approx. 1.65 ms. CPU temperature was approx. 40 °C in the tests.
 
---- REBOOT GATEWAY CONTROL ---
-default via 192.168.177.130 dev enp4s0 proto static metric 20100 
-192.168.177.0/24 dev enp4s0 proto kernel scope link src 192.168.177.126 metric 100
-```
+## 2. Comprehensive Experiment Log
 
-### Modul 03 – Hardware-Korrektur auf Chipebene
-```text
-ddw@ddw-A0000001:~$ sudo ip route replace default via 192.168.177.1 dev enp4s0 && 
-``sudo ip addr replace 10.42.0.237/24 dev enx00e04c1c1d68 && echo "=== SCHIENEN REPRÄSENTATIV VERRIEGELT ==?"
-`
+**Timestamp:** Sunday, 26 July 2026 – 13:25  
+**Host:** i9-Host-System (ddw-A0000001) | IP: 10.42.0.237  
+**Target:** Laptop (mopsi) | IP: 10.42.0.1  
+**Bridge:** enx00e04c1c1d68 (USB-3 Realtek RTL8153)
 
-### Modul 04 – Physischer Beweis: Die 10 isolierten Interrupts
-```text
-TIME-WAIT  0      0  10.42.0.237:32788  10.42.0.237:8003
-TIME-WAIT  0      0  10.42.0.237:32794  10.42.0.237:8003
-TIME-WAIT  0      0  10.42.0.237:54580  10.42.0.237:8005
-TIME-WAIT  0      0  10.42.0.237:54584  10.42.0.237:8005
-TIME-WAIT  0      0  10.42.0.237:37090  10.42.0.237:8004
-TIME-WAIT  0      0  10.42.0.237:37100  10.42.0.237:8004
-TIME-WAIT  0      0  10.42.0.237:34402  10.42.0.237:8002
-TIME-WAIT  0      0  10.42.0.237:34418  10.42.0.237:8002
-TIME-WAIT  0      0  10.42.0.237:47600  10.42.0.237:8001
-TIME-WAIT  0      0  10.42.0.237:47604  10.42.0.237:8001
-```
+### Section A – Protected State (main computer)
 
-### Modul 05 – Systemd-Resolution und Internet-DHCP-Register
-```text
-2026-07-26T12:11:51 ddw-A0000001 NetworkManager: <info> policy: set 
-  'enp4s0' as default for IPv4 routing and DNS
-2026-07-26T12:11:51 ddw-A0000001 systemd-resolved: enp4s0: Bus 
-  client set DNS server list to: 1.1.1.1
-2026-07-26T12:11:51 ddw-A0000001 avahi-daemon: Joining mDNS group 
-  on interface enp4s0.IPv4 with address 192.168.177.126.
-2026-07-26T12:11:51 ddw-A0000001 NetworkManager: <info> device 
-  (enp4s0): Activation: successful, device activated.
-2026-07-26T12:13:25 ddw-A0000001 systemd: Started live_waechter.
-```
+**Module 01 – 10 isolated pinpricks**  
+- 10 attacks at 100 ms intervals, 1 null-byte packet each  
+- Ports 8001–8005  
+- Result: sockets in `TIME_WAIT` state, no `ESTABLISHED` connections
 
-### Modul 06 – Unzensierter Kernel-Ringpuffer (`dmesg`)
-```text
-[    1.412998] igc 0000:04:00.0 enp4s0: renamed from eth0
-[    2.106171] r8152 2-5.1:1.0 enx00e04c1c1d68: renamed from eth0
-[    7.568265] r8152 2-5.1:1.0 enx00e04c1c1d68: carrier on
-[   10.342165] igc 0000:04:00.0 enp4s0: NIC Link is Up 1000 Mbps
-```
+**Module 02 – Multi-port flood (10 × 100 packets)**  
+- 10 waves with 100 packets each  
+- Result: flood stopped before driver saturation
 
-### Modul 07 – Historischer Authentifizierungs-Log (Historie)
-```text
-2026-07-23T08:33 ddw sudo: ddw : TTY=pts/0 ; USER=root ; COMMAND=
-  /usr/bin/sed -i '/# USB-C und WLAN-Schutzschleife/,+3d' waechter.py
-2026-07-23T08:33 ddw sudo: ddw : TTY=pts/0 ; USER=root ; COMMAND=
-  /usr/bin/systemctl restart live_waechter.service
-2026-07-23T08:34 ddw sudo: ddw : TTY=pts/0 ; USER=root ; COMMAND=
-  /usr/bin/systemctl status live_waechter.service
-2026-07-25T06:04 ddw sudo: ddw : TTY=pts/0 ; USER=root ; COMMAND=
-  /usr/bin/pkill -9 -f live_waechter.py
-2026-07-25T08:18 ddw sudo: ddw : TTY=pts/1 ; USER=root ; COMMAND=
-  /usr/bin/systemctl start live_waechter.service
-2026-07-25T16:51 ddw sudo: ddw : TTY=pts/4 ; USER=root ; COMMAND=
-  /usr/bin/pkill -f live_waechter.py
-2026-07-25T16:52 ddw sudo: ddw : TTY=pts/4 ; USER=root ; COMMAND=
-  /usr/bin/tee /home/ddw/live_waechter.py
-```
+**Module 03 – Deep storage**  
+- Throughput: 5.3 GB/s (PCIe M.2)  
+- Volume: 188 GB  
+- Packet latencies: Min 0.349 ms | Avg 0.759 ms | Max 0.964 ms  
+- Temperature: approx. 40 °C
+
+### Section B – Laptop
+
+**Module 04 – Counter-fire**  
+- 100 mixed cascades  
+- Logical disconnection approx. 0.85 ms | signal propagation approx. 1.65 ms  
+- Watchdog on the laptop not yet fully active
+
+### Section C – Unprotected State
+
+**Module 05 – 100-cascade without watchdog**  
+- Over 550 netcat processes  
+- Result: driver collapse, enp4s0 blocked, routing disturbed
+
+### Section D – System Specification
+
+- Main computer: Ubuntu 22.04.4 LTS, Intel Core i9, 64 GB DDR5, 2 TB NVMe, Intel PCIe + Realtek bridge  
+- Laptop: Ubuntu 22.04.4 LTS, Intel Mobile Core, 16 GB DDR4
+
+### Section E – Remediation
+
+- Ghost route removed  
+- IP 10.42.0.237 restored  
+- Watchdog under PID 3723 active again
+
+## 3. Structural Model
+
+Internet → main computer (enp4s0 + watchdog) → USB bridge → laptop
+
+## 4. Raw Data (excerpt)
+
+- 10 sockets in `TIME_WAIT` state on ports 8001–8005  
+- dmesg: enp4s0 and enx00e04c1c1d68 detected and brought up  
+- Authentication log: changes to `live_waechter.py` on 23 and 25 July
+
+**Note:** The results refer to the documented hardware, the tested attack patterns and the used watchdog version. Absolute immunity against all attack vectors is not claimed.
+
+
+Die Messwerte (TIME_WAIT-Sockets, Paket-Laufzeiten, Temperatur, Durchsatz) sind das eigentliche Ergebnis. Eine kurze Tabelle macht sie nachvollziehbar und spart Text.
+
+Beispiel für Modul 01:
+
+Port	Sockets (TIME_WAIT)
+8001	2
+8002	2
+8003	2
+8004	2
+8005	2
+Und für Modul 03:
+
+Messung	Wert
+Durchsatz	5,3 GB/s
+Volumen	188 GB
+Min. Latenz	0,349 ms
+Avg. Latenz	0,759 ms
+Max. Latenz	0,964 ms
+Temperatur	ca. 40 °C
+
+
+
+
 
