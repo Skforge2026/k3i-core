@@ -63,3 +63,21 @@ This document reports measurements of the hardware-level core isolation and jitt
 3. **Veto Behavior:** The K3I-Veto mechanism remained inert during the tested high-throughput sequences. No false positives were observed under the applied network payload.
 
 These results apply to the tested configuration and load profiles. They do not constitute a general immunity guarantee.
+
+## 3. Empirische Testmatrix & Ergebnisse
+
+| Stress-Vektor                  | Beschreibung                 | Aggressionsstufe              | Watchdog-Status | Gemessener Jitter |
+|--------------------------------|------------------------------|-------------------------------|-----------------|-------------------|
+| Szenario 1: Cache Invalidation | `stress-ng --cache 8`        | L3-Cache-Hammering            | PASS (Stabil)   | < 50 ns           |
+| Szenario 2: Kernel & I/O Stress| `stress-ng --cpu 12 --io 4`  | Maximales Context Switching   | PASS (Stabil)   | < 50 ns           |
+| Szenario 3: Entropy Flood      | `ping -f -c 10000`           | 10k Pakete / 60 ms Dauer      | PASS (Stabil)   | < 50 ns           |
+
+## 4. Architektonische Einordnung
+
+1. **SMT-Interferenz-Reduktion:** Die gleichzeitige Isolierung der physischen Kerne und ihrer Hyperthreading-Zwillinge (`2,3` und `10,11`) reduzierte den Einfluss von Ring-3-Laufzeitrauschen auf den gemessenen Jitter.
+2. **SMI-/Sleep-Vermeidung:** Der Betrieb der Schleife im deterministischen No-Sleep-Zustand vermied Laufzeit-Initialisierungen und hielt den Jitter unter den getesteten Bedingungen unter der 50-ns-Schwelle.
+3. **Veto-Verhalten:** Der K3I-Veto-Mechanismus blieb während der getesteten Hochdurchsatz-Sequenzen inaktiv. Unter der angelegten Netzwerk-Last wurden keine Fehlauslösungen beobachtet.
+
+Die Ergebnisse gelten für die getestete Konfiguration und die verwendeten Lastprofile. Sie stellen keine allgemeine Immunitätsgarantie dar.
+
+
