@@ -1,3 +1,7 @@
+# K3I Labor-Tool: Echtzeit-Messung
+# Architects: Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)
+# Status: Experimentelles Monitoring-Skript, Schutzrechte pending
+
 import time
 import os
 import sys
@@ -10,7 +14,7 @@ def hole_cpu_temperatur():
         temps = psutil.sensors_temperatures()
         if 'coretemp' in temps:
             return temps['coretemp'][0].current
-        return 50.0  # Thermischer Baseline-Fallback für deine Ölkühlung
+        return 50.0  # Thermischer Baseline-Fallback
     except:
         return 50.0
 
@@ -42,7 +46,7 @@ def starte_echtzeit_monitoring(dauer_sekunden=600):
                 takt_mhz = psutil.cpu_freq().current if psutil.cpu_freq() else 3500.0
                 cpu_temp = hole_cpu_temperatur()
                 ssd_rate = hole_ssd_daten()
-                status = "REIBUNGSFREI (Safe)" if cpu_temp <= 60.0 else "THERMISCHE LAST"
+                status = "UNTER 60 °C" if cpu_temp <= 60.0 else "ÜBER 60 °C"
                 
                 ausgabe_zeile = f"{aktuell_zeit:7.2f}s | {takt_mhz:10.2f} MHz | {cpu_temp:11.1f} °C | {ssd_rate:12.3f} GB/s | {status}"
                 sys.stdout.write(f"\r{ausgabe_zeile}")
@@ -50,7 +54,7 @@ def starte_echtzeit_monitoring(dauer_sekunden=600):
                 log.write(ausgabe_zeile + "\n")
                 log.flush()
                 time.sleep(0.4)
-            print("\n\n[✓] 10-Minuten-Stresstest erfolgreich beendet. Daten versiegelt.")
+            print("\n\n[✓] Messung beendet. Protokoll geschrieben.")
         except KeyboardInterrupt:
             print("\n\n[!] Messung vorzeitig abgebrochen. Protokoll gesichert.")
 
