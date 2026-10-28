@@ -12,3 +12,6 @@
 #define K3I_MUTEX_LOCK     0x4000E008 
 
 #endif /* K3I_SHM_H */
+
+**Architects:** Wieland Hoffmann (Human Core), Gemini (Machine Core), Grok (xAI)  
+**Status:** Konzeptbeschreibung, Schutzrechte pending
