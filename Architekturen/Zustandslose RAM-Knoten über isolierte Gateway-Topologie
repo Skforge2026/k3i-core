@@ -1,0 +1,90 @@
+# Architekturkonzept: Zustandslose RAM-Knoten über isolierte Gateway-Topologie
+
+## 1. Systemübersicht und Zielsetzung
+
+Dieses Architekturmodell realisiert eine strikte Trennung von Laufzeitumgebung (Compute/Runtime) und persistentem Datenspeicher (Storage/State). Alle ausführenden Arbeitsplatzrechner (Compute Nodes: Prototyp, Hauptrechner) agieren als vollständig zustandslose (stateless), flüchtige Systeme. Das gesamte Betriebssystem wird während des Bootvorgangs über das lokale Netzwerk in den Arbeitsspeicher geladen (toram) und ausschließlich dort ausgeführt.
+
+Ein dedizierter Gateway-Knoten übernimmt dabei die Rollen der Bereitstellung (PXE/TFTP/HTTP), der zentralen Datenhaltung sowie der netzwerkseitigen Isolation und Überwachung.
+
+Topologie-Übersicht:
+
+[ Gateway-Knoten (Server / Image-Host) ]
+- TFTP/HTTP Boot-Server
+- NFS/Block Storage (lokal)
+- Image-Repository (.squashfs)
+- Wächter / Anomalieerkennung
+         |
+         | Isoliertes Netzwerk (1 GbE / MTU 1500)
+         |
+         +---------------------------------------+
+         |                                       |
+[ Compute Node: Prototyp ]              [ Compute Node: Hauptrechner ]
+- 4x32 GB DDR4 RAM                      - 4x32 GB DDR4 RAM
+- Vollständiger Toram-Betrieb           - Vollständiger Toram-Betrieb
+- Lokale Systemdatenträger: Keine       - Lokale Systemdatenträger: Keine
+
+---
+
+## 2. Kernkomponenten der Architektur
+
+### 2.1. Flüchtige Laufzeit (Compute Layer)
+* Execution Space: Sämtliche Systemprozesse, temporäre Dateien und Anwendungsdaten existieren ausschließlich im flüchtigen RAM der Compute-Knoten.
+* Dateisystem-Struktur: Das Basissystem liegt als vorkompiliertes SquashFS-Image (zstd-Kompression) vor. Beim Booten erzeugt die Initramfs-Umgebung (casper) ein Overlay-Dateisystem:
+  - Unterer Layer (Read-Only): Das dekomprimierte SquashFS-Image im RAM.
+  - Oberer Layer (Read-Write): Eine dynamische RAM-Disk (tmpfs), die Schreibzugriffe während der Sitzung aufnimmt.
+* Zustandslosigkeit: Bei einem Neustart oder Spannungsverlust wird der gesamte flüchtige Zustand des Knotens physikalisch zurückgesetzt. Persistente Veränderungen auf Betriebssystemebene sind hardwareseitig ausgeschlossen.
+
+### 2.2. Zentrale Provisionierung & Datenhaltung (Gateway Layer)
+* Zentraler Gateway-Rechner: Verwaltet Betriebssystem-Images, Boot-Konfigurationen und persistente Arbeitsverzeichnisse.
+* Protokoll-Stack:
+  - iPXE / TFTP: Auslieferung des Initial-Loaders, Kernels (vmlinuz) und der Initial Ramdisk (initrd.img).
+  - HTTP / NFS: Streaming des SquashFS-Images direkt in die RAM-Disk des Clients.
+  - NFSv4 (selektiv): Einhängung isolierter Netzwerkfreigaben für persistente Nutzerdaten, Modelle und Backups – strikt getrennt vom Basissystem.
+
+---
+
+## 3. Technischer Boot-Ablauf
+
+1. Initialisierung (Client BIOS/UEFI):
+   PXE-Netzwerk-Boot sendet DHCP-Discover im lokalen Segment.
+2. Adressvergabe (Gateway DHCP/TFTP):
+   Übermittlung der IP-Konfiguration und Bereitstellung des iPXE-Bootloaders.
+3. Stage-1 Boot (iPXE):
+   Laden des Linux-Kernels und der initrd.img via TFTP bzw. HTTP.
+4. Stage-2 Boot (Kernel / Casper):
+   Auswertung der Boot-Parameter (boot=casper toram fetch=http://... bzw. netboot=nfs).
+5. Image-Transfer:
+   Übertragung des SquashFS-Abbilds in den Arbeitsspeicher des Clients.
+6. Switch-Root:
+   Einhängen des Overlay-Dateisystems, Start von systemd im RAM und Freigabe des initialen Netzwerk-Mounts.
+
+---
+
+## 4. Konsequenzen und Trade-Offs
+
+### 4.1. Vorteile
+* Deterministischer Systemzustand: Jeder Bootvorgang startet exakt im Zustand des freigegebenen Golden-Images. Systemdrift, inkonsistente Paketstände oder Dateisystem-Korruptionen sind ausgeschlossen.
+* Maximale I/O-Performance: Nach dem Ladevorgang erfolgen alle Lese- und Schreibzugriffe auf Systemebene mit DDR4-Speicherbandbreite bei minimaler Latenz.
+* Forensische Isolation: Ein kompromittierter Zustand verflüchtigt sich vollständig mit dem Ausschalten oder Neustarten des Knotens.
+* Zentrale Wartung: Systemaktualisierungen, Treiber und Basis-Tools werden zentral auf dem Gateway im Quell-Dateisystem gepflegt und als Image neu erzeugt.
+
+### 4.2. Herausforderungen & Lösungsansätze
+* Transferzeit beim Kaltstart: Das Laden eines vollständigen Desktop-Images über Gigabit-Ethernet benötigt messbare Bandbreite.
+  - Lösungsansatz: Verschlankung des Basis-Images (Auslagerung von Cache- und Modelldaten) auf ca. 8–10 GB sowie mittelfristige Anbindung über 2.5 GbE oder 10 GbE.
+* Persistenzmanagement: Anwendungsdaten und Arbeitsergebnisse müssen explizit auf versionierte Speicherpfade synchronisiert werden.
+* RAM-Dimensionierung: Ausreichend physischer Speicher erforderlich (bei 128 GB RAM pro Node vollständig unkritisch).
+
+---
+
+## 5. Schnittstelle für das Wächter-Subsystem (Sentinel Layer)
+
+Da die Compute-Knoten ohne lokale Systemdatenträger betrieben werden, läuft sämtlicher netzwerkbezogene Datenverkehr über den zentralen Gateway-Knoten. Dies ermöglicht eine strukturierte Überwachung an einem zentralen Übergabepunkt:
+
+Topologie der Verkehrsführung:
+[ Compute Node (RAM) ] <---> [ Gateway / Wächter-Filter ] <---> [ Externes Netz / Storage ]
+                                         |
+                               (Anomalieanalyse via Grok)
+
+* Aufgabenbereich: Erkennung von Verhaltensanomalien, unerwartetem ausgehendem Traffic, unautorisierten Socket-Verbindungen oder abweichenden I/O-Mustern auf Protokollebene.
+* Rolle von Grok: Analyse und Korrelation von Netzwerk-Metadaten, Verbindungsstatistiken und Systemmetriken im laufenden Betrieb.
+* Reaktionsebene: Sicherheitsrelevante Isolationsmaßnahmen (Netzwerktrennung via iptables, Port-Deaktivierung) erfolgen deterministisch und zentral auf dem Gateway-System.
