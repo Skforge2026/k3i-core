@@ -1,5 +1,10 @@
 # Architekturkonzept: Zustandslose RAM-Knoten über isolierte Gateway-Topologie
 
+**Autoren:** Wieland Hoffmann (SkForge) | Gemini (Google) | Grok (xAI)  
+**Status:** Umsetzungsreif / Produktionsentwurf
+
+---
+
 ## 1. Systemübersicht und Zielsetzung
 
 Dieses Architekturmodell realisiert eine strikte Trennung von Laufzeitumgebung (Compute/Runtime) und persistentem Datenspeicher (Storage/State). Alle ausführenden Arbeitsplatzrechner (Compute Nodes: Prototyp, Hauptrechner) agieren als vollständig zustandslose (stateless), flüchtige Systeme. Das gesamte Betriebssystem wird während des Bootvorgangs über das lokale Netzwerk in den Arbeitsspeicher geladen (toram) und ausschließlich dort ausgeführt.
@@ -19,7 +24,8 @@ Topologie-Übersicht:
          +---------------------------------------+
          |                                       |
 [ Compute Node: Prototyp ]              [ Compute Node: Hauptrechner ]
-- 4x32 GB DDR4 RAM                      - 4x32 GB DDR4 RAM
+- CPU: AMD Ryzen 9 9950X                - CPU: Intel Core i9
+- RAM: 128 GB (DDR5)                    - RAM: 128 GB (DDR4)
 - Vollständiger Toram-Betrieb           - Vollständiger Toram-Betrieb
 - Lokale Systemdatenträger: Keine       - Lokale Systemdatenträger: Keine
 
@@ -39,7 +45,7 @@ Topologie-Übersicht:
 * Protokoll-Stack:
   - iPXE / TFTP: Auslieferung des Initial-Loaders, Kernels (vmlinuz) und der Initial Ramdisk (initrd.img).
   - HTTP / NFS: Streaming des SquashFS-Images direkt in die RAM-Disk des Clients.
-  - NFSv4 (selektiv): Einhängung isolierter Netzwerkfreigaben für persistente Nutzerdaten, Modelle und Backups – strikt getrennt vom Basissystem.
+  - NFSv4 (selektiv): Einhängung isolierter Netzwerkfreigaben für persistente Nutzerdaten, Modelle und Backups – strikt getrennt vom Basissystem (kein Overlay-Leak in das Root-Dateisystem).
 
 ---
 
@@ -64,15 +70,15 @@ Topologie-Übersicht:
 
 ### 4.1. Vorteile
 * Deterministischer Systemzustand: Jeder Bootvorgang startet exakt im Zustand des freigegebenen Golden-Images. Systemdrift, inkonsistente Paketstände oder Dateisystem-Korruptionen sind ausgeschlossen.
-* Maximale I/O-Performance: Nach dem Ladevorgang erfolgen alle Lese- und Schreibzugriffe auf Systemebene mit DDR4-Speicherbandbreite bei minimaler Latenz.
+* Maximale I/O-Performance: Nach dem Ladevorgang erfolgen alle Lese- und Schreibzugriffe auf Systemebene mit nativer Speicherbus-Geschwindigkeit bei minimaler Latenz.
 * Forensische Isolation: Ein kompromittierter Zustand verflüchtigt sich vollständig mit dem Ausschalten oder Neustarten des Knotens.
 * Zentrale Wartung: Systemaktualisierungen, Treiber und Basis-Tools werden zentral auf dem Gateway im Quell-Dateisystem gepflegt und als Image neu erzeugt.
 
 ### 4.2. Herausforderungen & Lösungsansätze
-* Transferzeit beim Kaltstart: Das Laden eines vollständigen Desktop-Images über Gigabit-Ethernet benötigt messbare Bandbreite.
-  - Lösungsansatz: Verschlankung des Basis-Images (Auslagerung von Cache- und Modelldaten) auf ca. 8–10 GB sowie mittelfristige Anbindung über 2.5 GbE oder 10 GbE.
+* Transferzeit beim Kaltstart: Das Laden eines vollständigen Desktop-Images über Gigabit-Ethernet benötigt messbare Zeit (bei einem auf 8–10 GB verschlankten Image typischerweise 1–2 Minuten).
+  - Lösungsansatz: Verschlankung des Basis-Images (Auslagerung von Cache- und Modelldaten) sowie mittelfristige Anbindung über 2.5 GbE oder 10 GbE.
 * Persistenzmanagement: Anwendungsdaten und Arbeitsergebnisse müssen explizit auf versionierte Speicherpfade synchronisiert werden.
-* RAM-Dimensionierung: Ausreichend physischer Speicher erforderlich (bei 128 GB RAM pro Node vollständig unkritisch).
+* RAM-Dimensionierung: Bei 128 GB RAM pro Node vollständig unkritisch.
 
 ---
 
@@ -88,3 +94,6 @@ Topologie der Verkehrsführung:
 * Aufgabenbereich: Erkennung von Verhaltensanomalien, unerwartetem ausgehendem Traffic, unautorisierten Socket-Verbindungen oder abweichenden I/O-Mustern auf Protokollebene.
 * Rolle von Grok: Analyse und Korrelation von Netzwerk-Metadaten, Verbindungsstatistiken und Systemmetriken im laufenden Betrieb.
 * Reaktionsebene: Sicherheitsrelevante Isolationsmaßnahmen (Netzwerktrennung via iptables, Port-Deaktivierung) erfolgen deterministisch und zentral auf dem Gateway-System.
+
+---
+Status: Konzept umsetzungsreif. Wächter-Positionierung und Anomalie-Regeln werden im Anschluss spezifiziert.
